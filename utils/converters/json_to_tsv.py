@@ -1,10 +1,10 @@
-# utils/converters/json_to_tsv.py
+# TODO : This could be cleaned up even further but its a significant improvement over the legacy code for now
 
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator, TextIO
 import ijson
-from ..data_types import BiomarkerEntry, Evidence
+from ..data_types import BiomarkerEntry, Evidence, EvidenceItem, EvidenceTag
 
 
 @dataclass
@@ -29,10 +29,81 @@ class TSVRow:
     tag: str = ""
 
 
+@dataclass
+class ObjectFieldTags:
+    """Represents the fields that are referenced with a value in the JSON tags."""
+
+    specimen: str = ""
+    loinc_code: str = ""
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            field.name: getattr(self, field.name)
+            for field in self.__dataclass_fields__.values()
+        }
+
+
+@dataclass
+class EvidenceState:
+    """Tracks evidence state for a specific evidence source."""
+
+    evidence_texts: set[str]  # Stores unique evidence text entries
+    tags: set[str]  # Stores unique tags
+
+    def combine_evidence(self, new_evidence: list[EvidenceItem]) -> None:
+        for item in new_evidence:
+            self.evidence_texts.add(item.evidence)
+
+    def combine_tags(
+        self, new_tags: list[EvidenceTag], object_fields: ObjectFieldTags
+    ) -> None:
+        object_fields_dict = object_fields.to_dict()
+        for tag in new_tags:
+            tag_parts = tag.tag.split(":", 1)
+            tag_type = tag_parts[0]
+            tag_value = tag_parts[1] if len(tag_parts) > 1 else ""
+
+            # Handle object field specific tags
+            if tag_type in object_fields_dict:
+                if tag_value:
+                    # Only add tag if it matches specified value
+                    if tag_value == object_fields_dict[tag_type]:
+                        self.tags.add(tag_type)
+                continue
+
+            # Handle component singular fields
+            if tag_type in JSONtoTSVConverter.COMP_SINGULAR_EVIDENCE_FIELDS:
+                self.tags.add(tag_type)
+                continue
+
+            # Hanle top level fields
+            if tag_type in JSONtoTSVConverter.TOP_LEVEL_EVIDENCE_FIELDS:
+                self.tags.add(tag_type)
+
+    @property
+    def evidence_text(self) -> str:
+        return ";|".join(sorted(self.evidence_texts))
+
+    @property
+    def tag_string(self) -> str:
+        return ";".join(sorted(self.tags))
+
+
 class JSONtoTSVConverter:
     """Converts biomarker JSON data to TSV format using streaming"""
 
-    def __init__(self):
+    # Biomarker component fields that are singular, for tags
+    COMP_SINGULAR_EVIDENCE_FIELDS = {
+        "biomarker",
+        "assessed_biomarker_entity",
+        "assessed_biomarker_entity_id",
+        "assessed_entity_type",
+    }
+
+    # Possible top level evidence tags
+    TOP_LEVEL_EVIDENCE_FIELDS = {"condition", "exposure_agent", "best_biomarker_role"}
+
+    def __init__(self) -> None:
         self._tsv_headers = [
             "biomarker_id",
             "biomarker",
@@ -51,45 +122,12 @@ class JSONtoTSVConverter:
             "evidence",
             "tag",
         ]
-
-    def _simplify_tag(self, tag: str) -> str:
-        """Remove provenance information from tag."""
-        base_tag = tag.split(":")[0]
-        return (
-            base_tag
-            if base_tag
-            in {
-                "biomarker",
-                "specimen",
-                "condition",
-                "exposure_agent",
-                "best_biomarker_role",
-                "assessed_biomarker_entity",
-            }
-            else tag
-        )
-
-    def _combine_evidence(self, evidence_texts: list[str]) -> str:
-        """Combine evidence texts with correct delimiter."""
-        return ";|".join(text for text in evidence_texts if text)
-
-    def _process_evidence_source(
-        self, evidence: Evidence, base_tags: set[str]
-    ) -> tuple[str, str, str]:
-        """Process evidence source and return formatted strings."""
-        evidence_source = f"{evidence.database}:{evidence.id}"
-        evidence_text = ";|".join(item.evidence for item in evidence.evidence_list)
-        tags = {self._simplify_tag(tag.tag) for tag in evidence.tags}
-        tags.update(base_tags)
-        return evidence_source, evidence_text, ";".join(sorted(tags))
+        self._evidence_states: dict[str, EvidenceState] = {}
 
     def convert(self, input_path: Path, output_path: Path) -> None:
         """Convert JSON biomarker data to TSV format."""
         with output_path.open("w") as out_file:
-            # Write headers
             out_file.write("\t".join(self._tsv_headers) + "\n")
-
-            # Stream and convert entries
             for entry in self._stream_json(input_path):
                 self._process_entry(entry, out_file)
 
@@ -100,35 +138,48 @@ class JSONtoTSVConverter:
             for entry_data in parser:
                 yield BiomarkerEntry.from_dict(entry_data)
 
-    def _process_entry(self, entry: BiomarkerEntry, out_file: TextIO) -> None:
-        """Process a single BiomarkerEntry and write rows directly to file."""
-        base_data = {
+    def _initialize_evidence_states(self, entry: BiomarkerEntry) -> None:
+        """Initalizes evidence states from top-level evidence sources."""
+        self._evidence_states.clear()
+        for evidence in entry.evidence_source:
+            key = f"{evidence.database}:{evidence.id}"
+            state = EvidenceState(evidence_texts=set(), tags=set())
+            state.combine_evidence(evidence.evidence_list)
+            state.combine_tags(evidence.tags, ObjectFieldTags())
+            self._evidence_states[key] = state
+
+    def _get_base_row_data(self, entry: BiomarkerEntry) -> dict:
+        """Get base row data common to all component rows."""
+        entry_dict = entry.to_dict()
+        return {
             "biomarker_id": entry.biomarker_id,
             "condition": (
-                entry.condition.recommended_name.name if entry.condition else ""
+                entry.condition.recommended_name.name
+                if "condition" in entry_dict
+                else ""
             ),
-            "condition_id": entry.condition.id if entry.condition else "",
+            "condition_id": entry.condition.id if "condition" in entry_dict else "",
             "best_biomarker_role": ";".join(
                 role.role for role in entry.best_biomarker_role
             ),
+            "exposure_agent": (
+                entry.exposure_agent.recommended_name.name
+                if "exposure_agent" in entry_dict
+                else ""
+            ),
+            "exposure_agent_id": (
+                entry.exposure_agent.id if "exposure_agent" in entry_dict else ""
+            ),
         }
 
-        # Keep track of processed evidence to avoid duplicates
-        processed_evidence = {}  # key: evidence_id, value: (evidence_text, tags)
+    def _process_entry(self, entry: BiomarkerEntry, out_file: TextIO) -> None:
+        """Process a single BiomarkerEntry and write rows to file."""
+        self._initialize_evidence_states(entry)
+        base_row_data = self._get_base_row_data(entry)
 
-        # Process top-level evidence first
-        for evidence in entry.evidence_source:
-            evidence_key = f"{evidence.database}:{evidence.id}"
-            evidence_text = self._combine_evidence(
-                [item.evidence for item in evidence.evidence_list]
-            )
-            tags = {self._simplify_tag(tag.tag) for tag in evidence.tags}
-            processed_evidence[evidence_key] = (evidence_text, tags)
-
-        # Process components
         for component in entry.biomarker_component:
-            component_data = base_data.copy()
-            component_data.update(
+            curr_row_data = base_row_data.copy()
+            curr_row_data.update(
                 {
                     "biomarker": component.biomarker,
                     "assessed_biomarker_entity": component.assessed_biomarker_entity.recommended_name,
@@ -138,69 +189,90 @@ class JSONtoTSVConverter:
             )
 
             if not component.specimen:
-                self._write_component_evidence(
-                    component_data,
-                    component.evidence_source,
-                    processed_evidence,
-                    out_file,
+                self._write_rows(
+                    row_data=curr_row_data,
+                    component_evidence_sources=component.evidence_source,
+                    object_fields=ObjectFieldTags(),
+                    out_file=out_file,
                 )
             else:
                 for specimen in component.specimen:
-                    specimen_data = component_data.copy()
-                    specimen_data.update(
+                    specimen_row_data = curr_row_data.copy()
+                    specimen_row_data.update(
                         {
                             "specimen": specimen.name,
                             "specimen_id": specimen.id,
                             "loinc_code": specimen.loinc_code,
                         }
                     )
-                    self._write_component_evidence(
-                        specimen_data,
-                        component.evidence_source,
-                        processed_evidence,
-                        out_file,
+                    self._write_rows(
+                        row_data=specimen_row_data,
+                        component_evidence_sources=component.evidence_source,
+                        object_fields=ObjectFieldTags(
+                            specimen=specimen.id, loinc_code=specimen.loinc_code
+                        ),
+                        out_file=out_file,
                     )
 
-    def _write_component_evidence(
+    def _write_rows(
         self,
-        base_data: dict[str, str],
-        evidence_list: list[Evidence],
-        processed_evidence: dict[str, tuple[str, set[str]]],
+        row_data: dict[str, str],
+        component_evidence_sources: list[Evidence],
+        object_fields: ObjectFieldTags,
         out_file: TextIO,
     ) -> None:
-        """Write evidence rows with proper combining of evidence and tags."""
-        for evidence in evidence_list:
-            evidence_key = f"{evidence.database}:{evidence.id}"
-            current_evidence_text = self._combine_evidence(
-                [item.evidence for item in evidence.evidence_list]
-            )
-            current_tags = {self._simplify_tag(tag.tag) for tag in evidence.tags}
+        """Write component rows with evidence combination."""
+        processed_top_level = set()
 
-            if evidence_key in processed_evidence:
-                # Combine with existing evidence
-                existing_text, existing_tags = processed_evidence[evidence_key]
-                if current_evidence_text != existing_text:
-                    evidence_text = self._combine_evidence(
-                        [existing_text, current_evidence_text]
-                    )
-                else:
-                    evidence_text = existing_text
-                tags = existing_tags.union(current_tags)
-                processed_evidence[evidence_key] = (evidence_text, tags)
-            else:
-                evidence_text = current_evidence_text
-                tags = current_tags
-                processed_evidence[evidence_key] = (evidence_text, tags)
+        for comp_evidence in component_evidence_sources:
+            key = f"{comp_evidence.database}:{comp_evidence.id}"
 
-            row_data = base_data.copy()
-            row_data.update(
+            state = EvidenceState(evidence_texts=set(), tags=set())
+
+            # If there's matching top-level evidence, combine it
+            if key in self._evidence_states:
+                top_level_state = self._evidence_states[key]
+                state.evidence_texts.update(top_level_state.evidence_texts)
+                state.tags.update(top_level_state.tags)
+                processed_top_level.add(key)
+
+            # Add component evidence
+            state.combine_evidence(comp_evidence.evidence_list)
+            state.combine_tags(comp_evidence.tags, object_fields)
+
+            final_row_data = row_data.copy()
+            final_row_data.update(
                 {
-                    "evidence_source": evidence_key,
-                    "evidence": evidence_text,
-                    "tag": ";".join(sorted(tags)),
+                    "evidence_source": key,
+                    "evidence": state.evidence_text,
+                    "tag": state.tag_string,
                 }
             )
 
-            row = TSVRow(**row_data)
+            row = TSVRow(**final_row_data)
             values = [str(getattr(row, header)) for header in self._tsv_headers]
             out_file.write("\t".join(values) + "\n")
+
+        for key, top_state in self._evidence_states.items():
+            if key not in processed_top_level:
+                # Create new state just for this top-level evidence
+                state = EvidenceState(evidence_texts=set(), tags=set())
+                state.evidence_texts.update(top_state.evidence_texts)
+
+                # Need to process tags again with current object fields
+                state.combine_tags(
+                    [EvidenceTag(tag=tag) for tag in top_state.tags], object_fields
+                )
+
+                final_row_data = row_data.copy()
+                final_row_data.update(
+                    {
+                        "evidence_source": key,
+                        "evidence": state.evidence_text,
+                        "tag": state.tag_string,
+                    }
+                )
+
+                row = TSVRow(**final_row_data)
+                values = [str(getattr(row, header)) for header in self._tsv_headers]
+                out_file.write("\t".join(values) + "\n")

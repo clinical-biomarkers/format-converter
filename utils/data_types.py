@@ -66,6 +66,13 @@ class Condition:
 
 
 @dataclass
+class ExposureAgent:
+    id: str
+    recommended_name: RecommendedName
+    synonyms: list[ConditionSynonym] = field(default_factory=list)
+
+
+@dataclass
 class Reference:
     id: str
     type: str
@@ -105,6 +112,7 @@ class BiomarkerEntry:
     biomarker_component: list[BiomarkerComponent]
     best_biomarker_role: list[BiomarkerRole]
     condition: Condition
+    exposure_agent: ExposureAgent
     evidence_source: list[Evidence] = field(default_factory=list)
     citation: list[Citation] = field(default_factory=list)
 
@@ -136,7 +144,10 @@ class BiomarkerEntry:
             best_biomarker_role=[
                 BiomarkerRole(**r) for r in data["best_biomarker_role"]
             ],
-            condition=cls._dict_to_condition(data["condition"]),
+            condition=cls._dict_to_condition(data.get("condition", None)),
+            exposure_agent=cls._dict_to_exposure_agent(
+                data.get("exposure_agent", None)
+            ),
             evidence_source=[
                 cls._dict_to_evidence(e) for e in data.get("evidence_source", [])
             ],
@@ -220,6 +231,10 @@ class BiomarkerEntry:
     @classmethod
     def _dict_to_component(cls, data: dict[str, Any]) -> BiomarkerComponent:
         """Create BiomarkerComponent from dictionary data."""
+        specimen_data = data.get("specimen")
+        if specimen_data is None:
+            specimen_data = []
+
         return BiomarkerComponent(
             biomarker=data["biomarker"],
             assessed_biomarker_entity=AssessedBiomarkerEntity(
@@ -231,7 +246,7 @@ class BiomarkerEntry:
             ),
             assessed_biomarker_entity_id=data["assessed_biomarker_entity_id"],
             assessed_entity_type=data["assessed_entity_type"],
-            specimen=[Specimen(**s) for s in data.get("specimen", [])],
+            specimen=[Specimen(**s) for s in specimen_data],
             evidence_source=[
                 cls._dict_to_evidence(e) for e in data.get("evidence_source", [])
             ],
@@ -249,9 +264,34 @@ class BiomarkerEntry:
         )
 
     @classmethod
-    def _dict_to_condition(cls, data: dict[str, Any]) -> Condition:
+    def _dict_to_condition(cls, data: Optional[dict[str, Any]]) -> Condition:
         """Create Condition from dictionary data."""
+        if data is None:
+            return Condition(
+                id="",
+                recommended_name=RecommendedName(
+                    id="", name="", description="", resource="", url=""
+                ),
+                synonyms=[],
+            )
         return Condition(
+            id=data["id"],
+            recommended_name=RecommendedName(**data["recommended_name"]),
+            synonyms=[ConditionSynonym(**s) for s in data.get("synonyms", [])],
+        )
+
+    @classmethod
+    def _dict_to_exposure_agent(cls, data: Optional[dict[str, Any]]) -> ExposureAgent:
+        """Create ExposureAgent from dictionary data."""
+        if data is None:
+            return ExposureAgent(
+                id="",
+                recommended_name=RecommendedName(
+                    id="", name="", description="", resource="", url=""
+                ),
+                synonyms=[],
+            )
+        return ExposureAgent(
             id=data["id"],
             recommended_name=RecommendedName(**data["recommended_name"]),
             synonyms=[ConditionSynonym(**s) for s in data.get("synonyms", [])],
