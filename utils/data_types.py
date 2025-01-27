@@ -308,3 +308,54 @@ class BiomarkerEntry:
             reference=[Reference(**r) for r in data["reference"]],
             evidence=data.get("evidence", []),
         )
+
+
+@dataclass
+class TSVRow:
+    """Represents a single row in the TSV format"""
+
+    biomarker_id: str
+    biomarker: str
+    assessed_biomarker_entity: str
+    assessed_biomarker_entity_id: str
+    assessed_entity_type: str
+    condition: str = ""
+    condition_id: str = ""
+    exposure_agent: str = ""
+    exposure_agent_id: str = ""
+    best_biomarker_role: str = ""
+    specimen: str = ""
+    specimen_id: str = ""
+    loinc_code: str = ""
+    evidence_source: str = ""
+    evidence: str = ""
+    tag: str = ""
+
+    @classmethod
+    def from_dict(cls, row: dict[str, str]) -> "TSVRow":
+        cleaned_row = {}
+
+        for field in cls.__dataclass_fields__:
+            cleaned_row[field] = row.get(field, "").strip()
+
+        return cls(**cleaned_row)
+
+    @property
+    def headers(self) -> list[str]:
+        return list(self.__dataclass_fields__.keys())
+
+    @classmethod
+    def get_headers(cls) -> list[str]:
+        return list(cls.__dataclass_fields__.keys())
+
+    @classmethod
+    def get_role_delimiter(cls) -> str:
+        return ";"
+
+    @classmethod
+    def get_evidence_text_delimiter(cls) -> str:
+        return ";|"
+
+    @classmethod
+    def get_tag_delimiter(cls) -> str:
+        return ";"
