@@ -4,33 +4,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator, TextIO
 import ijson
-from ..data_types import BiomarkerEntry, Evidence, EvidenceItem, EvidenceTag
+from . import Converter
+from ..data_types import BiomarkerEntry, Evidence, EvidenceItem, EvidenceTag, TSVRow
 
 
 @dataclass
-class TSVRow:
-    """Represents a single row in the TSV format"""
-
-    biomarker_id: str
-    biomarker: str
-    assessed_biomarker_entity: str
-    assessed_biomarker_entity_id: str
-    assessed_entity_type: str
-    condition: str = ""
-    condition_id: str = ""
-    exposure_agent: str = ""
-    exposure_agent_id: str = ""
-    best_biomarker_role: str = ""
-    specimen: str = ""
-    specimen_id: str = ""
-    loinc_code: str = ""
-    evidence_source: str = ""
-    evidence: str = ""
-    tag: str = ""
-
-
-@dataclass
-class ObjectFieldTags:
+class ObjectFieldTags():
     """Represents the fields that are referenced with a value in the JSON tags."""
 
     specimen: str = ""
@@ -82,14 +61,14 @@ class EvidenceState:
 
     @property
     def evidence_text(self) -> str:
-        return ";|".join(sorted(self.evidence_texts))
+        return TSVRow.get_evidence_text_delimiter().join(sorted(self.evidence_texts))
 
     @property
     def tag_string(self) -> str:
-        return ";".join(sorted(self.tags))
+        return TSVRow.get_tag_delimiter().join(sorted(self.tags))
 
 
-class JSONtoTSVConverter:
+class JSONtoTSVConverter(Converter):
     """Converts biomarker JSON data to TSV format using streaming"""
 
     # Biomarker component fields that are singular, for tags
@@ -104,24 +83,7 @@ class JSONtoTSVConverter:
     TOP_LEVEL_EVIDENCE_FIELDS = {"condition", "exposure_agent", "best_biomarker_role"}
 
     def __init__(self) -> None:
-        self._tsv_headers = [
-            "biomarker_id",
-            "biomarker",
-            "assessed_biomarker_entity",
-            "assessed_biomarker_entity_id",
-            "assessed_entity_type",
-            "condition",
-            "condition_id",
-            "exposure_agent",
-            "exposure_agent_id",
-            "best_biomarker_role",
-            "specimen",
-            "specimen_id",
-            "loinc_code",
-            "evidence_source",
-            "evidence",
-            "tag",
-        ]
+        self._tsv_headers = TSVRow.get_headers()
         self._evidence_states: dict[str, EvidenceState] = {}
 
     def convert(self, input_path: Path, output_path: Path) -> None:
@@ -159,7 +121,7 @@ class JSONtoTSVConverter:
                 else ""
             ),
             "condition_id": entry.condition.id if "condition" in entry_dict else "",
-            "best_biomarker_role": ";".join(
+            "best_biomarker_role": TSVRow.get_role_delimiter().join(
                 role.role for role in entry.best_biomarker_role
             ),
             "exposure_agent": (
