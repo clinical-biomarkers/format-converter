@@ -1,9 +1,15 @@
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, Optional
 import json
 import csv
-from . import Converter
-from ..data_types import (
+import logging
+
+from utils.logging import LoggedClass
+from utils.metadata import Metadata
+from . import TSV_LOG_CHECKPOINT, Converter
+from utils.logging import log_once
+from utils.data_types import (
+    COMPONENT_SINGULAR_EVIDENCE_FIELDS,
     BiomarkerEntry,
     BiomarkerComponent,
     AssessedBiomarkerEntity,
@@ -16,20 +22,34 @@ from ..data_types import (
     RecommendedName,
     Specimen,
     TSVRow,
+    EvidenceState,
+    ObjectFieldTags,
 )
 
 
-class TSVtoJSONConverter(Converter):
+class TSVtoJSONConverter(Converter, LoggedClass):
     """Converts biomarker TSV data to JSON format."""
 
     def __init__(self, fetch_metadata: bool = True) -> None:
+        LoggedClass.__init__(self)
+        self.debug("Initializing TSV to JSON converter")
         self._fetch_metadata = fetch_metadata
         self._entries: dict[str, BiomarkerEntry] = {}
+        self._metadata = Metadata()
+        self._api_calls = 0
+        # Track evidence states per biomarker_id
+        self._evidence_states: dict[str, dict[str, EvidenceState]] = {}
 
     def convert(self, input_path: Path, output_path: Path) -> None:
-        for row in self._stream_tsv(input_path):
+        """Main conversion workflow entry point."""
+
+        for idx, row in enumerate(self._stream_tsv(input_path)):
+            if (idx + 1) % TSV_LOG_CHECKPOINT == 0:
+                self.debug(f"Hit log checkpoint on row {idx + 1}")
             self._process_row(row)
 
+        self.info(f"Writing {len(self._entries)} entries to {output_path}")
+        self.info(f"Made {self._api_calls} API calls")
         entries = list(self._entries.values())
         self._write_json(entries, output_path)
 
@@ -40,31 +60,53 @@ class TSVtoJSONConverter(Converter):
                 yield TSVRow.from_dict(row)
 
     def _process_row(self, row: TSVRow) -> None:
+        """Process a single row, updating entries and evidence."""
+        log_once(
+            self.logger,
+            f"Processing row for biomarker ID: {row.biomarker_id}",
+            logging.DEBUG,
+        )
+
         entry = self._entries.get(row.biomarker_id)
+        # If we don't find the existing entry, create it and add
         if not entry:
             entry = self._create_entry(row)
             self._entries[row.biomarker_id] = entry
+        # If we do find an existing entry for that, handle the component
+        else:
+            self._handle_component_for_existing_entry(entry, row)
 
-        self._process_component(entry, row)
+        if row.evidence_source:
+            self._handle_evidence(entry, row)
 
     def _create_entry(self, row: TSVRow) -> BiomarkerEntry:
+        """Creates a base entry for the biomarker from the TSV row."""
         roles = [
             BiomarkerRole(role=role.strip())
             for role in row.best_biomarker_role.split(TSVRow.get_role_delimiter())
             if role.strip()
         ]
 
+        condition_ressource = row.condition_id.split(":")[0]
+        condition_id = row.condition_id.split(":")[1]
+        condition_resource_name = self._metadata.get_full_name(condition_ressource)
+        condition_resource_name = (
+            condition_resource_name if condition_resource_name else ""
+        )
+        condition_url = self._metadata.get_url_template(condition_ressource)
+        condition_url = condition_url.format(condition_id) if condition_url else ""
         condition = Condition(
             id=row.condition_id,
             recommended_name=RecommendedName(
                 id=row.condition_id,
                 name=row.condition,
                 description=None,
-                resource="",
-                url="",
+                resource=condition_resource_name,
+                url=condition_url,
             ),
         )
 
+        # TODO : not handling exposure agent metadata right now
         exposure_agent = ExposureAgent(
             id=row.exposure_agent_id,
             recommended_name=RecommendedName(
@@ -78,7 +120,7 @@ class TSVtoJSONConverter(Converter):
 
         component = self._create_component(row)
 
-        # TODO : missing top level evidence, citation, and xrefs right now
+        # TODO : missing citation, and xrefs right now
         return BiomarkerEntry(
             biomarker_id=row.biomarker_id,
             biomarker_component=[component],
@@ -88,51 +130,158 @@ class TSVtoJSONConverter(Converter):
         )
 
     def _create_component(self, row: TSVRow) -> BiomarkerComponent:
+        """Creates the biomarker component from the TSV row. Does not
+        create the component level evidence source as that is handled
+        separately.
+        """
+        assessed_biomarker_entity_resource, assessed_biomarker_entity_id = (
+            row.assessed_biomarker_entity_id.split(":")
+        )
+        api_calls, assessed_biomarker_entity = self._metadata.entity_type_api_call(
+            resource=assessed_biomarker_entity_resource,
+            id=assessed_biomarker_entity_id,
+            entity_type=row.assessed_entity_type,
+        )
+        self._api_calls += api_calls
+        if (
+            assessed_biomarker_entity is not None
+            and assessed_biomarker_entity.recommended_name
+            != row.assessed_biomarker_entity
+        ):
+            log_once(
+                self.logger,
+                f"TSV assessed biomarker entity name ({row.assessed_biomarker_entity}) does NOT match resource recommended name ({assessed_biomarker_entity.recommended_name})",
+                logging.WARNING,
+            )
+
         component = BiomarkerComponent(
             biomarker=row.biomarker,
-            assessed_biomarker_entity=AssessedBiomarkerEntity(
-                recommended_name=row.assessed_biomarker_entity
+            assessed_biomarker_entity=(
+                assessed_biomarker_entity
+                if assessed_biomarker_entity
+                else AssessedBiomarkerEntity(
+                    recommended_name=row.assessed_biomarker_entity
+                )
             ),
             assessed_biomarker_entity_id=row.assessed_biomarker_entity_id,
             assessed_entity_type=row.assessed_entity_type,
         )
 
         if row.specimen:
+            specimen_resource = row.specimen_id.split(":")[0]
+            specimen_id = row.specimen_id.split(":")[1]
+            specimen_resource_name = self._metadata.get_full_name(specimen_resource)
+            specimen_resource_name = (
+                specimen_resource_name if specimen_resource_name else ""
+            )
+            specimen_resource_url = self._metadata.get_url_template(specimen_resource)
+            specimen_resource_url = (
+                specimen_resource_url if specimen_resource_url else ""
+            )
+            specimen_resource_url = specimen_resource_url.format(specimen_id)
             component.specimen.append(
                 Specimen(
                     name=row.specimen,
                     id=row.specimen_id,
-                    name_space="",
-                    url="",
+                    name_space=specimen_resource_name,
+                    url=specimen_resource_url,
                     loinc_code=row.loinc_code,
                 )
             )
 
-        if row.evidence_source:
-            evidence = Evidence(
-                id=row.evidence_source.split(":")[-1],
-                database=row.evidence_source.split(":")[0],
-                url="",
-                evidence_list=[
-                    EvidenceItem(evidence=evidence.strip())
-                    for evidence in row.evidence.split(
-                        TSVRow.get_evidence_text_delimiter()
-                    )
-                    if evidence.strip()
-                ],
-                tags=[
-                    EvidenceTag(tag=tag.strip())
-                    for tag in row.tag.split(TSVRow.get_tag_delimiter())
-                    if tag.strip()
-                ],
-            )
-            component.evidence_source.append(evidence)
-
         return component
 
-    def _process_component(self, entry: BiomarkerEntry, row: TSVRow) -> None:
-        # Check if we already have this component
-        matching_component = None
+    def _handle_evidence(self, entry: BiomarkerEntry, row: TSVRow) -> None:
+        """Handle evidence allocation based on tags."""
+        # Parse base evidence details
+        evidence_base = {
+            "id": row.evidence_source.split(":")[-1],
+            "database": row.evidence_source.split(":")[0],
+            "url": "",
+            "evidence_list": [
+                EvidenceItem(evidence=e.strip())
+                for e in row.evidence.split(TSVRow.get_evidence_text_delimiter())
+                if e.strip()
+            ],
+        }
+
+        # Separate tags by level
+        component_tags = []
+        top_level_tags = []
+        object_fields = ObjectFieldTags(
+            specimen=row.specimen_id, loinc_code=row.loinc_code
+        )
+
+        for tag in row.tag.split(TSVRow.get_tag_delimiter()):
+            tag = tag.strip()
+            if not tag:
+                continue
+
+            tag_parts = tag.split(":", 1)
+            tag_type = tag_parts[0]
+            tag_value = tag_parts[1] if len(tag_parts) > 1 else ""
+
+            if tag_type in COMPONENT_SINGULAR_EVIDENCE_FIELDS:
+                component_tags.append(EvidenceTag(tag=tag_type))
+            elif tag_type in ObjectFieldTags.get_fields():
+                field_value = getattr(object_fields, tag_type)
+                if field_value and (not tag_value or tag_value == field_value):
+                    component_tags.append(EvidenceTag(tag=f"{tag_type}:{field_value}"))
+            else:
+                top_level_tags.append(EvidenceTag(tag=tag))
+
+        # Add evidence to component level if it has component tags
+        if component_tags:
+            component_evidence = Evidence(**evidence_base, tags=component_tags)
+            self._add_evidence(
+                entry.biomarker_component[-1].evidence_source, component_evidence
+            )
+
+        # Add evidence to top level if it has top level tags
+        if top_level_tags:
+            top_level_evidence = Evidence(**evidence_base, tags=top_level_tags)
+            self._add_evidence(entry.evidence_source, top_level_evidence)
+
+    def _add_evidence(
+        self, evidence_list: list[Evidence], new_evidence: Evidence
+    ) -> None:
+        """Adds evidence at appropriate level, combining if duplicates exist."""
+        for existing in evidence_list:
+            if (
+                existing.id == new_evidence.id
+                and existing.database == new_evidence.database
+            ):
+                # Add any new evidence texts
+                existing_texts = {e.evidence for e in existing.evidence_list}
+                for evidence_item in new_evidence.evidence_list:
+                    if evidence_item.evidence not in existing_texts:
+                        existing.evidence_list.append(evidence_item)
+                # Add any new tags
+                existing_tags = {t.tag for t in existing.tags}
+                for tag in new_evidence.tags:
+                    if tag.tag not in existing_tags:
+                        existing.tags.append(tag)
+                return
+        evidence_list.append(new_evidence)
+
+    def _handle_component_for_existing_entry(
+        self, entry: BiomarkerEntry, row: TSVRow
+    ) -> None:
+        """Entry point to process component handling for existing entries."""
+        matching_component = self._find_matching_component(entry, row)
+
+        if matching_component:
+            # Update existing component with new data
+            self._update_component(matching_component, row)
+        else:
+            # No match found - create and add new component
+            new_component = self._create_component(row)
+            entry.biomarker_component.append(new_component)
+
+    def _find_matching_component(
+        self, entry: BiomarkerEntry, row: TSVRow
+    ) -> Optional[BiomarkerComponent]:
+        """Determines if the component is already in the biomarker entry."""
         for component in entry.biomarker_component:
             if (
                 component.biomarker == row.biomarker
@@ -142,59 +291,30 @@ class TSVtoJSONConverter(Converter):
                 == row.assessed_biomarker_entity_id
                 and component.assessed_entity_type == row.assessed_entity_type
             ):
-                matching_component = component
-                break
+                return component
+        return None
 
-        if matching_component is None:
-            # New component - create and add it
-            new_component = self._create_component(row)
-            entry.biomarker_component.append(new_component)
-        else:
-            # Update existing component
-            if row.specimen:
-                specimen_exists = any(
-                    s.name == row.specimen
-                    and s.id == row.specimen_id
-                    and s.loinc_code == row.loinc_code
-                    for s in matching_component.specimen
-                )
-                if not specimen_exists:
-                    matching_component.specimen.append(
-                        Specimen(
-                            name=row.specimen,
-                            id=row.specimen_id,
-                            name_space="",
-                            url="",
-                            loinc_code=row.loinc_code,
-                        )
+    def _update_component(self, component: BiomarkerComponent, row: TSVRow) -> None:
+        """Update existing component with new data. Does not merge evidence data, that
+        is handled separately.
+        """
+        if row.specimen:
+            specimen_exists = any(
+                s.name == row.specimen
+                and s.id == row.specimen_id
+                and s.loinc_code == row.loinc_code
+                for s in component.specimen
+            )
+            if not specimen_exists:
+                component.specimen.append(
+                    Specimen(
+                        name=row.specimen,
+                        id=row.specimen_id,
+                        name_space="",
+                        url="",
+                        loinc_code=row.loinc_code,
                     )
-
-            # Add evidence if present and not duplicate
-            if row.evidence_source:
-                evidence = Evidence(
-                    id=row.evidence_source.split(":")[-1],
-                    database=row.evidence_source.split(":")[0],
-                    url="",
-                    evidence_list=[
-                        EvidenceItem(evidence=e.strip())
-                        for e in row.evidence.split(";|")
-                        if e.strip()
-                    ],
-                    tags=[
-                        EvidenceTag(tag=t.strip())
-                        for t in row.tag.split(";")
-                        if t.strip()
-                    ],
                 )
-
-                # Check if identical evidence exists
-                if not any(
-                    e.id == evidence.id
-                    and e.database == evidence.database
-                    and e.evidence_list == evidence.evidence_list
-                    for e in matching_component.evidence_source
-                ):
-                    matching_component.evidence_source.append(evidence)
 
     def _write_json(self, entries: list[BiomarkerEntry], path: Path) -> None:
         json_data = [entry.to_dict() for entry in entries]
