@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 
 @dataclass
@@ -11,6 +11,12 @@ class Synonym:
 class AssessedBiomarkerEntity:
     recommended_name: str
     synonyms: list[Synonym] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Union[str, list[str]]]:
+        return {
+            "recommended_name": self.recommended_name,
+            "synonyms": [s.synonym for s in self.synonyms],
+        }
 
 
 @dataclass
@@ -161,10 +167,7 @@ class BiomarkerEntry:
             "biomarker": component.biomarker,
             "assessed_biomarker_entity": {
                 "recommended_name": component.assessed_biomarker_entity.recommended_name,
-                "synonyms": [
-                    {"synonym": s.synonym}
-                    for s in component.assessed_biomarker_entity.synonyms
-                ],
+                "synonyms": [s for s in component.assessed_biomarker_entity.synonyms],
             },
             "assessed_biomarker_entity_id": component.assessed_biomarker_entity_id,
             "assessed_entity_type": component.assessed_entity_type,

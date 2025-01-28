@@ -4,6 +4,7 @@ from utils.data_types import AssessedBiomarkerEntity
 from .api import API_HANDLER_MAP
 from typing import Optional
 import logging
+import json
 from pathlib import Path
 from time import sleep
 import requests
@@ -112,18 +113,23 @@ class Metadata(LoggedClass):
             return 0, None
 
         # Begin API call handling
-        clean_id = self._clean_string(id)
-        self.debug(
-            f"Making API call for {resource} with ID {clean_id} (type: {entity_type})"
-        )
+        self.debug(f"Making API call for {resource} with ID {id} (type: {entity_type})")
 
         # First check the cache and make sure an API call is absolutely necessary
         cache_path = self.get_cache_path(resource)
-        if cache_path is not None:
-            cache = load_json_type_safe(cache_path, "dict")
-            if clean_id in cache:
-                self.debug(f"Found cached data for {clean_id}")
-                return 0, cache[clean_id]
+        if cache_path is None:
+            self.error(f"No cache path found for {resource}")
+            return 0, None
+
+        cache = load_json_type_safe(cache_path, "dict")
+        if id in cache:
+            self.debug(f"Found cached data for {id}")
+            cached_record = cache[id]
+            assessed_biomarker_entity = AssessedBiomarkerEntity(
+                recommended_name=cached_record["recommended_name"],
+                synonyms=cached_record["synonyms"],
+            )
+            return 0, assessed_biomarker_entity
 
         # Check that the corresponding API call handler exists for this resource
         handler = API_HANDLER_MAP.get(resource_clean)
@@ -136,44 +142,48 @@ class Metadata(LoggedClass):
         while attempt < self._max_retries:
             try:
                 # Make request
-                response = requests.get(
-                    endpoint.format(clean_id), timeout=self._timeout
-                )
+                response = requests.get(endpoint.format(id), timeout=self._timeout)
                 if response.status_code != 200:
                     self.error(
-                        f"API call failed for {clean_id}: {response.status_code} - {response.text}"
+                        f"API call failed for {id}: {response.status_code} - {response.text}"
                     )
                     return attempt + 1, None
+
+                self.info(f"Made successful API call for {resource}:{id}")
 
                 # Pass the return response to the resource specific API handler
                 processed_data = API_HANDLER_MAP[resource_clean](response)
                 if processed_data is None:
                     log_once(
                         self.logger,
-                        f"Unable to process data for {resource}:{clean_id}",
+                        f"Unable to process data for {resource}:{id}",
                         logging.WARNING,
                     )
                     return attempt + 1, None
                 else:
+                    self.debug(f"Adding entry for {resource}:{id} to {cache_path}")
+                    cache[id] = processed_data.to_dict()
+                    with open(cache_path, "w") as f:
+                        json.dump(cache, f, index=2)
                     return attempt + 1, processed_data
 
             except requests.Timeout as e:
                 self.warning(
-                    f"Request timeout on attempt {attempt + 1} for {resource}:{clean_id}\n{e}"
+                    f"Request timeout on attempt {attempt + 1} for {resource}:{id}\n{e}"
                 )
                 attempt += 1
                 self.debug(f"Sleeping for {self._sleep_time} seconds...")
                 sleep(self._sleep_time)
             except requests.ConnectionError as e:
                 self.warning(
-                    f"Connection error on attempt {attempt + 1} for {resource}:{clean_id}\n{e}"
+                    f"Connection error on attempt {attempt + 1} for {resource}:{id}\n{e}"
                 )
                 attempt += 1
                 self.debug(f"Sleeping for {self._sleep_time} seconds...")
                 sleep(self._sleep_time)
             except Exception as e:
                 self.exception(
-                    f"Unexpected error during API call for {resource}:{clean_id}\n{e}"
+                    f"Unexpected error during API call for {resource}:{id}\n{e}"
                 )
                 attempt += 1
                 self.debug(f"Sleeping for {self._sleep_time} seconds...")
@@ -181,7 +191,7 @@ class Metadata(LoggedClass):
 
         log_once(
             self.logger,
-            f"Failed to reach API for {resource}:{clean_id} after {self._max_retries} attempts",
+            f"Failed to reach API for {resource}:{id} after {self._max_retries} attempts",
             logging.ERROR,
         )
         return attempt + 1, None
