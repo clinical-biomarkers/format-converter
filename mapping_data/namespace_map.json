@@ -16,5 +16,11 @@
     "api_endpoint": null,
     "url_template": "http://purl.obolibrary.org/obo/UBERON_{}",
     "cache": null
+  },
+  "pubmed": {
+    "full_name": "pubmed",
+    "api_endpoint": "library_call",
+    "url_template": "https://pubmed.ncbi.nlm.nih.gov/{}",
+    "cache": "pubmed_cache.json"
   }
 }
