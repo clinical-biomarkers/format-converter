@@ -6,6 +6,7 @@ ROOT_DIR = Path(__file__).parent.parent
 
 
 def _load_json(filepath: Union[str, Path]) -> Union[dict, list]:
+    # TODO : should we let callers handle exceptions?
     with open(filepath, "r") as f:
         json_obj = json.load(f)
     return json_obj
