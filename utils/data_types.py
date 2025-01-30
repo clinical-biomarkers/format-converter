@@ -84,6 +84,19 @@ class Reference:
     type: str
     url: str
 
+    def to_dict(self) -> dict[str, str]:
+        return {"id": self.id, "type": self.type, "url": self.url}
+
+
+@dataclass
+class CitationEvidence:
+    database: str
+    id: str
+    url: str
+
+    def to_dict(self) -> dict[str, str]:
+        return {"database": self.database, "id": self.id, "url": self.url}
+
 
 @dataclass
 class Citation:
@@ -92,7 +105,17 @@ class Citation:
     authors: str
     date: str
     reference: list[Reference]
-    evidence: list[Any] = field(default_factory=list)
+    evidence: list[CitationEvidence] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Union[str, list, dict]]:
+        return {
+            "title": self.title,
+            "journal": self.journal,
+            "authors": self.authors,
+            "date": self.date,
+            "reference": [ref.to_dict() for ref in self.reference],
+            "evidence": [ev.to_dict() for ev in self.evidence],
+        }
 
 
 @dataclass
