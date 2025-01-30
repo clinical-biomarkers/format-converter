@@ -40,7 +40,7 @@
     "rate_limit": null,
     "url_template": "http://purl.obolibrary.org/obo/{}",
     "cache": "chebi_cache.json"
-  }
+  },
   "gwas": {
     "full_name": "gwas",
     "api_endpoint": null,
