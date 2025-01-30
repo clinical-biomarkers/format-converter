@@ -2,25 +2,85 @@
   "doid": {
     "full_name": "disease ontology",
     "api_endpoint": "https://www.disease-ontology.org/api/metadata/DOID:{}",
+    "rate_limit": null,
     "url_template": "http://purl.obolibrary.org/obo/DOID_{}",
     "cache": "doid_cache.json"
   },
   "upkb": {
     "full_name": "uniprot",
     "api_endpoint": "https://www.ebi.ac.uk/proteins/api/proteins/{}",
+    "rate_limit": 200,
     "url_template": "https://www.uniprot.org/uniprotkb/{}/entry",
     "cache": "uniprot_cache.json"
   },
   "uberon": {
     "full_name": "uberon",
     "api_endpoint": null,
+    "rate_limit": null,
     "url_template": "http://purl.obolibrary.org/obo/UBERON_{}",
     "cache": null
   },
   "pubmed": {
     "full_name": "pubmed",
     "api_endpoint": "library_call",
+    "rate_limit": 10,
     "url_template": "https://pubmed.ncbi.nlm.nih.gov/{}",
     "cache": "pubmed_cache.json"
+  },
+  "co": {
+    "full_name": "cell ontology",
+    "api_endpoint": "https://www.ebi.ac.uk/ols4/api/ontologies/cl/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252F{}",
+    "rate_limit": null,
+    "url_template": "http://purl.obolibrary.org/obo/{}",
+    "cache": "cell_ontology_cache.json"
+  },
+  "chebi": {
+    "full_name": "chemical entities of biological interest",
+    "api_endpoint": "https://www.ebi.ac.uk/webservices/chebi/2.0/test/getCompleteEntity?chebiId={}",
+    "rate_limit": null,
+    "url_template": "http://purl.obolibrary.org/obo/{}",
+    "cache": "chebi_cache.json"
+  }
+  "gwas": {
+    "full_name": "gwas",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.ebi.ac.uk/gwas/search?query={}",
+    "cache": null
+  },
+  "clinvar": {
+    "full_name": "clinvar",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.ncbi.nlm.nih.gov/clinvar/variation/{}",
+    "cache": null
+  },
+  "doi": {
+    "full_name": "doi",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://doi.org/{}",
+    "cache": null
+  },
+  "omim": {
+    "full_name": "online mendelian inheritance in man",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.omim.org/entry/{}",
+    "cache": null
+  },
+  "civic": {
+    "full_name": "clinical interpretation of variants in cancer",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://civicdb.org/molecular-profiles/{}",
+    "cache": null
+  },
+  "wipo": {
+    "full_name": "world intellectural property organization",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://patentscope.wipo.int/search/en/detail.jsf?docId={}",
+    "cache": null
   }
 }
