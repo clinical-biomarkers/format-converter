@@ -1,11 +1,13 @@
 from typing import Optional
 from requests import Response
-from utils.logging import LoggedClass, log_once
-from utils.data_types import AssessedBiomarkerEntity, Synonym
 import logging
 
+from .data_types import APIHandler
+from utils.logging import LoggedClass, log_once
+from utils.data_types import AssessedBiomarkerEntity, Synonym
 
-class UniprotHandler(LoggedClass):
+
+class UniprotHandler(APIHandler, LoggedClass):
     """Handles Uniprot API responses and data processing."""
 
     def __call__(self, response: Response) -> Optional[AssessedBiomarkerEntity]:
@@ -13,7 +15,7 @@ class UniprotHandler(LoggedClass):
 
         Parameters
         ----------
-        response : Response
+        response: Response
             Response from Uniprot API call
 
         Returns
@@ -24,10 +26,9 @@ class UniprotHandler(LoggedClass):
         try:
             uniprot_data = response.json()["protein"]
             self.debug(
-                f"Processing Uniprot data: {uniprot_data.get('recommendedName', {}).get('fullName', {}).get('value', '')}"
+                f"Processing Uniprot data: {uniprot_data.get('recommendedName', {})}"
             )
 
-            # Extract synonyms
             synonyms = []
 
             # Get recommended short names
@@ -60,11 +61,7 @@ class UniprotHandler(LoggedClass):
                 uniprot_data.get("recommendedName", {}).get("fullName", {}).get("value")
             )
             if not recommended_name:
-                log_once(
-                    self.logger,
-                    "No recommended name found in Uniprot response",
-                    logging.WARNING,
-                )
+                self.warning("No recommended name found in Uniprot response")
                 return None
 
             self.debug(f"Successfully processed Uniprot data for {recommended_name}")
@@ -76,13 +73,15 @@ class UniprotHandler(LoggedClass):
         except KeyError as e:
             log_once(
                 self.logger,
-                f"Missing required field in Uniprot response: {e}",
+                f"Missing required field in Uniprot response for ID: {id}\n{e}",
                 logging.ERROR,
             )
             return None
         except Exception as e:
             log_once(
-                self.logger, f"Error processing Uniprot response: {e}", logging.ERROR
+                self.logger,
+                f"Error processing Uniprot response for ID: {id}\n{e}",
+                logging.ERROR,
             )
             return None
 
