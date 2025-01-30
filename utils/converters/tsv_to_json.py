@@ -5,7 +5,7 @@ import csv
 import logging
 
 from utils.logging import LoggedClass
-from utils.metadata import Metadata
+from utils.metadata import Metadata, ApiCallType
 from . import TSV_LOG_CHECKPOINT, Converter
 from utils.logging import log_once
 from utils.data_types import (
@@ -14,6 +14,7 @@ from utils.data_types import (
     BiomarkerComponent,
     AssessedBiomarkerEntity,
     BiomarkerRole,
+    Citation,
     Condition,
     Evidence,
     EvidenceItem,
@@ -79,6 +80,8 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         if row.evidence_source:
             self._handle_evidence(entry, row)
 
+        self._add_citations(entry)
+
     def _create_entry(self, row: TSVRow) -> BiomarkerEntry:
         """Creates a base entry for the biomarker from the TSV row."""
         roles = [
@@ -120,7 +123,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
         component = self._create_component(row)
 
-        # TODO : missing citation, and xrefs right now
+        # TODO : missing xrefs right now
         return BiomarkerEntry(
             biomarker_id=row.biomarker_id,
             biomarker_component=[component],
@@ -137,10 +140,11 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         assessed_biomarker_entity_resource, assessed_biomarker_entity_id = (
             row.assessed_biomarker_entity_id.split(":")
         )
-        api_calls, assessed_biomarker_entity = self._metadata.entity_type_api_call(
+        api_calls, assessed_biomarker_entity = self._metadata.fetch_metadata(
+            fetch_flag=self._fetch_metadata,
+            call_type=ApiCallType.ENTITY_TYPE,
             resource=assessed_biomarker_entity_resource,
             id=assessed_biomarker_entity_id,
-            entity_type=row.assessed_entity_type,
         )
         self._api_calls += api_calls
         if (
@@ -232,15 +236,79 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
         # Add evidence to component level if it has component tags
         if component_tags:
-            component_evidence = Evidence(**evidence_base, tags=component_tags)
+            component_evidence = Evidence(**evidence_base, tags=component_tags)  # type: ignore
             self._add_evidence(
                 entry.biomarker_component[-1].evidence_source, component_evidence
             )
 
         # Add evidence to top level if it has top level tags
         if top_level_tags:
-            top_level_evidence = Evidence(**evidence_base, tags=top_level_tags)
+            top_level_evidence = Evidence(**evidence_base, tags=top_level_tags)  # type: ignore
             self._add_evidence(entry.evidence_source, top_level_evidence)
+
+    def _add_citations(self, entry: BiomarkerEntry) -> None:
+
+        def collect_evidence_sources(entry: BiomarkerEntry) -> dict[str, set[str]]:
+            sources: dict[str, set[str]] = {}
+
+            for component in entry.biomarker_component:
+                for component_evidence in component.evidence_source:
+                    if component_evidence.database not in sources:
+                        sources[component_evidence.database] = set(
+                            component_evidence.id
+                        )
+                    else:
+                        sources[component_evidence.database].add(component_evidence.id)
+            for top_level_evidence in entry.evidence_source:
+                if top_level_evidence.database not in sources:
+                    sources[top_level_evidence.database] = set(top_level_evidence.id)
+                else:
+                    sources[top_level_evidence.database].add(top_level_evidence.id)
+
+            return sources
+
+        def merge_citations(
+            existing_citation: Citation, new_citation: Citation
+        ) -> None:
+            existing_refs = {
+                (ref.id, ref.type, ref.url) for ref in existing_citation.reference
+            }
+            for new_ref in new_citation.reference:
+                ref_tuple = (new_ref.id, new_ref.type, new_ref.url)
+                if ref_tuple not in existing_refs:
+                    existing_citation.reference.append(new_ref)
+
+            existing_evidence = {
+                (ev.database, ev.id, ev.url) for ev in existing_citation.evidence
+            }
+            for new_ev in new_citation.evidence:
+                ev_tuple = (new_ev.database, new_ev.id, new_ev.url)
+                if ev_tuple not in existing_evidence:
+                    existing_citation.evidence.append(new_ev)
+
+        def add_or_merge_citation(entry: BiomarkerEntry, citation: Citation) -> None:
+            for existing_citation in entry.citation:
+                if (
+                    existing_citation.title == citation.title
+                    and existing_citation.journal == citation.journal
+                    and existing_citation.authors == citation.authors
+                    and existing_citation.date == citation.date
+                ):
+                    merge_citations(existing_citation, citation)
+
+        evidence_sources = collect_evidence_sources(entry)
+        for resource, ids in evidence_sources.items():
+            for id in ids:
+                api_calls, citation = self._metadata.fetch_metadata(
+                    fetch_flag=self._fetch_metadata,
+                    call_type=ApiCallType.CITATION,
+                    resource=resource,
+                    id=id,
+                )
+                self._api_calls += api_calls
+                if citation is None:
+                    continue
+                add_or_merge_citation(entry, citation)
 
     def _add_evidence(
         self, evidence_list: list[Evidence], new_evidence: Evidence
