@@ -197,11 +197,21 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
     def _handle_evidence(self, entry: BiomarkerEntry, row: TSVRow) -> None:
         """Handle evidence allocation based on tags."""
+        split_ev = row.evidence_source.split(":")
+        database = split_ev[0]
+        id = split_ev[-1]
+
+        url = self._metadata.get_url_template(resource=database)
+        if url is not None:
+            url = url.format(id)
+        else:
+            url = ""
+
         # Parse base evidence details
         evidence_base = {
-            "id": row.evidence_source.split(":")[-1],
-            "database": row.evidence_source.split(":")[0],
-            "url": "",
+            "id": id,
+            "database": database.title(),
+            "url": url,
             "evidence_list": [
                 EvidenceItem(evidence=e.strip())
                 for e in row.evidence.split(TSVRow.get_evidence_text_delimiter())
