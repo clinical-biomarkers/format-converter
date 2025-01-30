@@ -10,7 +10,9 @@ from utils.data_types import AssessedBiomarkerEntity, Synonym
 class UniprotHandler(APIHandler, LoggedClass):
     """Handles Uniprot API responses and data processing."""
 
-    def __call__(self, response: Response) -> Optional[AssessedBiomarkerEntity]:
+    def __call__(
+        self, response: Response, id: str
+    ) -> Optional[AssessedBiomarkerEntity]:
         """Process Uniprot API response.
 
         Parameters
