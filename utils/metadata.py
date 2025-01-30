@@ -11,6 +11,7 @@ from utils import ROOT_DIR, load_json_type_safe
 from utils.logging import LoggedClass, log_once
 from utils.data_types import AssessedBiomarkerEntity, Citation
 from .api import ENTITY_HANDLERS, CITATION_HANDLERS, LIBRARY_CALL
+from .api.data_types import RateLimiter
 
 
 class ApiCallType(Enum):
@@ -31,11 +32,11 @@ class Metadata(LoggedClass):
         self._max_retries = max_retries
         self._timeout = timeout
         self._sleep_time = sleep_time
+        self._rate_limiter = RateLimiter()
 
     def get_resource_data(self, resource: str) -> Optional[dict[str, str]]:
         exists, resource_clean = self._check_resource_existence(resource)
         if exists:
-            self.debug(f"Resource {resource} does not exist in namespace map")
             return None
         self.debug(f"Getting resource data for {resource_clean}")
         return self.namespace_map[resource_clean]
@@ -43,7 +44,6 @@ class Metadata(LoggedClass):
     def get_full_name(self, resource: Optional[str]) -> Optional[str]:
         exists, resource_clean = self._check_resource_existence(resource)
         if not exists:
-            self.debug(f"Resource {resource} does not exist in namespace map")
             return None
         full_name = self.namespace_map[resource_clean].get("full_name")
         if not full_name:
@@ -51,21 +51,24 @@ class Metadata(LoggedClass):
             return None
         return full_name.title()
 
-    def get_api_endpoint(self, resource: str) -> Optional[str]:
+    def get_api(self, resource: str) -> tuple[Optional[str], Optional[int]]:
         exists, resource_clean = self._check_resource_existence(resource)
         if not exists:
-            self.debug(f"Resource {resource} does not exist in namespace map")
-            return None
+            return None, None
         endpoint = self.namespace_map[resource_clean].get("api_endpoint")
+        # If there is no endpoint, we just assume no rate limit (at least there shouldn't be)
         if not endpoint:
-            self.debug(f"No api endpoint found for {resource_clean}")
-            return None
-        return endpoint
+            log_once(self.logger, f"No API endpoint found for {resource_clean}", logging.WARNING)
+            return None, None
+        rate_limit = self.namespace_map[resource_clean].get("rate_limit")
+        if not rate_limit:
+            log_once(self.logger, f"API endpoint found for {resource_clean} but no rate limit found", logging.WARNING)
+            return endpoint, None
+        return endpoint, rate_limit
 
     def get_url_template(self, resource: str) -> Optional[str]:
         exists, resource_clean = self._check_resource_existence(resource)
         if not exists:
-            self.debug(f"Resource {resource} does not exist in namespace map")
             return None
         url = self.namespace_map[resource_clean].get("url_template")
         if not url:
@@ -76,7 +79,6 @@ class Metadata(LoggedClass):
     def get_cache_path(self, resource: str) -> Optional[Path]:
         exists, resource_clean = self._check_resource_existence(resource)
         if not exists:
-            self.debug(f"Resource {resource} does not exist in namespace map")
             return None
         cache_file_name = self.namespace_map[resource_clean].get("cache")
         if not cache_file_name:
@@ -137,7 +139,7 @@ class Metadata(LoggedClass):
         id = self._clean_string(string=id, lower=False)
 
         # Check that the API endpoint exists in the namespace map
-        base_endpoint = self.get_api_endpoint(resource_clean)
+        base_endpoint, rate_limit = self.get_api(resource_clean)
         if not base_endpoint:
             log_once(self.logger, f"No API endpoint availble for {resource}", logging.WARNING)
             return 0, None
@@ -155,7 +157,7 @@ class Metadata(LoggedClass):
         cache = load_json_type_safe(cache_path, "dict")
         # Check if entry is already in our cache file
         if id in cache:
-            self.debug(f"Found cached data for {id}")
+            self.debug(f"Found cached data for {resource}:{id}")
             found: Union[AssessedBiomarkerEntity, Citation]
             cached_record = cache[id]
             match call_type:
@@ -178,7 +180,13 @@ class Metadata(LoggedClass):
         if not fetch_flag:
             return 0, None
 
-        handler_map = (ENTITY_HANDLERS if call_type == ApiCallType.ENTITY_TYPE else CITATION_HANDLERS)
+        self._rate_limiter.add_limit(resource=resource_clean, calls=rate_limit, window=1)
+
+        handler_map = (
+            ENTITY_HANDLERS 
+            if call_type == ApiCallType.ENTITY_TYPE 
+            else CITATION_HANDLERS
+        )
 
         # Check that the corresponding API call handler exists for this resource
         if base_endpoint == LIBRARY_CALL:
@@ -188,14 +196,14 @@ class Metadata(LoggedClass):
                 return 0, None
             return lib_handler(id, self._max_retries, self._timeout, self._sleep_time)
         else:
-            api_handler = handler_map.get("api", {}).get(resource_clean)
+            api_handler = handler_map["api"].get(resource_clean)
             if not api_handler:
                 self.warning(f"No API handler found for {resource}")
                 return 0, None
             api_call_count, response = self._api_call_handling(resource=resource_clean, endpoint=base_endpoint.format(id))
             if response is None:
                 return api_call_count, None
-            processed_data = api_handler(response)
+            processed_data = api_handler(response, id)
             return api_call_count, processed_data
             
     def _api_call_handling(
@@ -205,7 +213,13 @@ class Metadata(LoggedClass):
         attempt = 0
         while attempt < self._max_retries:
             try:
+                # Check rate limit before making call
+                self._rate_limiter.check_limit(resource=resource)
+
                 response = requests.get(endpoint, timeout=self._timeout)
+                # Record api call
+                self._rate_limiter.record_call(resource=resource)
+
                 if response.status_code != 200:
                     self.error(
                         f"API call failed for endpoint: {endpoint}\nStatus code: {response.status_code}\nContent: {response.text}"
@@ -240,9 +254,11 @@ class Metadata(LoggedClass):
 
     def _check_resource_existence(self, resource: Optional[str]) -> tuple[bool, str]:
         if resource is None:
+            self.error(f"Got `None` resource")
             return False, ""
         resource_clean = self._clean_string(resource)
         if resource_clean not in self.namespace_map:
+            log_once(self.logger, f"Resource {resource} does not exist in namespace map", logging.WARNING)
             return False, resource_clean
         return True, resource_clean
 
