@@ -7,6 +7,7 @@ from utils.logging import LoggerFactory
 from argparse import ArgumentParser, Namespace
 from traceback import format_exc
 import sys
+from time import time
 
 DEFAULT_LOG_DIR = Path(__file__).parent / "logs"
 
@@ -79,6 +80,8 @@ def main() -> None:
         logger.error(msg)
         raise ValueError(msg)
 
+    start_time = time()
+
     if input.suffix.lower() == ".json" and output.suffix.lower() == ".tsv":
         msg = f"Converting JSON to TSV: {input} -> {output}"
         logger.info(msg)
@@ -99,7 +102,8 @@ def main() -> None:
         logger.error(msg)
         raise
 
-    finish_msg = "Conversion completed successfully!"
+    elapsed_time = time() - start_time
+    finish_msg = f"Conversion completed successfully! Took {elapsed_time:.2f} seconds."
     logger.info(finish_msg)
 
 
