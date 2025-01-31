@@ -7,16 +7,33 @@ from requests import Response
 from enum import Enum
 from dotenv import load_dotenv
 
-from utils import ROOT_DIR, load_json_type_safe
+from utils import ROOT_DIR, load_json_type_safe, write_json
 from utils.logging import LoggedClass, log_once
-from utils.data_types import AssessedBiomarkerEntity, Citation
-from .api import ENTITY_HANDLERS, CITATION_HANDLERS, LIBRARY_CALL
-from .api.data_types import RateLimiter
+from utils.data_types import (
+    AssessedBiomarkerEntity, 
+    Citation, 
+    Condition, 
+    ConditionSynonym, 
+    ConditionRecommendedName
+)
+from .api import (
+    CONDITION_HANDLERS, 
+    ENTITY_HANDLERS, 
+    CITATION_HANDLERS, 
+    LIBRARY_CALL
+)
+from .api.data_types import (
+    CitationHandler, 
+    ConditionHandler, 
+    EntityHandler, 
+    RateLimiter
+)
 
 
 class ApiCallType(Enum):
     ENTITY_TYPE = 1
     CITATION = 2
+    CONDITION = 3
 
 
 class Metadata(LoggedClass):
@@ -58,11 +75,19 @@ class Metadata(LoggedClass):
         endpoint = self.namespace_map[resource_clean].get("api_endpoint")
         # If there is no endpoint, we just assume no rate limit (at least there shouldn't be)
         if not endpoint:
-            log_once(self.logger, f"No API endpoint found for {resource_clean}", logging.WARNING)
+            log_once(
+                self.logger, 
+                f"No API endpoint found for {resource_clean}", 
+                logging.WARNING
+            )
             return None, None
         rate_limit = self.namespace_map[resource_clean].get("rate_limit")
         if not rate_limit:
-            log_once(self.logger, f"API endpoint found for {resource_clean} but no rate limit found", logging.WARNING)
+            log_once(
+                self.logger, 
+                f"API endpoint found for {resource_clean} but no rate limit found", 
+                logging.WARNING
+            )
             return endpoint, None
         return endpoint, rate_limit
 
@@ -106,13 +131,25 @@ class Metadata(LoggedClass):
     ) -> tuple[int, Optional[Citation]]:
         pass
 
+    @overload 
+    def fetch_metadata(
+        self,
+        fetch_flag: bool,
+        call_type: Literal[ApiCallType.CONDITION],
+        resource: str,
+        id: str,
+        **kwargs,
+    ) -> tuple[int, Optional[Condition]]:
+        pass
+
     def fetch_metadata(
         self,
         fetch_flag: bool,
         call_type: ApiCallType,
         resource: str,
         id: str,
-    ) -> tuple[int, Optional[Union[AssessedBiomarkerEntity, Citation]]]:
+        **kwargs,
+    ) -> tuple[int, Optional[Union[AssessedBiomarkerEntity, Citation, Condition]]]:
         """Entry point for making an API call to fetch metadata.
 
         Parameters
@@ -131,9 +168,9 @@ class Metadata(LoggedClass):
 
         Returns
         -------
-        (int, AssessedBiomarkerEntity or Citation or None)
+        (int, AssessedBiomarkerEntity or Citation or Condition or None)
             An int indicating how many API calls were made, and the AssessedBiomarkerEntity
-            data, Citation data, or None if the process failed.
+            data, Citation data, Condition data, or None if the process failed.
         """
         resource_clean = self._clean_string(string=resource, lower=True)
         id = self._clean_string(string=id, lower=False)
@@ -158,7 +195,7 @@ class Metadata(LoggedClass):
         # Check if entry is already in our cache file
         if id in cache:
             self.debug(f"Found cached data for {resource}:{id}")
-            found: Union[AssessedBiomarkerEntity, Citation]
+            found: Union[AssessedBiomarkerEntity, Citation, Condition]
             cached_record = cache[id]
             match call_type:
                 case ApiCallType.ENTITY_TYPE:
@@ -175,36 +212,86 @@ class Metadata(LoggedClass):
                         reference=[], 
                         evidence=[]
                     )
+                case ApiCallType.CONDITION:
+                    full_name = self.get_full_name(resource)
+                    full_name = full_name if full_name else ""
+                    url = self.get_url_template(resource)
+                    url = url.format(id) if url else ""
+                    found = Condition(
+                        id=f"{resource}:{id}", 
+                        recommended_name=ConditionRecommendedName(
+                            id=f"{resource}:{id}", 
+                            name=cached_record["recommended_name"], 
+                            description=cached_record["description"], 
+                            resource=full_name, 
+                            url=url
+                        ), 
+                        synonyms=[
+                            ConditionSynonym(
+                                id=f"{resource}:{id}", 
+                                name=s, 
+                                resource=full_name, 
+                                url=url
+                            ) for s in cached_record["synonyms"]
+                        ]
+                    )
             return 0, found
 
         if not fetch_flag:
             return 0, None
 
-        self._rate_limiter.add_limit(resource=resource_clean, calls=rate_limit, window=1)
-
-        handler_map = (
-            ENTITY_HANDLERS 
-            if call_type == ApiCallType.ENTITY_TYPE 
-            else CITATION_HANDLERS
+        self._rate_limiter.add_limit(
+            resource=resource_clean, 
+            calls=rate_limit, 
+            window=1
         )
+
+        handler_map: Union[EntityHandler, CitationHandler, ConditionHandler]
+        match call_type:
+            case ApiCallType.ENTITY_TYPE:
+                handler_map = ENTITY_HANDLERS
+            case ApiCallType.CITATION:
+                handler_map = CITATION_HANDLERS
+            case ApiCallType.CONDITION:
+                handler_map = CONDITION_HANDLERS
 
         # Check that the corresponding API call handler exists for this resource
         if base_endpoint == LIBRARY_CALL:
             lib_handler = handler_map.get("library", {}).get(resource_clean)
             if not lib_handler:
-                self.warning(f"No library handler found for {resource}, call type: {call_type}")
+                self.warning(
+                    f"No library handler found for {resource}, call type: {call_type}"
+                )
                 return 0, None
-            return lib_handler(id, self._max_retries, self._timeout, self._sleep_time)
+            api_call_count, processed_data = lib_handler(
+                id, 
+                self._max_retries, 
+                self._timeout, 
+                self._sleep_time
+            )
         else:
             api_handler = handler_map["api"].get(resource_clean)
             if not api_handler:
                 self.warning(f"No API handler found for {resource}")
                 return 0, None
-            api_call_count, response = self._api_call_handling(resource=resource_clean, endpoint=base_endpoint.format(id))
+            api_call_count, response = self._api_call_handling(
+                resource=resource_clean, 
+                endpoint=base_endpoint.format(id)
+            )
             if response is None:
                 return api_call_count, None
-            processed_data = api_handler(response, id)
-            return api_call_count, processed_data
+            processed_data = api_handler(response, id, **kwargs)
+
+        # Save fetched data to cache if possible
+        if processed_data is not None:
+            save_data = processed_data.to_cache_dict()
+            cache[id] = save_data
+            try:
+                write_json(filepath=cache_path, data=cache, indent=2)
+            except Exception as e:
+                self.error(f"Failed updating cache for {resource}, {id}: {e}")
+
+        return api_call_count, processed_data
             
     def _api_call_handling(
         self, resource: str, endpoint: str
