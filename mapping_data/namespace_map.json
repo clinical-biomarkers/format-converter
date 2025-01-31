@@ -82,5 +82,19 @@
     "rate_limit": null,
     "url_template": "https://patentscope.wipo.int/search/en/detail.jsf?docId={}",
     "cache": null
+  },
+  "pro": {
+    "full_name": "protein ontology",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "",
+    "cache": null
+  },
+  "dbsnp": {
+    "full_name": "dbsnp",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "",
+    "cache": null
   }
 }
