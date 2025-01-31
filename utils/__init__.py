@@ -1,8 +1,13 @@
 from pathlib import Path
-from typing import Literal, Union, overload
+from typing import Any, Literal, Union, overload
 import json
 
 ROOT_DIR = Path(__file__).parent.parent
+
+
+def write_json(filepath: Union[str, Path], data: Any, indent: int = 2) -> None:
+    with open(filepath, "w") as f:
+        json.dump(data, f, indent=indent)
 
 
 def _load_json(filepath: Union[str, Path]) -> Union[dict, list]:
