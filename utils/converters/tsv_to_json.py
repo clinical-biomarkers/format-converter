@@ -1,11 +1,11 @@
 from pathlib import Path
 from typing import Iterator, Optional
-import json
 import csv
 import logging
 
 from utils.logging import LoggedClass
 from utils.metadata import Metadata, ApiCallType
+from utils import write_json
 from . import TSV_LOG_CHECKPOINT, Converter
 from utils.logging import log_once
 from utils.data_types import (
@@ -20,7 +20,7 @@ from utils.data_types import (
     EvidenceItem,
     EvidenceTag,
     ExposureAgent,
-    RecommendedName,
+    ConditionRecommendedName,
     Specimen,
     TSVRow,
     EvidenceState,
@@ -90,32 +90,50 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             if role.strip()
         ]
 
-        condition_ressource = row.condition_id.split(":")[0]
-        condition_id = row.condition_id.split(":")[1]
-        condition_resource_name = self._metadata.get_full_name(condition_ressource)
+        condition_data = row.condition_id.split(":")
+        condition_resource = condition_data[0]
+        condition_id = condition_data[-1]
+        condition_resource_name = self._metadata.get_full_name(condition_resource)
         condition_resource_name = (
             condition_resource_name if condition_resource_name else ""
         )
-        condition_url = self._metadata.get_url_template(condition_ressource)
+        condition_url = self._metadata.get_url_template(condition_resource)
         condition_url = condition_url.format(condition_id) if condition_url else ""
-        condition = Condition(
-            id=row.condition_id,
-            recommended_name=RecommendedName(
-                id=row.condition_id,
-                name=row.condition,
-                description=None,
-                resource=condition_resource_name,
-                url=condition_url,
-            ),
+        cond_api_calls, condition = self._metadata.fetch_metadata(
+            fetch_flag=self._fetch_metadata,
+            call_type=ApiCallType.CONDITION,
+            resource=condition_resource,
+            id=condition_id,
+            resource_name=condition_resource_name,
+            condition_url=condition_url,
         )
+        self._api_calls += cond_api_calls
+        if condition is None:
+            condition = Condition(
+                id=row.condition_id,
+                recommended_name=ConditionRecommendedName(
+                    id=row.condition_id,
+                    name=row.condition,
+                    description="",
+                    resource=condition_resource_name,
+                    url=condition_url,
+                ),
+            )
+        else:
+            if row.condition.lower() != condition.recommended_name.name.lower():
+                log_once(
+                    self.logger,
+                    f"TSV condition name ({row.condition}) does NOT match resource recommended name ({condition.recommended_name.name})",
+                    logging.WARNING,
+                )
 
         # TODO : not handling exposure agent metadata right now
         exposure_agent = ExposureAgent(
             id=row.exposure_agent_id,
-            recommended_name=RecommendedName(
+            recommended_name=ConditionRecommendedName(
                 id=row.exposure_agent_id,
                 name=row.exposure_agent,
-                description=None,
+                description="",
                 resource="",
                 url="",
             ),
@@ -149,8 +167,8 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         self._api_calls += api_calls
         if (
             assessed_biomarker_entity is not None
-            and assessed_biomarker_entity.recommended_name
-            != row.assessed_biomarker_entity
+            and assessed_biomarker_entity.recommended_name.lower()
+            != row.assessed_biomarker_entity.lower()
         ):
             log_once(
                 self.logger,
@@ -396,5 +414,4 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
     def _write_json(self, entries: list[BiomarkerEntry], path: Path) -> None:
         json_data = [entry.to_dict() for entry in entries]
-        with path.open("w") as f:
-            json.dump(json_data, f, indent=2)
+        write_json(filepath=path, data=json_data, indent=2)
