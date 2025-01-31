@@ -5,7 +5,7 @@ from requests import Response
 from collections import defaultdict
 from time import time, sleep
 
-from utils.data_types import AssessedBiomarkerEntity, Citation
+from utils.data_types import AssessedBiomarkerEntity, Citation, Condition
 from utils.logging import LoggedClass
 
 
@@ -18,8 +18,8 @@ class APIHandler(ABC):
 
 
 class LibraryHandler(ABC):
-    """Parent structure for resources that manage their API calls 
-    through libraries. Note, the handler will have to manage their 
+    """Parent structure for resources that manage their API calls
+    through libraries. Note, the handler will have to manage their
     own error handling, api call counts, and rate limiting.
     """
 
@@ -64,6 +64,19 @@ class CitationHandler(TypedDict):
     library: dict[str, CitationLibraryHandlerAlias]
 
 
+# Condition handlers
+
+ConditionAPIHandlerAlias: TypeAlias = Callable[[Response, str], Optional[Condition]]
+ConditionLibraryHandlerAlias: TypeAlias = Callable[
+    [str, int, int, int], tuple[int, Optional[Condition]]
+]
+
+
+class ConditionHandler(TypedDict):
+    api: dict[str, ConditionAPIHandlerAlias]
+    library: dict[str, ConditionLibraryHandlerAlias]
+
+
 # Rate limit state
 
 
@@ -99,7 +112,7 @@ class RateLimiter(LoggedClass):
 
         # If this resource is already being tracked, don't re-add
         if resource in self._limits:
-            return 
+            return
 
         self._limits[resource] = RateLimit(calls=calls, window=window)
         self.debug(
