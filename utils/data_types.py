@@ -18,6 +18,9 @@ class AssessedBiomarkerEntity:
             "synonyms": [s.synonym for s in self.synonyms],
         }
 
+    def to_cache_dict(self) -> dict[str, Union[str, list[str]]]:
+        return self.to_dict()
+
 
 @dataclass
 class Specimen:
@@ -48,10 +51,10 @@ class Evidence:
 
 
 @dataclass
-class RecommendedName:
+class ConditionRecommendedName:
     id: str
     name: str
-    description: Optional[str]
+    description: str
     resource: str
     url: str
 
@@ -67,14 +70,22 @@ class ConditionSynonym:
 @dataclass
 class Condition:
     id: str
-    recommended_name: RecommendedName
+    recommended_name: ConditionRecommendedName
     synonyms: list[ConditionSynonym] = field(default_factory=list)
+
+    def to_cache_dict(self) -> dict[str, Union[str, list[str]]]:
+        return_data: dict[str, Union[str, list[str]]] = {
+            "recommended_name": self.recommended_name.name,
+            "description": self.recommended_name.description,
+            "synonyms": [s.name for s in self.synonyms],
+        }
+        return return_data
 
 
 @dataclass
 class ExposureAgent:
     id: str
-    recommended_name: RecommendedName
+    recommended_name: ConditionRecommendedName
     synonyms: list[ConditionSynonym] = field(default_factory=list)
 
 
@@ -116,6 +127,15 @@ class Citation:
             "reference": [ref.to_dict() for ref in self.reference],
             "evidence": [ev.to_dict() for ev in self.evidence],
         }
+
+    def to_cache_dict(self) -> dict[str, str]:
+        return_data: dict[str, str] = {
+            "title": self.title,
+            "journal": self.journal,
+            "authors": self.authors,
+            "publication_date": self.date,
+        }
+        return return_data
 
 
 @dataclass
@@ -295,14 +315,14 @@ class BiomarkerEntry:
         if data is None:
             return Condition(
                 id="",
-                recommended_name=RecommendedName(
+                recommended_name=ConditionRecommendedName(
                     id="", name="", description="", resource="", url=""
                 ),
                 synonyms=[],
             )
         return Condition(
             id=data["id"],
-            recommended_name=RecommendedName(**data["recommended_name"]),
+            recommended_name=ConditionRecommendedName(**data["recommended_name"]),
             synonyms=[ConditionSynonym(**s) for s in data.get("synonyms", [])],
         )
 
@@ -312,14 +332,14 @@ class BiomarkerEntry:
         if data is None:
             return ExposureAgent(
                 id="",
-                recommended_name=RecommendedName(
+                recommended_name=ConditionRecommendedName(
                     id="", name="", description="", resource="", url=""
                 ),
                 synonyms=[],
             )
         return ExposureAgent(
             id=data["id"],
-            recommended_name=RecommendedName(**data["recommended_name"]),
+            recommended_name=ConditionRecommendedName(**data["recommended_name"]),
             synonyms=[ConditionSynonym(**s) for s in data.get("synonyms", [])],
         )
 
