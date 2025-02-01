@@ -28,6 +28,12 @@ def parse_args() -> Namespace:
         dest="metadata",
         help="Whether to fetch synonym and recommended name metdata from APIs",
     )
+    tsvJSON.add_argument(
+        "--preload-cache",
+        action="store_true",
+        dest="preload_cache",
+        help="Whether to preload the cache data",
+    )
 
     # Logging args
     log_group = parser.add_argument_group("logging options")
@@ -69,6 +75,7 @@ def main() -> None:
     input: Path = args.input
     output: Path = args.output
     metadata: bool = args.metadata
+    preload_cache: bool = args.preload_cache
     converter: Converter
 
     if not input.exists():
@@ -89,7 +96,9 @@ def main() -> None:
     elif input.suffix.lower() == ".tsv" and output.suffix.lower() == ".json":
         msg = f"Converting TSV to JSON: {input} -> {output}"
         logger.info(msg)
-        converter = TSVtoJSONConverter(fetch_metadata=metadata)
+        converter = TSVtoJSONConverter(
+            fetch_metadata=metadata, preload_caches=preload_cache
+        )
     else:
         msg = f"Invalid conversion: {input.suffix} -> {output.suffix}"
         logger.error(msg)

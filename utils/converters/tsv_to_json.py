@@ -31,12 +31,15 @@ from utils.data_types import (
 class TSVtoJSONConverter(Converter, LoggedClass):
     """Converts biomarker TSV data to JSON format."""
 
-    def __init__(self, fetch_metadata: bool = True) -> None:
+    def __init__(
+        self, fetch_metadata: bool = True, preload_caches: bool = False
+    ) -> None:
         LoggedClass.__init__(self)
         self.debug("Initializing TSV to JSON converter")
         self._fetch_metadata = fetch_metadata
         self._entries: dict[str, BiomarkerEntry] = {}
-        self._metadata = Metadata()
+        self._preload_caches = preload_caches
+        self._metadata = Metadata(preload_caches=self._preload_caches)
         self._api_calls = 0
         # Track evidence states per biomarker_id
         self._evidence_states: dict[str, dict[str, EvidenceState]] = {}
@@ -47,12 +50,14 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         for idx, row in enumerate(self._stream_tsv(input_path)):
             if (idx + 1) % TSV_LOG_CHECKPOINT == 0:
                 self.debug(f"Hit log checkpoint on row {idx + 1}")
-            self._process_row(row)
+            self._process_row(row, idx)
 
         self.info(f"Writing {len(self._entries)} entries to {output_path}")
         self.info(f"Made {self._api_calls} API calls")
         entries = list(self._entries.values())
         self._write_json(entries, output_path)
+        if self._preload_caches:
+            self._metadata.save_cache_files()
 
     def _stream_tsv(self, path: Path) -> Iterator[TSVRow]:
         with path.open() as f:
@@ -60,11 +65,11 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             for row in reader:
                 yield TSVRow.from_dict(row)
 
-    def _process_row(self, row: TSVRow) -> None:
+    def _process_row(self, row: TSVRow, idx: int) -> None:
         """Process a single row, updating entries and evidence."""
         log_once(
             self.logger,
-            f"Processing row for biomarker ID: {row.biomarker_id}",
+            f"Processing row #{idx + 1} for biomarker ID: {row.biomarker_id}",
             logging.DEBUG,
         )
 
@@ -123,7 +128,10 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             if row.condition.lower() != condition.recommended_name.name.lower():
                 log_once(
                     self.logger,
-                    f"TSV condition name ({row.condition}) does NOT match resource recommended name ({condition.recommended_name.name})",
+                    (
+                        f"TSV condition name ({row.condition}) does NOT match "
+                        f"resource recommended name ({condition.recommended_name.name})"
+                    ),
                     logging.WARNING,
                 )
 
@@ -172,7 +180,10 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         ):
             log_once(
                 self.logger,
-                f"TSV assessed biomarker entity name ({row.assessed_biomarker_entity}) does NOT match resource recommended name ({assessed_biomarker_entity.recommended_name})",
+                (
+                    f"TSV assessed biomarker entity name ({row.assessed_biomarker_entity}) "
+                    f"does NOT match resource recommended name ({assessed_biomarker_entity.recommended_name})"
+                ),
                 logging.WARNING,
             )
 
@@ -190,26 +201,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         )
 
         if row.specimen:
-            specimen_resource = row.specimen_id.split(":")[0]
-            specimen_id = row.specimen_id.split(":")[1]
-            specimen_resource_name = self._metadata.get_full_name(specimen_resource)
-            specimen_resource_name = (
-                specimen_resource_name if specimen_resource_name else ""
-            )
-            specimen_resource_url = self._metadata.get_url_template(specimen_resource)
-            specimen_resource_url = (
-                specimen_resource_url if specimen_resource_url else ""
-            )
-            specimen_resource_url = specimen_resource_url.format(specimen_id)
-            component.specimen.append(
-                Specimen(
-                    name=row.specimen,
-                    id=row.specimen_id,
-                    name_space=specimen_resource_name,
-                    url=specimen_resource_url,
-                    loinc_code=row.loinc_code,
-                )
-            )
+            component.specimen.append(self._to_specimen(row))
 
         return component
 
@@ -282,16 +274,12 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             for component in entry.biomarker_component:
                 for component_evidence in component.evidence_source:
                     if component_evidence.database not in sources:
-                        sources[component_evidence.database] = set(
-                            component_evidence.id
-                        )
-                    else:
-                        sources[component_evidence.database].add(component_evidence.id)
+                        sources[component_evidence.database] = set()
+                    sources[component_evidence.database].add(component_evidence.id)
             for top_level_evidence in entry.evidence_source:
                 if top_level_evidence.database not in sources:
-                    sources[top_level_evidence.database] = set(top_level_evidence.id)
-                else:
-                    sources[top_level_evidence.database].add(top_level_evidence.id)
+                    sources[top_level_evidence.database] = set()
+                sources[top_level_evidence.database].add(top_level_evidence.id)
 
             return sources
 
@@ -323,6 +311,10 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                     and existing_citation.date == citation.date
                 ):
                     merge_citations(existing_citation, citation)
+                    return
+
+            # No match found - append new citation
+            entry.citation.append(citation)
 
         evidence_sources = collect_evidence_sources(entry)
         for resource, ids in evidence_sources.items():
@@ -364,7 +356,24 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         self, entry: BiomarkerEntry, row: TSVRow
     ) -> None:
         """Entry point to process component handling for existing entries."""
-        matching_component = self._find_matching_component(entry, row)
+
+        def find_matching_component(
+            entry: BiomarkerEntry, row: TSVRow
+        ) -> Optional[BiomarkerComponent]:
+            """Determines if the component is already in the biomarker entry."""
+            for component in entry.biomarker_component:
+                if (
+                    component.biomarker == row.biomarker
+                    and component.assessed_biomarker_entity.recommended_name.lower()
+                    == row.assessed_biomarker_entity.lower()
+                    and component.assessed_biomarker_entity_id
+                    == row.assessed_biomarker_entity_id
+                    and component.assessed_entity_type.lower() == row.assessed_entity_type.lower()
+                ):
+                    return component
+            return None
+
+        matching_component = find_matching_component(entry, row)
 
         if matching_component:
             # Update existing component with new data
@@ -374,43 +383,37 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             new_component = self._create_component(row)
             entry.biomarker_component.append(new_component)
 
-    def _find_matching_component(
-        self, entry: BiomarkerEntry, row: TSVRow
-    ) -> Optional[BiomarkerComponent]:
-        """Determines if the component is already in the biomarker entry."""
-        for component in entry.biomarker_component:
-            if (
-                component.biomarker == row.biomarker
-                and component.assessed_biomarker_entity.recommended_name
-                == row.assessed_biomarker_entity
-                and component.assessed_biomarker_entity_id
-                == row.assessed_biomarker_entity_id
-                and component.assessed_entity_type == row.assessed_entity_type
-            ):
-                return component
-        return None
-
     def _update_component(self, component: BiomarkerComponent, row: TSVRow) -> None:
         """Update existing component with new data. Does not merge evidence data, that
         is handled separately.
         """
         if row.specimen:
+            # Check if this exact specimen already exists
             specimen_exists = any(
                 s.name == row.specimen
                 and s.id == row.specimen_id
                 and s.loinc_code == row.loinc_code
                 for s in component.specimen
             )
+            # Add if it doesn't
             if not specimen_exists:
-                component.specimen.append(
-                    Specimen(
-                        name=row.specimen,
-                        id=row.specimen_id,
-                        name_space="",
-                        url="",
-                        loinc_code=row.loinc_code,
-                    )
-                )
+                component.specimen.append(self._to_specimen(row))
+
+    def _to_specimen(self, row: TSVRow) -> Specimen:
+        specimen_parts = row.specimen_id.split(":")
+        specimen_resource = specimen_parts[0]
+        specimen_id = specimen_parts[-1]
+        specimen_resource_name = self._metadata.get_full_name(specimen_resource)
+        specimen_resource_name = (specimen_resource_name if specimen_resource_name else "")
+        specimen_resource_url = self._metadata.get_url_template(specimen_resource)
+        specimen_resource_url = specimen_resource_url.format(specimen_id) if specimen_resource_url else ""
+        return Specimen(
+            name=row.specimen,
+            id=row.specimen_id,
+            name_space=specimen_resource_name,
+            url=specimen_resource_url,
+            loinc_code=row.loinc_code
+        )
 
     def _write_json(self, entries: list[BiomarkerEntry], path: Path) -> None:
         json_data = [entry.to_dict() for entry in entries]
