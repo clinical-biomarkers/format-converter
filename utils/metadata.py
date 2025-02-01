@@ -39,7 +39,11 @@ class ApiCallType(Enum):
 class Metadata(LoggedClass):
 
     def __init__(
-        self, max_retries: int = 3, timeout: int = 5, sleep_time: int = 1
+        self, 
+        max_retries: int = 3, 
+        timeout: int = 5, 
+        sleep_time: int = 1, 
+        preload_caches: bool = False
     ) -> None:
         super().__init__()
         load_dotenv()
@@ -50,6 +54,10 @@ class Metadata(LoggedClass):
         self._timeout = timeout
         self._sleep_time = sleep_time
         self._rate_limiter = RateLimiter()
+
+        self._preloaded_caches: dict[str, dict] = {}
+        if preload_caches:
+            self._preload_cache_files()
 
     def get_resource_data(self, resource: str) -> Optional[dict[str, str]]:
         exists, resource_clean = self._check_resource_existence(resource)
@@ -110,6 +118,25 @@ class Metadata(LoggedClass):
             self.debug(f"No cache file found for {resource_clean}")
             return None
         return ROOT_DIR / "mapping_data" / cache_file_name
+
+    def get_cache_data(self, resource: str) -> Optional[dict]:
+        """Get cache data for a resource."""
+        # If caches are preloaded, check memory first
+        if resource in self._preloaded_caches:
+            return self._preloaded_caches[resource]
+
+        # Otherwise load from disk
+        cache_path = self.get_cache_path(resource)
+        if cache_path is None or not cache_path.exists():
+            return None
+        
+        try:
+            return load_json_type_safe(filepath=cache_path, return_type="dict")
+        except Exception as e:
+            self.error(
+                f"Failed to load cache for {resource} from {cache_path}: {e}"
+            )
+            return None
 
     @overload
     def fetch_metadata(
@@ -181,17 +208,12 @@ class Metadata(LoggedClass):
             log_once(self.logger, f"No API endpoint availble for {resource}", logging.WARNING)
             return 0, None
 
-        # Check that a corresponding cache file path exists
-        cache_path = self.get_cache_path(resource)
-        if cache_path is None:
-            self.error(f"No cache path found for {resource}")
-            return 0, None
-        if not cache_path.exists():
-            self.error(f"Cache file at {cache_path} does not exist")
+        # Load the cache file
+        cache = self.get_cache_data(resource_clean)
+        if cache is None:
+            log_once(self.logger, f"Failed to load cache for {resource}", logging.WARNING)
             return 0, None
 
-        # Load the cache file
-        cache = load_json_type_safe(cache_path, "dict")
         # Check if entry is already in our cache file
         if id in cache:
             self.debug(f"Found cached data for {resource}:{id}")
@@ -284,10 +306,9 @@ class Metadata(LoggedClass):
 
         # Save fetched data to cache if possible
         if processed_data is not None:
-            save_data = processed_data.to_cache_dict()
-            cache[id] = save_data
             try:
-                write_json(filepath=cache_path, data=cache, indent=2)
+                save_data = processed_data.to_cache_dict()
+                self._update_cache(resource=resource_clean, id=id, data=save_data, cache=cache)
             except Exception as e:
                 self.error(f"Failed updating cache for {resource}, {id}: {e}")
 
@@ -309,7 +330,10 @@ class Metadata(LoggedClass):
 
                 if response.status_code != 200:
                     self.error(
-                        f"API call failed for endpoint: {endpoint}\nStatus code: {response.status_code}\nContent: {response.text}"
+                        (
+                            f"API call failed for endpoint: {endpoint}\n"
+                            f"Status code: {response.status_code}\nContent: {response.text}"
+                        )
                     )
                     return attempt + 1, None
 
@@ -321,11 +345,17 @@ class Metadata(LoggedClass):
 
             except (requests.Timeout, requests.ConnectionError) as e:
                 self.warning(
-                    f"Request {type(e).__name__} on attempt {attempt + 1} for endpoint {endpoint} from resource {resource}\n{e}"
+                    (
+                        f"Request {type(e).__name__} on attempt {attempt + 1} for "
+                        f"endpoint {endpoint} from resource {resource}\n{e}"
+                    )
                 )
             except Exception as e:
                 self.exception(
-                    f"Unexpected error during API call (attempt {attempt + 1}/{self._max_retries}) for endpoint {endpoint} from resource {resource}\n{e}"
+                    (
+                        f"Unexpected error during API call (attempt {attempt + 1}/{self._max_retries}) "
+                         f"for endpoint {endpoint} from resource {resource}\n{e}"
+                     )
                 )
 
             attempt += 1
@@ -338,6 +368,52 @@ class Metadata(LoggedClass):
             logging.ERROR,
         )
         return attempt + 1, None
+    
+    def _preload_cache_files(self) -> None:
+        self.info("Preloading cache files into memory...")
+        for resource in self.namespace_map.keys():
+            resource_clean = self._clean_string(resource)
+            cache_path = self.get_cache_path(resource_clean)
+            if cache_path is not None and cache_path.exists():
+                self._preloaded_caches[resource_clean] = load_json_type_safe(
+                    filepath=cache_path, 
+                    return_type="dict"
+                )
+        self.info(f"Preloaded {len(self._preloaded_caches)} cache files")
+
+    def save_cache_files(self) -> None:
+        """Saves cache files back to disk if using prefetched cache data."""
+        self.info("Saving cache files back to disk...")
+        for resource in self.namespace_map.keys():
+            resource_clean = self._clean_string(resource)
+            cache_path = self.get_cache_path(resource_clean)
+            if cache_path is not None and cache_path.exists():
+                write_json(filepath=cache_path, data=self._preloaded_caches[resource_clean], indent=2)
+        self.info(f"Saved {len(self._preloaded_caches)} cache files back to disk")
+
+    def _update_cache(
+        self, 
+        resource: str, 
+        id: str, 
+        data: dict, 
+        cache: dict
+    ) -> None:
+        # Update memory cache if preloaded
+        if resource in self._preloaded_caches:
+            self._preloaded_caches[resource][id] = data
+            return
+
+        # Update disk cache
+        cache_path = self.get_cache_path(resource)
+        if cache_path is None:
+            self.error(f"No cache path found for {resource}")
+            return 
+        
+        try:
+            cache[id] = data
+            write_json(filepath=cache_path, data=cache, indent=2)
+        except Exception as e:
+            self.error(f"Failed updating cache for {resource}:{id}\n{e}")
 
     def _check_resource_existence(self, resource: Optional[str]) -> tuple[bool, str]:
         if resource is None:
