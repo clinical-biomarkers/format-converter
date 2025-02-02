@@ -236,9 +236,11 @@ class Metadata(LoggedClass):
                 return 0, None
             api_call_count, processed_data = lib_handler(
                 id, 
+                resource_clean,
                 self._max_retries, 
                 self._timeout, 
-                self._sleep_time
+                self._sleep_time,
+                self._rate_limiter,
             )
         else:
             api_handler = METADATA_HANDLERS["api"].get(resource_clean)

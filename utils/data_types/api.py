@@ -1,11 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Optional, TypedDict, Callable, TypeAlias
+from typing import Optional, TypedDict, Callable, TypeAlias, TYPE_CHECKING
 from requests import Response
 
-from utils.data_types import CacheableDataModelObject
+from utils.data_types.json_types import CacheableDataModelObject
+if TYPE_CHECKING:
+    from utils.data_types import RateLimiter
+from utils.logging import LoggedClass
 
 
-class APIHandler(ABC):
+class APIHandler(ABC, LoggedClass):
     """Parent structure for direct API call resources."""
 
     @abstractmethod
@@ -15,70 +18,44 @@ class APIHandler(ABC):
         pass
 
 
-class LibraryHandler(ABC):
+class LibraryHandler(ABC, LoggedClass):
     """Parent structure for resources that manage their API calls
     through libraries. Note, the handler will have to manage their
-    own error handling, api call counts, and rate limiting.
+    own error handling and api call counts.
     """
 
     @abstractmethod
     def __call__(
         self,
         id: str,
+        resource: str,
         max_retries: int = 3,
         timeout: int = 5,
         sleep_time: int = 1,
+        rate_limiter: Optional["RateLimiter"] = None,
     ) -> tuple[int, Optional[CacheableDataModelObject]]:
         pass
+
+    def _check_limit(self, resource: str, rate_limiter: Optional["RateLimiter"]) -> None:
+        if rate_limiter is None:
+            return
+        rate_limiter.check_limit(resource=resource)
+
+    def _record_call(self, resource: str, rate_limiter: Optional["RateLimiter"]) -> None:
+        if rate_limiter is None:
+            return
+        rate_limiter.record_call(resource=resource)
 
 
 APIHandlerAlias: TypeAlias = Callable[
     [Response, str], Optional[CacheableDataModelObject]
 ]
 LibraryHandlerAlias: TypeAlias = Callable[
-    [str, int, int, int], tuple[int, Optional[CacheableDataModelObject]]
+    [str, str, int, int, int, Optional["RateLimiter"]],
+    tuple[int, Optional[CacheableDataModelObject]],
 ]
 
 
 class EntityHandlerMap(TypedDict):
     api: dict[str, APIHandlerAlias]
     library: dict[str, LibraryHandlerAlias]
-
-
-# EntityAPIHandlerAlias: TypeAlias = Callable[
-#     [Response, str], Optional[AssessedBiomarkerEntity]
-# ]
-# EntityLibraryHandlerAlias: TypeAlias = Callable[
-#     [str, int, int, int], tuple[int, Optional[AssessedBiomarkerEntity]]
-# ]
-#
-#
-# class EntityHandler(TypedDict):
-#     api: dict[str, EntityAPIHandlerAlias]
-#     library: dict[str, EntityLibraryHandlerAlias]
-#
-#
-# # Citation handlers
-#
-# CitationAPIHandlerAlias: TypeAlias = Callable[[Response, str], Optional[Citation]]
-# CitationLibraryHandlerAlias: TypeAlias = Callable[
-#     [str, int, int, int], tuple[int, Optional[Citation]]
-# ]
-#
-#
-# class CitationHandler(TypedDict):
-#     api: dict[str, CitationAPIHandlerAlias]
-#     library: dict[str, CitationLibraryHandlerAlias]
-#
-#
-# # Condition handlers
-#
-# ConditionAPIHandlerAlias: TypeAlias = Callable[[Response, str], Optional[Condition]]
-# ConditionLibraryHandlerAlias: TypeAlias = Callable[
-#     [str, int, int, int], tuple[int, Optional[Condition]]
-# ]
-#
-#
-# class ConditionHandler(TypedDict):
-#     api: dict[str, ConditionAPIHandlerAlias]
-#     library: dict[str, ConditionLibraryHandlerAlias]

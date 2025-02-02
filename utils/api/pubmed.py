@@ -3,10 +3,14 @@ import logging
 from pymed import PubMed
 import os
 from time import sleep
-from xml.etree.ElementTree import ParseError
 
 from utils.logging import LoggedClass, log_once
-from utils.data_types import LibraryHandler, Citation, CacheableDataModelObject
+from utils.data_types import (
+    LibraryHandler,
+    Citation,
+    CacheableDataModelObject,
+    RateLimiter,
+)
 
 
 class PubmedHandler(LibraryHandler, LoggedClass):
@@ -15,9 +19,11 @@ class PubmedHandler(LibraryHandler, LoggedClass):
     def __call__(
         self,
         id: str,
+        resource: str,
         max_retries: int = 3,
         timeout: int = 5,
         sleep_time: int = 1,
+        rate_limiter: Optional[RateLimiter] = None,
     ) -> tuple[int, Optional[CacheableDataModelObject]]:
         """Processes Pubmed API response.
 
@@ -58,8 +64,10 @@ class PubmedHandler(LibraryHandler, LoggedClass):
         attempt = 0
         while attempt < max_retries:
             try:
+                self._check_limit(resource=resource, rate_limiter=rate_limiter)
                 articles = pubmed.query(query)
                 article = next(articles)
+                self._record_call(resource=resource, rate_limiter=rate_limiter)
                 title = article.title
                 journal = article.journal
                 authors = ", ".join(
@@ -80,20 +88,17 @@ class PubmedHandler(LibraryHandler, LoggedClass):
                 )
                 return attempt + 1, citation
             except StopIteration as e:
+                self._record_call(resource=resource, rate_limiter=rate_limiter)
                 self.warning(f"Error: No articles found for Pubmed ID: {id}\n{e}")
                 return attempt + 1, None
-            except ParseError as e:
-                self.exception(
-                    f"Failed to parse (attempt {attempt}/{max_retries}) Pubmed data for Pubmed ID: {id}\n{e}"
-                )
             except Exception as e:
+                self._record_call(resource=resource, rate_limiter=rate_limiter)
+                attempt += 1
                 self.exception(
                     f"Unexpected error while fetching (attempt {attempt}/{max_retries}) Pubmed data for Pubmed ID: {id}\n{e}"
                 )
-
-            attempt += 1
-            self.debug(f"Sleeping for {sleep_time} seconds...")
-            sleep(sleep_time)
+                self.debug(f"Sleeping for {sleep_time} seconds...")
+                sleep(sleep_time)
 
         log_once(
             self.logger,
