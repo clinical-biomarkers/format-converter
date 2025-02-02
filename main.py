@@ -13,6 +13,8 @@ DEFAULT_LOG_DIR = Path(__file__).parent / "logs"
 
 
 def parse_args() -> Namespace:
+    """Parse command line arguments."""
+
     parser = ArgumentParser()
 
     # Required args
@@ -29,6 +31,7 @@ def parse_args() -> Namespace:
         help="Whether to fetch synonym and recommended name metdata from APIs",
     )
     tsvJSON.add_argument(
+        "-p",
         "--preload-cache",
         action="store_true",
         dest="preload_cache",
@@ -61,10 +64,9 @@ def parse_args() -> Namespace:
 
 def main() -> None:
     args = parse_args()
-    log_path = args.log_dir / "conversion.log"
 
     LoggerFactory.initialize(
-        log_path=log_path,
+        log_path=args.log_dir / "conversion.log",
         debug=args.debug,
         console_output=args.console_output,
         rotate_logs=args.rotate_logs,
@@ -89,16 +91,19 @@ def main() -> None:
 
     start_time = time()
 
+    # JSON to TSV conversion
     if input.suffix.lower() == ".json" and output.suffix.lower() == ".tsv":
         msg = f"Converting JSON to TSV: {input} -> {output}"
         logger.info(msg)
         converter = JSONtoTSVConverter()
+    # TSV to JSON conversion
     elif input.suffix.lower() == ".tsv" and output.suffix.lower() == ".json":
         msg = f"Converting TSV to JSON: {input} -> {output}"
         logger.info(msg)
         converter = TSVtoJSONConverter(
             fetch_metadata=metadata, preload_caches=preload_cache
         )
+    # Unsupported conversion
     else:
         msg = f"Invalid conversion: {input.suffix} -> {output.suffix}"
         logger.error(msg)

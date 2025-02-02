@@ -6,8 +6,7 @@ from time import sleep
 from xml.etree.ElementTree import ParseError
 
 from utils.logging import LoggedClass, log_once
-from utils.data_types import Citation
-from .data_types import LibraryHandler
+from utils.data_types import LibraryHandler, Citation, CacheableDataModelObject
 
 
 class PubmedHandler(LibraryHandler, LoggedClass):
@@ -17,9 +16,9 @@ class PubmedHandler(LibraryHandler, LoggedClass):
         self,
         id: str,
         max_retries: int = 3,
-        _: int = 5,
+        timeout: int = 5,
         sleep_time: int = 1,
-    ) -> tuple[int, Optional[Citation]]:
+    ) -> tuple[int, Optional[CacheableDataModelObject]]:
         """Processes Pubmed API response.
 
         Parameters

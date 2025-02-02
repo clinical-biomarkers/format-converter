@@ -2,9 +2,13 @@ from typing import Optional
 from requests import Response
 import logging
 
-from .data_types import APIHandler
 from utils.logging import LoggedClass, log_once
-from utils.data_types import AssessedBiomarkerEntity, Synonym
+from utils.data_types import (
+    AssessedBiomarkerEntity,
+    Synonym,
+    CacheableDataModelObject,
+    APIHandler,
+)
 
 
 class UniprotHandler(APIHandler, LoggedClass):
@@ -12,7 +16,7 @@ class UniprotHandler(APIHandler, LoggedClass):
 
     def __call__(
         self, response: Response, id: str
-    ) -> Optional[AssessedBiomarkerEntity]:
+    ) -> Optional[CacheableDataModelObject]:
         """Process Uniprot API response.
 
         Parameters

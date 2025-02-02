@@ -3,15 +3,22 @@ from requests import Response
 import re
 import logging
 
-from .data_types import APIHandler
 from utils.logging import LoggedClass, log_once
-from utils.data_types import Condition, ConditionSynonym, ConditionRecommendedName
+from utils.data_types import (
+    Condition,
+    ConditionSynonym,
+    ConditionRecommendedName,
+    APIHandler,
+    CacheableDataModelObject,
+)
 
 
 class DoidHandler(APIHandler, LoggedClass):
     """Handles Disease Ontology API responses."""
 
-    def __call__(self, response: Response, id: str, **kwargs) -> Optional[Condition]:
+    def __call__(
+        self, response: Response, id: str, **kwargs
+    ) -> Optional[CacheableDataModelObject]:
         resource = str(kwargs.get("resource_name", ""))
         url = str(kwargs.get("condition_url", "")).format(id)
 

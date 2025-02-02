@@ -2,15 +2,21 @@ from typing import Optional
 from requests import Response
 import logging
 
-from .data_types import APIHandler
 from utils.logging import LoggedClass, log_once
-from utils.data_types import AssessedBiomarkerEntity, Synonym
+from utils.data_types import (
+    AssessedBiomarkerEntity,
+    Synonym,
+    APIHandler,
+    CacheableDataModelObject,
+)
 
 
 class CellOntologyHandler(APIHandler, LoggedClass):
     """Handles Cell Ontology API responses."""
 
-    def __call__(self, response: Response, id: str) -> Optional[AssessedBiomarkerEntity]:
+    def __call__(
+        self, response: Response, id: str
+    ) -> Optional[CacheableDataModelObject]:
         try:
             co_data = response.json()
             recommended_name = co_data["label"]

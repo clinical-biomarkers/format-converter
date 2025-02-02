@@ -4,16 +4,20 @@ import logging
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 
-from .data_types import APIHandler
 from utils.logging import LoggedClass, log_once
-from utils.data_types import AssessedBiomarkerEntity, Synonym
+from utils.data_types import (
+    AssessedBiomarkerEntity,
+    Synonym,
+    APIHandler,
+    CacheableDataModelObject,
+)
 
 
 class ChebiHandler(APIHandler, LoggedClass):
 
     def __call__(
         self, response: Response, id: str
-    ) -> Optional[AssessedBiomarkerEntity]:
+    ) -> Optional[CacheableDataModelObject]:
         try:
             root = ET.fromstring(response.content)
             ns = {"chebi": "https://www.ebi.ac.uk/webservices/chebi"}

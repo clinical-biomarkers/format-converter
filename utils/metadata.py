@@ -1,4 +1,4 @@
-from typing import Optional, Union, overload, Literal
+from typing import Optional, Union
 import logging
 from pathlib import Path
 from time import sleep
@@ -10,24 +10,13 @@ from dotenv import load_dotenv
 from utils import ROOT_DIR, load_json_type_safe, write_json
 from utils.logging import LoggedClass, log_once
 from utils.data_types import (
+    CacheableDataModelObject,
     AssessedBiomarkerEntity, 
     Citation, 
     Condition, 
-    ConditionSynonym, 
-    ConditionRecommendedName
+    RateLimiter,
 )
-from .api import (
-    CONDITION_HANDLERS, 
-    ENTITY_HANDLERS, 
-    CITATION_HANDLERS, 
-    LIBRARY_CALL
-)
-from .api.data_types import (
-    CitationHandler, 
-    ConditionHandler, 
-    EntityHandler, 
-    RateLimiter
-)
+from .api import LIBRARY_CALL, METADATA_HANDLERS
 
 
 class ApiCallType(Enum):
@@ -109,6 +98,12 @@ class Metadata(LoggedClass):
             return None
         return url
 
+    def format_url(self, resource: str, id: str) -> Optional[str]:
+        url_template = self.get_url_template(resource)
+        if url_template is None:
+            return None
+        return url_template.format(id)
+
     def get_cache_path(self, resource: str) -> Optional[Path]:
         exists, resource_clean = self._check_resource_existence(resource)
         if not exists:
@@ -118,6 +113,22 @@ class Metadata(LoggedClass):
             self.debug(f"No cache file found for {resource_clean}")
             return None
         return ROOT_DIR / "mapping_data" / cache_file_name
+
+    def get_name_and_url(self, formatted_id: str) -> tuple[Optional[str], Optional[str]]:
+        """Takes the `{resource}:{id}` formatted ID and returns the full resource
+        name and the formatted url.
+        """
+        id_parts = formatted_id.split(":")
+        id_resource = id_parts[0]
+        id = id_parts[-1]
+
+        full_name = self.get_full_name(id_resource)
+
+        url = self.get_url_template(id_resource)
+        url = url.format(id) if url else url
+
+        return full_name, url
+        
 
     def get_cache_data(self, resource: str) -> Optional[dict]:
         """Get cache data for a resource."""
@@ -138,37 +149,6 @@ class Metadata(LoggedClass):
             )
             return None
 
-    @overload
-    def fetch_metadata(
-        self,
-        fetch_flag: bool,
-        call_type: Literal[ApiCallType.ENTITY_TYPE],
-        resource: str,
-        id: str,
-    ) -> tuple[int, Optional[AssessedBiomarkerEntity]]:
-        pass
-
-    @overload 
-    def fetch_metadata(
-        self,
-        fetch_flag: bool,
-        call_type: Literal[ApiCallType.CITATION],
-        resource: str,
-        id: str,
-    ) -> tuple[int, Optional[Citation]]:
-        pass
-
-    @overload 
-    def fetch_metadata(
-        self,
-        fetch_flag: bool,
-        call_type: Literal[ApiCallType.CONDITION],
-        resource: str,
-        id: str,
-        **kwargs,
-    ) -> tuple[int, Optional[Condition]]:
-        pass
-
     def fetch_metadata(
         self,
         fetch_flag: bool,
@@ -176,7 +156,7 @@ class Metadata(LoggedClass):
         resource: str,
         id: str,
         **kwargs,
-    ) -> tuple[int, Optional[Union[AssessedBiomarkerEntity, Citation, Condition]]]:
+    ) -> tuple[int, Optional[CacheableDataModelObject]]:
         """Entry point for making an API call to fetch metadata.
 
         Parameters
@@ -221,41 +201,19 @@ class Metadata(LoggedClass):
             cached_record = cache[id]
             match call_type:
                 case ApiCallType.ENTITY_TYPE:
-                    found = AssessedBiomarkerEntity(
-                        recommended_name=cached_record["recommended_name"],
-                        synonyms=cached_record["synonyms"],
-                    )
+                    found = AssessedBiomarkerEntity.from_cache_dict(data=cached_record)
                 case ApiCallType.CITATION:
-                    found = Citation(
-                        title=cached_record["title"], 
-                        journal=cached_record["journal"], 
-                        authors=cached_record["authors"], 
-                        date=cached_record["publication_date"], 
-                        reference=[], 
-                        evidence=[]
-                    )
+                    found = Citation.from_cache_dict(data=cached_record)
                 case ApiCallType.CONDITION:
                     full_name = self.get_full_name(resource)
                     full_name = full_name if full_name else ""
                     url = self.get_url_template(resource)
                     url = url.format(id) if url else ""
-                    found = Condition(
+                    found = Condition.from_cache_dict(
+                        data=cached_record, 
                         id=f"{resource}:{id}", 
-                        recommended_name=ConditionRecommendedName(
-                            id=f"{resource}:{id}", 
-                            name=cached_record["recommended_name"], 
-                            description=cached_record["description"], 
-                            resource=full_name, 
-                            url=url
-                        ), 
-                        synonyms=[
-                            ConditionSynonym(
-                                id=f"{resource}:{id}", 
-                                name=s, 
-                                resource=full_name, 
-                                url=url
-                            ) for s in cached_record["synonyms"]
-                        ]
+                        resource=full_name, 
+                        url=url
                     )
             return 0, found
 
@@ -268,18 +226,9 @@ class Metadata(LoggedClass):
             window=1
         )
 
-        handler_map: Union[EntityHandler, CitationHandler, ConditionHandler]
-        match call_type:
-            case ApiCallType.ENTITY_TYPE:
-                handler_map = ENTITY_HANDLERS
-            case ApiCallType.CITATION:
-                handler_map = CITATION_HANDLERS
-            case ApiCallType.CONDITION:
-                handler_map = CONDITION_HANDLERS
-
         # Check that the corresponding API call handler exists for this resource
         if base_endpoint == LIBRARY_CALL:
-            lib_handler = handler_map.get("library", {}).get(resource_clean)
+            lib_handler = METADATA_HANDLERS["library"].get(resource_clean)
             if not lib_handler:
                 self.warning(
                     f"No library handler found for {resource}, call type: {call_type}"
@@ -292,7 +241,7 @@ class Metadata(LoggedClass):
                 self._sleep_time
             )
         else:
-            api_handler = handler_map["api"].get(resource_clean)
+            api_handler = METADATA_HANDLERS["api"].get(resource_clean)
             if not api_handler:
                 self.warning(f"No API handler found for {resource}")
                 return 0, None
