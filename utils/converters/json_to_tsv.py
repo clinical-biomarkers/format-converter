@@ -145,7 +145,8 @@ class JSONtoTSVConverter(Converter, LoggedClass):
                         row_data=specimen_row_data,
                         component_evidence_sources=component.evidence_source,
                         object_fields=ObjectFieldTags(
-                            specimen=specimen.id, loinc_code=specimen.loinc_code
+                            specimen=specimen.id.to_dict(),
+                            loinc_code=specimen.loinc_code,
                         ),
                         out_file=out_file,
                     )
