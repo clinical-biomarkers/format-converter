@@ -232,8 +232,8 @@ class Evidence(DataModelObject):
             id=data["id"],
             database=data["database"],
             url=data["url"],
-            evidence_list=[e.from_dict() for e in data["evidence_list"]],
-            tags=[t.from_dict() for t in data["tags"]],
+            evidence_list=[EvidenceItem.from_dict(e) for e in data["evidence_list"]],
+            tags=[EvidenceTag.from_dict(t) for t in data["tags"]],
         )
 
 
@@ -606,7 +606,9 @@ class BiomarkerComponent(DataModelObject):
             assessed_biomarker_entity=AssessedBiomarkerEntity.from_dict(
                 data["assessed_biomarker_entity"]
             ),
-            assessed_biomarker_entity_id=SplittableID.from_dict(data),
+            assessed_biomarker_entity_id=SplittableID(
+                id=data["assessed_biomarker_entity_id"]
+            ),
             assessed_entity_type=data["assessed_entity_type"],
             specimen=[Specimen.from_dict(s) for s in data["specimen"]],
             evidence_source=[Evidence.from_dict(e) for e in data["evidence_source"]],
@@ -620,24 +622,55 @@ class BiomarkerEntry(DataModelObject):
     biomarker_id: str
     biomarker_component: list[BiomarkerComponent]
     best_biomarker_role: list[BiomarkerRole]
-    condition: Condition
-    exposure_agent: ExposureAgent
+    condition: Optional[Condition] = None
+    exposure_agent: Optional[ExposureAgent] = None
     evidence_source: list[Evidence] = field(default_factory=list)
     citation: list[Citation] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert entry to dictionary format for JSON serialization."""
-        return {
-            "biomarker_id": self.biomarker_id,
-            "biomarker_component": [c.to_dict() for c in self.biomarker_component],
-            "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
-            "condition": self.condition.to_dict(),
-            "evidence_source": [e.to_dict() for e in self.evidence_source],
-            "citation": [c.to_dict() for c in self.citation],
-        }
+        if self.condition is not None:
+            return {
+                "biomarker_id": self.biomarker_id,
+                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
+                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
+                "condition": self.condition.to_dict(),
+                "evidence_source": [e.to_dict() for e in self.evidence_source],
+                "citation": [c.to_dict() for c in self.citation],
+            }
+        elif self.exposure_agent is not None:
+            return {
+                "biomarker_id": self.biomarker_id,
+                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
+                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
+                "exposure_agent": self.exposure_agent.to_dict(),
+                "evidence_source": [e.to_dict() for e in self.evidence_source],
+                "citation": [c.to_dict() for c in self.citation],
+            }
+        else:
+            raise ValueError(
+                f"Did not find condition or exposure agent in BiomarkerEntry: {self}"
+            )
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BiomarkerEntry":
+        condition_dict = data.get("condition")
+        if condition_dict is None:
+            return BiomarkerEntry(
+                biomarker_id=data["biomarker_id"],
+                biomarker_component=[
+                    BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
+                ],
+                best_biomarker_role=[
+                    BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
+                ],
+                exposure_agent=ExposureAgent.from_dict(data.get("exposure_agent", {})),
+                evidence_source=[
+                    Evidence.from_dict(e) for e in data["evidence_source"]
+                ],
+                citation=[Citation.from_dict(c) for c in data["citation"]],
+            )
+
         return BiomarkerEntry(
             biomarker_id=data["biomarker_id"],
             biomarker_component=[
@@ -646,8 +679,7 @@ class BiomarkerEntry(DataModelObject):
             best_biomarker_role=[
                 BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
             ],
-            condition=Condition.from_dict(data["condition"]),
-            exposure_agent=ExposureAgent.from_dict(data["exposure_agent"]),
+            condition=Condition.from_dict(data.get("condition", {})),
             evidence_source=[Evidence.from_dict(e) for e in data["evidence_source"]],
             citation=[Citation.from_dict(c) for c in data["citation"]],
         )
