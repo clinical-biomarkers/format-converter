@@ -28,14 +28,14 @@ def parse_args() -> Namespace:
         "--metadata",
         action="store_false",
         dest="metadata",
-        help="Whether to fetch synonym and recommended name metdata from APIs",
+        help="Whether to fetch synonym and recommended name metdata from APIs (default true)",
     )
     tsvJSON.add_argument(
         "-p",
         "--preload-cache",
         action="store_true",
         dest="preload_cache",
-        help="Whether to preload the cache data",
+        help="Whether to preload the cache data (default false)",
     )
 
     # Logging args
