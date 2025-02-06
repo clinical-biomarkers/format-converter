@@ -43,7 +43,7 @@ class TSVRow:
             component.biomarker == self.biomarker
             and component.assessed_biomarker_entity.recommended_name.lower()
             == self.assessed_biomarker_entity.lower()
-            and component.assessed_biomarker_entity_id
+            and component.assessed_biomarker_entity_id.to_dict()
             == self.assessed_biomarker_entity_id
             and component.assessed_entity_type.lower()
             == self.assessed_entity_type.lower()
