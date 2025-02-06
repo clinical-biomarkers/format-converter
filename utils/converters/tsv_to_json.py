@@ -3,7 +3,7 @@ from typing import Iterator, Optional
 import csv
 import logging
 
-from utils.data_types.json_types import Citation
+from utils.data_types.json_types import Citation, Reference
 from utils.logging import LoggedClass
 from utils.metadata import Metadata, ApiCallType
 from utils import write_json
@@ -330,6 +330,18 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                 self._api_calls += api_calls
                 if citation is None or not Citation.type_guard(citation):
                     continue
+                # Add in the original evidence source as a reference
+                reference_full_name = self._metadata.get_full_name(resource=resource)
+                reference_full_name = (
+                    reference_full_name
+                    if reference_full_name is not None
+                    else resource.title()
+                )
+                reference_url = self._metadata.format_url(resource=resource, id=id)
+                reference_url = reference_url if reference_url is not None else ""
+                citation.reference.append(
+                    Reference(id=id, type=reference_full_name, url=reference_url)
+                )
                 entry.add_or_merge_citation(citation)
 
     def _add_evidence(
