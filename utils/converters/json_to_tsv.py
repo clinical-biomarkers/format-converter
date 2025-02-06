@@ -78,20 +78,26 @@ class JSONtoTSVConverter(Converter, LoggedClass):
             "biomarker_id": entry.biomarker_id,
             "condition": (
                 entry.condition.recommended_name.name
-                if "condition" in entry_dict
+                if "condition" in entry_dict and entry.condition is not None
                 else ""
             ),
-            "condition_id": entry.condition.id if "condition" in entry_dict else "",
+            "condition_id": (
+                entry.condition.id.to_dict()
+                if "condition" in entry_dict and entry.condition is not None
+                else ""
+            ),
             "best_biomarker_role": TSVRow.get_role_delimiter().join(
                 role.role for role in entry.best_biomarker_role
             ),
             "exposure_agent": (
                 entry.exposure_agent.recommended_name.name
-                if "exposure_agent" in entry_dict
+                if "exposure_agent" in entry_dict and entry.exposure_agent is not None
                 else ""
             ),
             "exposure_agent_id": (
-                entry.exposure_agent.id if "exposure_agent" in entry_dict else ""
+                entry.exposure_agent.id
+                if "exposure_agent" in entry_dict and entry.exposure_agent is not None
+                else ""
             ),
         }
 
@@ -112,7 +118,7 @@ class JSONtoTSVConverter(Converter, LoggedClass):
                 {
                     "biomarker": component.biomarker,
                     "assessed_biomarker_entity": component.assessed_biomarker_entity.recommended_name,
-                    "assessed_biomarker_entity_id": component.assessed_biomarker_entity_id,
+                    "assessed_biomarker_entity_id": component.assessed_biomarker_entity_id.to_dict(),
                     "assessed_entity_type": component.assessed_entity_type,
                 }
             )
@@ -137,7 +143,7 @@ class JSONtoTSVConverter(Converter, LoggedClass):
                     specimen_row_data.update(
                         {
                             "specimen": specimen.name,
-                            "specimen_id": specimen.id,
+                            "specimen_id": specimen.id.to_dict(),
                             "loinc_code": specimen.loinc_code,
                         }
                     )
