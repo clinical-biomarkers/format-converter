@@ -127,58 +127,63 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             if role.strip()
         ]
 
-        condition_id = SplittableID(id=row.condition_id)
-        condition_resource, condition_accession = condition_id.get_parts()
-        condition_resource_name = self._metadata.get_full_name(condition_resource)
-        condition_resource_name = (
-            condition_resource_name if condition_resource_name else ""
-        )
-        condition_url = self._metadata.get_url_template(condition_resource)
-        condition_url = condition_url.format(condition_id) if condition_url else ""
-        cond_api_calls, condition = self._metadata.fetch_metadata(
-            fetch_flag=self._fetch_metadata,
-            call_type=ApiCallType.CONDITION,
-            resource=condition_resource,
-            id=condition_accession,
-            resource_name=condition_resource_name,
-            condition_url=condition_url,
-        )
-        self._api_calls += cond_api_calls
-        if condition is None or not Condition.type_guard(condition):
-            condition = Condition(
-                id=condition_id,
-                recommended_name=ConditionRecommendedName(
+        # TODO : this should be handled better, but fine for now
+        condition: Optional[Condition] = None
+        exposure_agent: Optional[ExposureAgent] = None
+        if row.condition_id:
+            condition_id = SplittableID(id=row.condition_id)
+            condition_resource, condition_accession = condition_id.get_parts()
+            condition_resource_name = self._metadata.get_full_name(condition_resource)
+            condition_resource_name = (
+                condition_resource_name if condition_resource_name else ""
+            )
+            condition_url = self._metadata.get_url_template(condition_resource)
+            condition_url = condition_url.format(condition_id) if condition_url else ""
+            cond_api_calls, condition = self._metadata.fetch_metadata(  # type: ignore
+                fetch_flag=self._fetch_metadata,
+                call_type=ApiCallType.CONDITION,
+                resource=condition_resource,
+                id=condition_accession,
+                resource_name=condition_resource_name,
+                condition_url=condition_url,
+            )
+            self._api_calls += cond_api_calls
+            if condition is None or not Condition.type_guard(condition):
+                condition = Condition(
                     id=condition_id,
-                    name=row.condition,
+                    recommended_name=ConditionRecommendedName(
+                        id=condition_id,
+                        name=row.condition,
+                        description="",
+                        resource=condition_resource_name,
+                        url=condition_url,
+                    ),
+                )
+            else:
+                if not condition.recommended_name.check_match(
+                    tsv_val=row.condition, strict=False, logger=self.logger
+                ):
+                    log_once(
+                        self.logger,
+                        (
+                            f"TSV condition name ({row.condition}) does NOT match "
+                            f"resource recommended name ({condition.recommended_name.name})"
+                        ),
+                        logging.WARNING,
+                    )
+        else:
+            # TODO : not handling exposure agent metadata right now
+            # TODO : this should be handled better with the condition, but fine for now
+            exposure_agent = ExposureAgent(
+                id=row.exposure_agent_id,
+                recommended_name=ConditionRecommendedName(
+                    id=SplittableID(id=row.exposure_agent_id),
+                    name=row.exposure_agent,
                     description="",
-                    resource=condition_resource_name,
-                    url=condition_url,
+                    resource="",
+                    url="",
                 ),
             )
-        else:
-            if not condition.recommended_name.check_match(
-                tsv_val=row.condition, strict=False, logger=self.logger
-            ):
-                log_once(
-                    self.logger,
-                    (
-                        f"TSV condition name ({row.condition}) does NOT match "
-                        f"resource recommended name ({condition.recommended_name.name})"
-                    ),
-                    logging.WARNING,
-                )
-
-        # TODO : not handling exposure agent metadata right now
-        exposure_agent = ExposureAgent(
-            id=row.exposure_agent_id,
-            recommended_name=ConditionRecommendedName(
-                id=condition_id,
-                name=row.exposure_agent,
-                description="",
-                resource="",
-                url="",
-            ),
-        )
 
         component = self._create_component(row)
 
