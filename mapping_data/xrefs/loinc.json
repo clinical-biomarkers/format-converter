@@ -1,0 +1,6 @@
+{
+    "xref_key": "xref_loinc",
+    "xref_badge": "LOINC",
+    "xref_url": "https://loinc.org/%s",
+    "xref_id_examples": "26881-3"
+}

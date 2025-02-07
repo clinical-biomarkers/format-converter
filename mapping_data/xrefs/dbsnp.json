@@ -1,0 +1,6 @@
+{
+    "xref_key": "xref_dbsnp",
+    "xref_badge": "dbSNP",
+    "xref_url": "https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s",
+    "xref_id_examples": "rs1189230508"
+}

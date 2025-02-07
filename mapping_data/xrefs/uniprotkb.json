@@ -1,0 +1,6 @@
+{
+    "xref_key": "xref_uniprotkb",
+    "xref_badge": "UniProtKB",
+    "xref_url": "https://www.uniprot.org/uniprotkb/%s",
+    "xref_id_examples": "P40797|Q95T37-1"
+}
