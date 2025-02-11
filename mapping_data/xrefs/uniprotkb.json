@@ -1,6 +1,13 @@
 {
-    "xref_key": "xref_uniprotkb",
-    "xref_badge": "UniProtKB",
-    "xref_url": "https://www.uniprot.org/uniprotkb/%s",
-    "xref_id_examples": "P40797|Q95T37-1"
+    "database": "UniProtKB",
+    "url": "https://www.uniprot.org/uniprotkb/{}",
+    "id_examples": [
+        "P40797",
+        "Q95T37-1"
+    ],
+    "id_map": {},
+    "categories": [],
+    "secondary_cross_references": [
+        "biomuta.json"
+    ]
 }
