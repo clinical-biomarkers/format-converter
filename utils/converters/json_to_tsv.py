@@ -37,7 +37,7 @@ class JSONtoTSVConverter(Converter, LoggedClass):
                 self._process_entry(entry, out_file)
                 count += 1
 
-            self.info(f"Successfully processed {count + 1} total biomarker entries")
+            self.info(f"Successfully processed {count} total biomarker entries")
 
     def _stream_json(self, path: Path) -> Iterator[BiomarkerEntry]:
         """Stream and parse JSON data into BiomarkerEntry objects."""
@@ -177,8 +177,10 @@ class JSONtoTSVConverter(Converter, LoggedClass):
             if key in self._evidence_states:
                 self.debug(f"Found matching top-level evidence for {key}")
                 top_level_state = self._evidence_states[key]
-                state.evidence_texts.update(top_level_state.evidence_texts)
-                state.tags.update(top_level_state.tags)
+                state = EvidenceState(
+                    evidence_texts=top_level_state.evidence_texts.copy(),
+                    tags=top_level_state.tags.copy(),
+                )
                 processed_top_level.add(key)
 
             # Add component evidence
