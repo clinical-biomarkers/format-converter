@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 import logging
 from pymed import PubMed
 import os
@@ -15,6 +15,38 @@ from utils.data_types import (
 
 class PubmedHandler(LibraryHandler, LoggedClass):
     """Handles Pubmed API responses and data processing."""
+
+    def _extract_article_data(self, article: Any) -> Optional[Citation]:
+        try:
+            title = article.title
+            authors = ", ".join(
+                [
+                    f"{author['lastname']} {author['initials']}"
+                    for author in article.authors
+                ]
+            )
+            publication_date = str(article.publication_date)
+
+            # Handle journal vs book
+            if hasattr(article, "journal"):
+                journal = article.journal
+            else:
+                journal = getattr(article, "book_title", "Book")
+
+            return Citation(
+                title=title,
+                journal=journal,
+                authors=authors,
+                date=publication_date,
+                reference=[],
+                evidence=[],
+            )
+        except AttributeError as e:
+            self.error(f"Missing required attribute while processing article: {e}")
+            return None
+        except Exception as e:
+            self.error(f"Unexpected error processing article: {e}")
+            return None
 
     def __call__(
         self,
@@ -68,25 +100,12 @@ class PubmedHandler(LibraryHandler, LoggedClass):
                 articles = pubmed.query(query)
                 article = next(articles)
                 self._record_call(resource=resource, rate_limiter=rate_limiter)
-                title = article.title
-                journal = article.journal
-                authors = ", ".join(
-                    [
-                        f"{author['lastname']} {author['initials']}"
-                        for author in article.authors
-                    ]
-                )
-                publication_date = str(article.publication_date)
 
-                citation = Citation(
-                    title=title,
-                    journal=journal,
-                    authors=authors,
-                    date=publication_date,
-                    reference=[],
-                    evidence=[],
-                )
-                return attempt + 1, citation
+                citation = self._extract_article_data(article)
+                if citation:
+                    return attempt + 1, citation
+                return attempt + 1, None
+
             except StopIteration as e:
                 self._record_call(resource=resource, rate_limiter=rate_limiter)
                 self.warning(f"Error: No articles found for Pubmed ID: {id}\n{e}")
