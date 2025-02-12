@@ -138,7 +138,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                 condition_resource_name if condition_resource_name else ""
             )
             condition_url = self._metadata.get_url_template(condition_resource)
-            condition_url = condition_url.format(condition_id) if condition_url else ""
+            condition_url = condition_url.format(condition_id.get_parts()[1]) if condition_url else ""
             cond_api_calls, condition = self._metadata.fetch_metadata(  # type: ignore
                 fetch_flag=self._fetch_metadata,
                 call_type=ApiCallType.CONDITION,
@@ -398,9 +398,9 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             return
         # Check if this exact specimen already exists
         specimen_exists = any(
-            s.name == row.specimen
-            and s.id == row.specimen_id
-            and s.loinc_code == row.loinc_code
+            s.name.strip().lower() == row.specimen.strip().lower()
+            and s.id.id.strip() == row.specimen_id.strip()
+            and s.loinc_code.strip() == row.loinc_code.strip()
             for s in component.specimen
         )
         # Add if it doesn't
