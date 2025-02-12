@@ -185,7 +185,6 @@ class Metadata(LoggedClass):
         # Check that the API endpoint exists in the namespace map
         base_endpoint, rate_limit = self.get_api(resource_clean)
         if not base_endpoint:
-            log_once(self.logger, f"No API endpoint availble for {resource}", logging.WARNING)
             return 0, None
 
         # Load the cache file
