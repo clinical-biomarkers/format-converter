@@ -124,17 +124,20 @@ class EvidenceState:
         self, new_tags: list["EvidenceTag"], object_fields: ObjectFieldTags
     ) -> None:
         object_fields_dict = object_fields.to_dict()
+
         for tag in new_tags:
             tag_parts = tag.tag.split(":", 1)
             tag_type = tag_parts[0]
             tag_value = tag_parts[1] if len(tag_parts) > 1 else ""
 
+            # TODO : this is ugly
             # Handle object field specific tags
             if tag_type in object_fields_dict:
+                field_value = object_fields_dict[tag_type]
                 if tag_value:
-                    # Only add tag if it matches specified value
-                    if tag_value == object_fields_dict[tag_type]:
-                        self.tags.add(tag_type)
+                    if field_value:
+                        if not tag_value or tag_value == field_value:
+                            self.tags.add(tag_type)
                 continue
 
             # Handle component singular fields
@@ -145,6 +148,9 @@ class EvidenceState:
             # Hanle top level fields
             if tag_type in TOP_LEVEL_EVIDENCE_FIELDS:
                 self.tags.add(tag_type)
+                continue
+
+            self.tags.add(tag.tag)
 
     @property
     def evidence_text(self) -> str:
