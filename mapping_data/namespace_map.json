@@ -96,5 +96,12 @@
     "rate_limit": null,
     "url_template": "",
     "cache": null
+  },
+  "hgnc": {
+    "full_name": "hugo gene nomenclature committee",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "",
+    "cache": null
   }
 }
