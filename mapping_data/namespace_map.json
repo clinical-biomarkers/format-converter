@@ -1,107 +1,121 @@
 {
   "doid": {
     "full_name": "disease ontology",
-    "api_endpoint": "https://www.disease-ontology.org/api/metadata/DOID:{}",
+    "api_endpoint": "https://www.disease-ontology.org/api/metadata/DOID:{id}",
     "rate_limit": null,
-    "url_template": "http://purl.obolibrary.org/obo/DOID_{}",
+    "url_template": "http://purl.obolibrary.org/obo/DOID_{id}",
     "cache": "doid_cache.json"
   },
   "upkb": {
     "full_name": "uniprot",
-    "api_endpoint": "https://www.ebi.ac.uk/proteins/api/proteins/{}",
+    "api_endpoint": "https://www.ebi.ac.uk/proteins/api/proteins/{id}",
     "rate_limit": 200,
-    "url_template": "https://www.uniprot.org/uniprotkb/{}/entry",
+    "url_template": "https://www.uniprot.org/uniprotkb/{id}/entry",
     "cache": "uniprot_cache.json"
   },
   "uberon": {
     "full_name": "uberon",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "http://purl.obolibrary.org/obo/UBERON_{}",
+    "url_template": "http://purl.obolibrary.org/obo/UBERON_{id}",
     "cache": null
   },
   "pubmed": {
     "full_name": "pubmed",
     "api_endpoint": "library_call",
     "rate_limit": 10,
-    "url_template": "https://pubmed.ncbi.nlm.nih.gov/{}",
+    "url_template": "https://pubmed.ncbi.nlm.nih.gov/{id}",
     "cache": "pubmed_cache.json"
   },
   "co": {
     "full_name": "cell ontology",
-    "api_endpoint": "https://www.ebi.ac.uk/ols4/api/ontologies/cl/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252F{}",
+    "api_endpoint": "https://www.ebi.ac.uk/ols4/api/ontologies/cl/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252F{id}",
     "rate_limit": null,
-    "url_template": "http://purl.obolibrary.org/obo/{}",
+    "url_template": "http://purl.obolibrary.org/obo/{id}",
     "cache": "cell_ontology_cache.json"
   },
   "chebi": {
     "full_name": "chemical entities of biological interest",
-    "api_endpoint": "https://www.ebi.ac.uk/webservices/chebi/2.0/test/getCompleteEntity?chebiId={}",
+    "api_endpoint": "https://www.ebi.ac.uk/webservices/chebi/2.0/test/getCompleteEntity?chebiId={id}",
     "rate_limit": null,
-    "url_template": "http://purl.obolibrary.org/obo/{}",
+    "url_template": "http://purl.obolibrary.org/obo/{id}",
     "cache": "chebi_cache.json"
   },
   "gwas": {
     "full_name": "gwas",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "https://www.ebi.ac.uk/gwas/search?query={}",
+    "url_template": "https://www.ebi.ac.uk/gwas/search?query={id}",
     "cache": null
   },
   "clinvar": {
     "full_name": "clinvar",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "https://www.ncbi.nlm.nih.gov/clinvar/variation/{}",
+    "url_template": "https://www.ncbi.nlm.nih.gov/clinvar/variation/{id}",
     "cache": null
   },
   "doi": {
     "full_name": "doi",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "https://doi.org/{}",
+    "url_template": "https://doi.org/{id}",
     "cache": null
   },
   "omim": {
     "full_name": "online mendelian inheritance in man",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "https://www.omim.org/entry/{}",
+    "url_template": "https://www.omim.org/entry/{id}",
     "cache": null
   },
   "civic": {
     "full_name": "clinical interpretation of variants in cancer",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "https://civicdb.org/molecular-profiles/{}",
+    "url_template": "https://civicdb.org/molecular-profiles/{id}",
     "cache": null
   },
   "wipo": {
     "full_name": "world intellectural property organization",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "https://patentscope.wipo.int/search/en/detail.jsf?docId={}",
+    "url_template": "https://patentscope.wipo.int/search/en/detail.jsf?docId={id}",
     "cache": null
   },
   "pro": {
     "full_name": "protein ontology",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "",
+    "url_template": null,
     "cache": null
   },
   "dbsnp": {
     "full_name": "dbsnp",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "",
+    "url_template": "https://www.ncbi.nlm.nih.gov/snp/{id}",
     "cache": null
   },
   "hgnc": {
     "full_name": "hugo gene nomenclature committee",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": "",
+    "url_template": null,
     "cache": null
+  },
+  "pccid": {
+    "full_name": "pubchem compound",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://pubchem.ncbi.nlm.nih.gov/compound/{id}",
+    "cache": null
+  },
+  "ncbi": {
+    "full_name": "national center for biotechnology information",
+    "api_endpoint": "library_call",
+    "rate_limit": 10,
+    "url_template": "https://www.ncbi.nlm.nih.gov/gene/{id}",
+    "cache": "ncbi_cache.json"
   }
 }
