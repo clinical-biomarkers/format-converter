@@ -15,7 +15,7 @@ class CellOntologyHandler(APIHandler, LoggedClass):
     """Handles Cell Ontology API responses."""
 
     def __call__(
-        self, response: Response, id: str
+        self, response: Response, id: str, **kwargs
     ) -> Optional[CacheableDataModelObject]:
         try:
             co_data = response.json()

@@ -15,7 +15,7 @@ class UniprotHandler(APIHandler, LoggedClass):
     """Handles Uniprot API responses and data processing."""
 
     def __call__(
-        self, response: Response, id: str
+        self, response: Response, id: str, **kwargs
     ) -> Optional[CacheableDataModelObject]:
         """Process Uniprot API response.
 

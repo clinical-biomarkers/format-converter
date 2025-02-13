@@ -5,6 +5,7 @@ import logging
 
 from utils.logging import LoggedClass, log_once
 from utils.data_types import (
+    SplittableID,
     Condition,
     ConditionSynonym,
     ConditionRecommendedName,
@@ -35,17 +36,18 @@ class DoidHandler(APIHandler, LoggedClass):
             synonyms = [
                 s.replace("EXACT", "").strip() for s in synonyms if "EXACT" in synonyms
             ]
+            splittable_id = SplittableID(id=f"{resource}:{id}")
             condition = Condition(
-                id=f"{resource}:{id}",
+                id=splittable_id,
                 recommended_name=ConditionRecommendedName(
-                    id=f"{resource}:{id}",
+                    id=splittable_id,
                     name=name,
                     description=description if description else "",
                     resource=resource,
                     url=url,
                 ),
                 synonyms=[
-                    ConditionSynonym(id=f"{resource}:{id}", name=s, resource="", url="")
+                    ConditionSynonym(id=splittable_id, name=s, resource="", url="")
                     for s in synonyms
                 ],
             )

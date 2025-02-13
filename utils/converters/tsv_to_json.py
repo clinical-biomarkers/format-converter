@@ -138,7 +138,11 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                 condition_resource_name if condition_resource_name else ""
             )
             condition_url = self._metadata.get_url_template(condition_resource)
-            condition_url = condition_url.format(condition_id.get_parts()[1]) if condition_url else ""
+            condition_url = (
+                condition_url.format(id=condition_id.get_parts()[1])
+                if condition_url
+                else ""
+            )
             cond_api_calls, condition = self._metadata.fetch_metadata(  # type: ignore
                 fetch_flag=self._fetch_metadata,
                 call_type=ApiCallType.CONDITION,
@@ -209,6 +213,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             call_type=ApiCallType.ENTITY_TYPE,
             resource=assessed_biomarker_entity_resource,
             id=assessed_biomarker_entity_accession,
+            assessed_entity_type=row.assessed_entity_type,
         )
         self._api_calls += api_calls
         if assessed_biomarker_entity is None or not AssessedBiomarkerEntity.type_guard(
@@ -262,7 +267,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
         url = self._metadata.get_url_template(resource=database)
         if url is not None:
-            url = url.format(id)
+            url = url.format(id=id)
         else:
             url = ""
 

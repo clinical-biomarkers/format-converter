@@ -11,9 +11,9 @@ from utils import ROOT_DIR, load_json_type_safe, write_json
 from utils.logging import LoggedClass, log_once
 from utils.data_types import (
     CacheableDataModelObject,
-    AssessedBiomarkerEntity, 
-    Citation, 
-    Condition, 
+    AssessedBiomarkerEntity,
+    Citation,
+    Condition,
     RateLimiter,
 )
 from .api import LIBRARY_CALL, METADATA_HANDLERS
@@ -28,11 +28,11 @@ class ApiCallType(Enum):
 class Metadata(LoggedClass):
 
     def __init__(
-        self, 
-        max_retries: int = 3, 
-        timeout: int = 5, 
-        sleep_time: int = 1, 
-        preload_caches: bool = False
+        self,
+        max_retries: int = 3,
+        timeout: int = 5,
+        sleep_time: int = 1,
+        preload_caches: bool = False,
     ) -> None:
         super().__init__()
         load_dotenv()
@@ -73,17 +73,17 @@ class Metadata(LoggedClass):
         # If there is no endpoint, we just assume no rate limit (at least there shouldn't be)
         if not endpoint:
             log_once(
-                self.logger, 
-                f"No API endpoint found for {resource_clean}", 
-                logging.WARNING
+                self.logger,
+                f"No API endpoint found for {resource_clean}",
+                logging.WARNING,
             )
             return None, None
         rate_limit = self.namespace_map[resource_clean].get("rate_limit")
         if not rate_limit:
             log_once(
-                self.logger, 
-                f"API endpoint found for {resource_clean} but no rate limit found", 
-                logging.WARNING
+                self.logger,
+                f"API endpoint found for {resource_clean} but no rate limit found",
+                logging.WARNING,
             )
             return endpoint, None
         return endpoint, rate_limit
@@ -102,7 +102,7 @@ class Metadata(LoggedClass):
         url_template = self.get_url_template(resource)
         if url_template is None:
             return None
-        return url_template.format(id)
+        return url_template.format(id=id)
 
     def get_cache_path(self, resource: str) -> Optional[Path]:
         exists, resource_clean = self._check_resource_existence(resource)
@@ -114,7 +114,9 @@ class Metadata(LoggedClass):
             return None
         return ROOT_DIR / "mapping_data" / cache_file_name
 
-    def get_name_and_url(self, formatted_id: str) -> tuple[Optional[str], Optional[str]]:
+    def get_name_and_url(
+        self, formatted_id: str
+    ) -> tuple[Optional[str], Optional[str]]:
         """Takes the `{resource}:{id}` formatted ID and returns the full resource
         name and the formatted url.
         """
@@ -125,10 +127,9 @@ class Metadata(LoggedClass):
         full_name = self.get_full_name(id_resource)
 
         url = self.get_url_template(id_resource)
-        url = url.format(id) if url else url
+        url = url.format(id=id) if url else url
 
         return full_name, url
-        
 
     def get_cache_data(self, resource: str) -> Optional[dict]:
         """Get cache data for a resource."""
@@ -140,13 +141,11 @@ class Metadata(LoggedClass):
         cache_path = self.get_cache_path(resource)
         if cache_path is None or not cache_path.exists():
             return None
-        
+
         try:
             return load_json_type_safe(filepath=cache_path, return_type="dict")
         except Exception as e:
-            self.error(
-                f"Failed to load cache for {resource} from {cache_path}: {e}"
-            )
+            self.error(f"Failed to load cache for {resource} from {cache_path}: {e}")
             return None
 
     def fetch_metadata(
@@ -170,8 +169,6 @@ class Metadata(LoggedClass):
             The resource to make the API call to.
         id: str
             The accession to make the API call with.
-        entity_type: str or None, optional
-            The assessed entity type.
 
         Returns
         -------
@@ -190,7 +187,9 @@ class Metadata(LoggedClass):
         # Load the cache file
         cache = self.get_cache_data(resource_clean)
         if cache is None:
-            log_once(self.logger, f"Failed to load cache for {resource}", logging.WARNING)
+            log_once(
+                self.logger, f"Failed to load cache for {resource}", logging.WARNING
+            )
             return 0, None
 
         # Check if entry is already in our cache file
@@ -207,12 +206,12 @@ class Metadata(LoggedClass):
                     full_name = self.get_full_name(resource)
                     full_name = full_name if full_name else ""
                     url = self.get_url_template(resource)
-                    url = url.format(id) if url else ""
+                    url = url.format(id=id) if url else ""
                     found = Condition.from_cache_dict(
-                        data=cached_record, 
-                        id=f"{resource}:{id}", 
-                        resource=full_name, 
-                        url=url
+                        data=cached_record,
+                        id=f"{resource}:{id}",
+                        resource=full_name,
+                        url=url,
                     )
             return 0, found
 
@@ -220,9 +219,7 @@ class Metadata(LoggedClass):
             return 0, None
 
         self._rate_limiter.add_limit(
-            resource=resource_clean, 
-            calls=rate_limit, 
-            window=1
+            resource=resource_clean, calls=rate_limit, window=1
         )
 
         # Check that the corresponding API call handler exists for this resource
@@ -234,12 +231,13 @@ class Metadata(LoggedClass):
                 )
                 return 0, None
             api_call_count, processed_data = lib_handler(
-                id, 
+                id,
                 resource_clean,
-                self._max_retries, 
-                self._timeout, 
+                self._max_retries,
+                self._timeout,
                 self._sleep_time,
                 self._rate_limiter,
+                assessed_entity_type=kwargs.get("assessed_entity_type", None),  # type: ignore
             )
         else:
             api_handler = METADATA_HANDLERS["api"].get(resource_clean)
@@ -247,8 +245,7 @@ class Metadata(LoggedClass):
                 self.warning(f"No API handler found for {resource}")
                 return 0, None
             api_call_count, response = self._api_call_handling(
-                resource=resource_clean, 
-                endpoint=base_endpoint.format(id)
+                resource=resource_clean, endpoint=base_endpoint.format(id=id)
             )
             if response is None:
                 return api_call_count, None
@@ -258,12 +255,14 @@ class Metadata(LoggedClass):
         if processed_data is not None:
             try:
                 save_data = processed_data.to_cache_dict()
-                self._update_cache(resource=resource_clean, id=id, data=save_data, cache=cache)
+                self._update_cache(
+                    resource=resource_clean, id=id, data=save_data, cache=cache
+                )
             except Exception as e:
                 self.error(f"Failed updating cache for {resource}, {id}: {e}")
 
         return api_call_count, processed_data
-            
+
     def _api_call_handling(
         self, resource: str, endpoint: str
     ) -> tuple[int, Optional[Response]]:
@@ -304,8 +303,8 @@ class Metadata(LoggedClass):
                 self.exception(
                     (
                         f"Unexpected error during API call (attempt {attempt + 1}/{self._max_retries}) "
-                         f"for endpoint {endpoint} from resource {resource}\n{e}"
-                     )
+                        f"for endpoint {endpoint} from resource {resource}\n{e}"
+                    )
                 )
 
             attempt += 1
@@ -318,7 +317,7 @@ class Metadata(LoggedClass):
             logging.ERROR,
         )
         return attempt + 1, None
-    
+
     def _preload_cache_files(self) -> None:
         self.info("Preloading cache files into memory...")
         for resource in self.namespace_map.keys():
@@ -326,8 +325,7 @@ class Metadata(LoggedClass):
             cache_path = self.get_cache_path(resource_clean)
             if cache_path is not None and cache_path.exists():
                 self._preloaded_caches[resource_clean] = load_json_type_safe(
-                    filepath=cache_path, 
-                    return_type="dict"
+                    filepath=cache_path, return_type="dict"
                 )
         self.info(f"Preloaded {len(self._preloaded_caches)} cache files")
 
@@ -338,16 +336,14 @@ class Metadata(LoggedClass):
             resource_clean = self._clean_string(resource)
             cache_path = self.get_cache_path(resource_clean)
             if cache_path is not None and cache_path.exists():
-                write_json(filepath=cache_path, data=self._preloaded_caches[resource_clean], indent=2)
+                write_json(
+                    filepath=cache_path,
+                    data=self._preloaded_caches[resource_clean],
+                    indent=2,
+                )
         self.info(f"Saved {len(self._preloaded_caches)} cache files back to disk")
 
-    def _update_cache(
-        self, 
-        resource: str, 
-        id: str, 
-        data: dict, 
-        cache: dict
-    ) -> None:
+    def _update_cache(self, resource: str, id: str, data: dict, cache: dict) -> None:
         # Update memory cache if preloaded
         if resource in self._preloaded_caches:
             self._preloaded_caches[resource][id] = data
@@ -357,8 +353,8 @@ class Metadata(LoggedClass):
         cache_path = self.get_cache_path(resource)
         if cache_path is None:
             self.error(f"No cache path found for {resource}")
-            return 
-        
+            return
+
         try:
             cache[id] = data
             write_json(filepath=cache_path, data=cache, indent=2)
@@ -371,7 +367,11 @@ class Metadata(LoggedClass):
             return False, ""
         resource_clean = self._clean_string(resource)
         if resource_clean not in self.namespace_map:
-            log_once(self.logger, f"Resource {resource} does not exist in namespace map", logging.WARNING)
+            log_once(
+                self.logger,
+                f"Resource {resource} does not exist in namespace map",
+                logging.WARNING,
+            )
             return False, resource_clean
         return True, resource_clean
 

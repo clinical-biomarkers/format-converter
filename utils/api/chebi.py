@@ -16,7 +16,7 @@ from utils.data_types import (
 class ChebiHandler(APIHandler, LoggedClass):
 
     def __call__(
-        self, response: Response, id: str
+        self, response: Response, id: str, **kwargs
     ) -> Optional[CacheableDataModelObject]:
         try:
             root = ET.fromstring(response.content)

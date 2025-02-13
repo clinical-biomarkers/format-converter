@@ -56,6 +56,7 @@ class PubmedHandler(LibraryHandler, LoggedClass):
         timeout: int = 5,
         sleep_time: int = 1,
         rate_limiter: Optional[RateLimiter] = None,
+        **kwargs,
     ) -> tuple[int, Optional[CacheableDataModelObject]]:
         """Processes Pubmed API response.
 
