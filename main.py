@@ -3,6 +3,7 @@ from pprint import pformat
 from utils.converters import Converter
 from utils.converters.json_to_tsv import JSONtoTSVConverter
 from utils.converters.tsv_to_json import TSVtoJSONConverter
+from utils.converters.json_to_nt import JSONtoNTConverter
 from utils.logging import LoggerFactory
 from argparse import ArgumentParser, Namespace
 from traceback import format_exc
@@ -103,6 +104,11 @@ def main() -> None:
         converter = TSVtoJSONConverter(
             fetch_metadata=metadata, preload_caches=preload_cache
         )
+    # JSON to NT conversion
+    elif input.suffix.lower() == ".json" and output.suffix.lower() == ".nt":
+        msg = f"Converting JSON to NT: {input} -> {output}"
+        logger.info(msg)
+        converter = JSONtoNTConverter()
     # Unsupported conversion
     else:
         msg = f"Invalid conversion: {input.suffix} -> {output.suffix}"

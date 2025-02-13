@@ -25,6 +25,7 @@ from .json_types import (
     BiomarkerComponent,
     BiomarkerEntry,
 )
+from .triple_types import Triple, TripleCategory
 from .api import (
     APIHandler,
     LibraryHandler,

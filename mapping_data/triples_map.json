@@ -1,0 +1,48 @@
+{
+  "subject_objects": {
+    "biomarker_id": "https://biomarkerkb.org/biomarker/{}",
+    "biomarker_canonical_id": "https://biomarkerkb.org/canonical/{}",
+    "uniprot": "http://purl.uniprot.org/uniprot/{}",
+    "best_biomarker_role": {
+      "risk": "http://purl.obolibrary.org/obo/OBCI_0000008",
+      "diagnostic": "http://purl.obolibrary.org/obo/OBCI_0000002",
+      "prognostic": "http://purl.obolibrary.org/obo/OBCI_0000006",
+      "monitoring": "http://purl.obolibrary.org/obo/OBCI_0000003",
+      "predictive": "http://purl.obolibrary.org/obo/OBCI_0000005",
+      "response": "http://purl.obolibrary.org/obo/OBCI_0000004",
+      "safety": "http://purl.obolibrary.org/obo/OBCI_0000007"
+    },
+    "uberon": "http://purl.obolibrary.org/obo/UBERON_{}",
+    "doid": "http://purl.obolibrary.org/obo/DOID_{}",
+    "cell_ontology": "http://purl.obolibrary.org/obo/{}",
+    "chebi": "http://purl.obolibrary.org/obo/CHEBI_{}",
+    "protein_ontology": "http://purl.obolibrary.org/obo/{}",
+    "ncit": "http://purl.obolibrary.org/obo/NCIT_{}",
+    "ncbi": {
+      "gene": "https://pubchem.ncbi.nlm.nih.gov/rest/rdf/gene/GID{}",
+      "compound": "http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID{}"
+    },
+    "dbsnp": "https://www.ncbi.nlm.nih.gov/snp/{}",
+    "pccid": "https://pubchem.ncbi.nlm.nih.gov/compound/{}",
+    "pdb": "https://www.rcsb.org/structure/{}",
+    "mrb": "https://www.mirbase.org/hairpin/{}",
+    "rnac": "https://rnacentral.org/rna/{}/9606",
+    "gtc": "https://glytoucan.org/Structures/Glycans/{}"
+  },
+  "predicates": {
+    "biomarker_change": {
+      "absence": "http://purl.obolibrary.org/obo/OBCI_1000017",
+      "decrease": "http://purl.obolibrary.org/obo/OBCI_1000015",
+      "increase": "http://purl.obolibrary.org/obo/OBCI_1000009",
+      "presence": "http://purl.obolibrary.org/obo/OBCI_1000016"
+    },
+    "best_biomarker_role": "http://purl.obolibrary.org/obo/OBCI_1000011",
+    "specimen_sampled_from": "http://purl.obolibrary.org/obo/OBCI_1000018",
+    "condition_role_indicator": {
+      "diagnostic": "http://purl.obolibrary.org/obo/OBCI_1000002",
+      "risk": "http://purl.obolibrary.org/obo/OBCI_1000008",
+      "monitoring": "http://purl.obolibrary.org/obo/OBCI_1000003",
+      "prognostic": "http://purl.obolibrary.org/obo/OBCI_1000006"
+    }
+  }
+}
