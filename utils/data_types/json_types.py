@@ -1,8 +1,10 @@
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Optional, Union, TYPE_CHECKING, TypeGuard
 from abc import ABC, abstractmethod
 from logging import Logger
 
+from utils import load_json_type_safe
 if TYPE_CHECKING:
     from . import TSVRow
 
@@ -737,3 +739,150 @@ class BiomarkerEntry(DataModelObject):
                         existing_citation.evidence.append(new_ev)
                 return
         self.citation.append(new_citation)
+
+
+@dataclass
+class CrossReference(DataModelObject):
+    id: str
+    url: str
+    database: str
+    categories: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Union[str, list[str]]]:
+        return {
+            "id": self.id,
+            "url": self.url,
+            "database": self.database,
+            "categories": [c for c in self.categories],
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> Any:
+        return CrossReference(
+            id=data["id"],
+            url=data["url"],
+            database=data["database"],
+            categories=data.get("categories", []),
+        )
+
+
+@dataclass
+class BiomarkerEntryWCrossReference(DataModelObject):
+    """Main biomarker entry data model."""
+
+    biomarker_id: str
+    biomarker_component: list[BiomarkerComponent]
+    best_biomarker_role: list[BiomarkerRole]
+    condition: Optional[Condition] = None
+    exposure_agent: Optional[ExposureAgent] = None
+    evidence_source: list[Evidence] = field(default_factory=list)
+    citation: list[Citation] = field(default_factory=list)
+    crossref: list[CrossReference] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert entry to dictionary format for JSON serialization."""
+        if self.condition is not None:
+            return {
+                "biomarker_id": self.biomarker_id,
+                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
+                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
+                "condition": self.condition.to_dict(),
+                "evidence_source": [e.to_dict() for e in self.evidence_source],
+                "citation": [c.to_dict() for c in self.citation],
+                "crossref": [c.to_dict() for c in self.crossref],
+            }
+        elif self.exposure_agent is not None:
+            return {
+                "biomarker_id": self.biomarker_id,
+                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
+                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
+                "exposure_agent": self.exposure_agent.to_dict(),
+                "evidence_source": [e.to_dict() for e in self.evidence_source],
+                "citation": [c.to_dict() for c in self.citation],
+                "crossref": [c.to_dict() for c in self.crossref],
+            }
+        else:
+            raise ValueError(
+                f"Did not find condition or exposure agent in BiomarkerEntryWCrossReference: {self}"
+            )
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "BiomarkerEntryWCrossReference":
+        condition_dict = data.get("condition")
+        if condition_dict is None:
+            return BiomarkerEntryWCrossReference(
+                biomarker_id=data["biomarker_id"],
+                biomarker_component=[
+                    BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
+                ],
+                best_biomarker_role=[
+                    BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
+                ],
+                exposure_agent=ExposureAgent.from_dict(data.get("exposure_agent", {})),
+                evidence_source=[
+                    Evidence.from_dict(e) for e in data["evidence_source"]
+                ],
+                citation=[Citation.from_dict(c) for c in data["citation"]],
+                crossref=[CrossReference.from_dict(c) for c in data["crossref"]],
+            )
+
+        return BiomarkerEntryWCrossReference(
+            biomarker_id=data["biomarker_id"],
+            biomarker_component=[
+                BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
+            ],
+            best_biomarker_role=[
+                BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
+            ],
+            condition=Condition.from_dict(data.get("condition", {})),
+            evidence_source=[Evidence.from_dict(e) for e in data["evidence_source"]],
+            citation=[Citation.from_dict(c) for c in data["citation"]],
+            crossref=[CrossReference.from_dict(c) for c in data["crossref"]],
+        )
+
+    @classmethod
+    def from_biomarker_entry(
+        cls,
+        entry: BiomarkerEntry,
+        cross_references: Union[CrossReference, list[CrossReference]],
+    ) -> "BiomarkerEntryWCrossReference":
+        if isinstance(cross_references, CrossReference):
+            cross_references = [cross_references]
+
+        return BiomarkerEntryWCrossReference(
+            biomarker_id=entry.biomarker_id,
+            biomarker_component=entry.biomarker_component,
+            best_biomarker_role=entry.best_biomarker_role,
+            condition=entry.condition,
+            exposure_agent=entry.exposure_agent,
+            evidence_source=entry.evidence_source,
+            citation=entry.citation,
+            crossref=cross_references,
+        )
+
+
+@dataclass
+class CrossReferenceMap:
+    database: str
+    url: str
+    id_examples: list[str]
+    id_map: dict[str, str]
+    categories: list[str]
+    secondary_cross_references: list[str]
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "CrossReferenceMap":
+        return CrossReferenceMap(
+            database=data["database"],
+            url=data["url"],
+            id_examples=data["id_examples"],
+            id_map=data["id_map"],
+            categories=data["categories"],
+            secondary_cross_references=data["secondary_cross_references"],
+        )
+
+    @classmethod
+    def from_file(cls, filepath: Path) -> "CrossReferenceMap":
+        return CrossReferenceMap.from_dict(
+            load_json_type_safe(filepath=filepath, return_type="dict")
+        )

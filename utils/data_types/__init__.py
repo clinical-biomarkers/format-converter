@@ -24,6 +24,9 @@ from .json_types import (
     BiomarkerRole,
     BiomarkerComponent,
     BiomarkerEntry,
+    CrossReference,
+    BiomarkerEntryWCrossReference,
+    CrossReferenceMap,
 )
 from .triple_types import Triple, TripleCategory
 from .api import (
