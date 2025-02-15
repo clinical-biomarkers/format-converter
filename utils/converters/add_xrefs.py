@@ -278,7 +278,7 @@ class XrefConverter(Converter, LoggedClass):
 
             xref = CrossReference(
                 id=mapped_id,
-                url=xref_map.url.format(mapped_id),
+                url=xref_map.url.format(id=mapped_id),
                 database=xref_map.database,
                 categories=xref_map.categories,
             )
