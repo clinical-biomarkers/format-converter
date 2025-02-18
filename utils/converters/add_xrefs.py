@@ -2,7 +2,8 @@ from collections.abc import Iterator
 from pathlib import Path
 import ijson
 import sys
-from typing import Literal
+from typing import Literal, Optional
+import json
 
 from . import JSON_LOG_CHECKPOINT, Converter
 from utils import load_json_type_safe, write_json, ROOT_DIR
@@ -56,12 +57,12 @@ class XrefConverter(Converter, LoggedClass):
 
         if input_path_dir_flag:
             self.debug(f"Processing directory: {input_path}")
-            for file in input_path.iterdir():
+            for idx, file in enumerate(input_path.iterdir()):
                 if not file.is_file() or file.suffix.lower() != ".json":
                     self.debug(f"Skipping '{file}'")
                     continue
                 out_file = output_path / file.name
-                self._process_file(file, out_file)
+                self._process_file(file, out_file, idx + 1)
         else:
             self.debug(f"Processing single file: {input_path}")
             self._process_file(input_path, output_path)
@@ -117,9 +118,13 @@ class XrefConverter(Converter, LoggedClass):
             top_level_maps=self._hardcoded_xref_maps, level="hardcode"
         )
 
-    def _process_file(self, input_file: Path, output_file: Path) -> None:
+    def _process_file(
+        self, input_file: Path, output_file: Path, idx: Optional[int] = None
+    ) -> None:
         entries: list[BiomarkerEntryWCrossReference] = []
         total_xrefs = 0
+        is_array = self._check_if_array(input_file)
+
         for idx, entry in enumerate(self._stream_json(input_file)):
             if (idx + 1) % JSON_LOG_CHECKPOINT == 0:
                 self.info(
@@ -140,20 +145,47 @@ class XrefConverter(Converter, LoggedClass):
             )
             entries.append(entry_with_xrefs)
 
-        self.info(f"Writing {len(entries)} entries to {output_file}")
-        json_data = [entry.to_dict() for entry in entries]
+        idx_str = f"{idx}. " if idx else ""
+        self.info(f"{idx_str}Writing {len(entries)} entries to {output_file}")
+        json_data: dict | list[dict] = [entry.to_dict() for entry in entries]
+        if not is_array:
+            if len(json_data) != 1:
+                self.error(f"Expected single entry but found {len(json_data)} entries")
+                raise ValueError("Single record file contained multiple entries")
+            json_data = json_data[0]
+
         write_json(filepath=output_file, data=json_data, indent=2)
 
-    def _stream_json(self, path: Path) -> Iterator[BiomarkerEntry]:
+    def _check_if_array(self, path: Path) -> bool:
+        """Check if the JSON file contains an array or a single object."""
         try:
             with path.open("rb") as f:
+                while True:
+                    char = f.read(1).decode()
+                    if not char.isspace():
+                        return char == "["
+        except Exception as e:
+            self.error(f"Failed to cehck JSON format of {path}\n{e}")
+            raise
+
+    def _stream_json(self, path: Path) -> Iterator[BiomarkerEntry]:
+        """Can handle both a full data file (a list of BiomarkerEntry's) or
+        a file with a single entry.
+        """
+        try:
+            with path.open("rb") as f:
+                # First try parsing as array of records
                 parser = ijson.items(f, "item")
-                for entry_data in parser:
-                    try:
-                        yield BiomarkerEntry.from_dict(entry_data)
-                    except Exception as e:
-                        self.error(f"Failed to parse biomarker entry: {e}")
-                        raise
+                first = next(parser, None)
+                if first is not None:
+                    yield BiomarkerEntry.from_dict(first)
+                    yield from (BiomarkerEntry.from_dict(item) for item in parser)
+                else:
+                    # No items found, try as single object
+                    f.seek(0)
+                    record = json.load(f)
+                    if record:
+                        yield BiomarkerEntry.from_dict(record)
         except Exception as e:
             self.error(f"Failed to stream JSON from {path}\n{e}")
             raise
