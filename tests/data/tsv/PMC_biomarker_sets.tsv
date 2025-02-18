@@ -15,7 +15,7 @@ AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in FANCC	FA
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in RAD51C	RAD51C	NCBI:5889	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in BLM	BLM	NCBI:641	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in BRCA1	BRCA1	NCBI:672	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
-AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in MRE11A	MRE11A	NCBI:4361	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
+AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in MRE11A	MRE11	NCBI:4361	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in NBN	NBN	NCBI:4683	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in RAD50	RAD50	NCBI:10111	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in RAD51	RAD51	NCBI:5888	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
@@ -42,27 +42,26 @@ AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in ESR1	ESR
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in PIK3CA	PIK3CA	NCBI:5290	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
 AN6188-1	FoundationOne CDx molecular profiling for DNA damage repair in PALB2	PALB2	NCBI:79728	gene	breast carcinoma	DOID:3459			diagnostic				Pubmed:32393302		assessed_biomarker_entity;best_biomarker_role
 AN6189-1	Plasma concentration changes in NPPB	NPPB	NCBI:4879	gene	coronary artery disease	DOID:3393			prognostic				Pubmed:35595781		assessed_biomarker_entity;best_biomarker_role
-AN6189-1	Plasma concentration changes in BNP	BNP	NCBI:4879	gene	coronary artery disease	DOID:3393			prognostic				Pubmed:35595781		assessed_biomarker_entity;best_biomarker_role
 AN6189-1	Plasma concentration changes in TIMD4	TIMD4	NCBI:91937	gene	coronary artery disease	DOID:3393			prognostic				Pubmed:35595781		assessed_biomarker_entity;best_biomarker_role
 AN6189-1	Plasma concentration changes in FGF23	FGF23	NCBI:8074	gene	coronary artery disease	DOID:3393			prognostic				Pubmed:35595781		assessed_biomarker_entity;best_biomarker_role
 AN6189-1	Plasma concentration changes in GDF15	GDF15	NCBI:9518	gene	coronary artery disease	DOID:3393			prognostic				Pubmed:35595781		assessed_biomarker_entity;best_biomarker_role
 AN6189-1	Plasma concentration changes in SPON1	SPON1	NCBI:10418	gene	coronary artery disease	DOID:3393			prognostic				Pubmed:35595781		assessed_biomarker_entity;best_biomarker_role
 AN6190-1	Therapeutic hypothermia affected serum biomarker of MAPT	MAPT	NCBI:4137	gene	developmental and epileptic encephalopathy 101	DOID:0070387			prognostic				Pubmed:34795631		assessed_biomarker_entity;best_biomarker_role
-AN6190-1	Therapeutic hypothermia affected serum biomarker of VEGF	VEGF	NCBI:7422	gene	developmental and epileptic encephalopathy 101	DOID:0070387			prognostic				Pubmed:34795631		assessed_biomarker_entity;best_biomarker_role
+AN6190-1	Therapeutic hypothermia affected serum biomarker of VEGF	VEGFA	NCBI:7422	gene	developmental and epileptic encephalopathy 101	DOID:0070387			prognostic				Pubmed:34795631		assessed_biomarker_entity;best_biomarker_role
 AN6190-1	Therapeutic hypothermia affected serum biomarker of GFAP	GFAP	NCBI:2670	gene	developmental and epileptic encephalopathy 101	DOID:0070387			prognostic				Pubmed:34795631		assessed_biomarker_entity;best_biomarker_role
 AN6190-1	Therapeutic hypothermia affected serum biomarker of IL10	IL10	NCBI:3586	gene	developmental and epileptic encephalopathy 101	DOID:0070387			prognostic				Pubmed:34795631		assessed_biomarker_entity;best_biomarker_role
-AN6191-1	Changes in elevated expression levels of KIM1	KIM1	NCBI:26762	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
-AN6191-1	Changes in elevated expression levels of BMP9	BMP9	NCBI:2658	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
+AN6191-1	Changes in elevated expression levels of KIM1	HAVCR1	NCBI:26762	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
+AN6191-1	Changes in elevated expression levels of BMP9	GDF2	NCBI:2658	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of TNNT1	TNNT1	NCBI:7138	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of NPPB	NPPB	NCBI:4879	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of SLAMF7	SLAMF7	NCBI:57823	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
-AN6191-1	Changes in elevated expression levels of IL4RA	IL4RA	NCBI:3566	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
+AN6191-1	Changes in elevated expression levels of IL4RA	IL4R	NCBI:3566	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of THBS2	THBS2	NCBI:7058	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of AGRP	AGRP	NCBI:181	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of CD4	CD4	NCBI:920	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of PRELP	PRELP	NCBI:5549	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of PTX3	PTX3	NCBI:5806	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
-AN6191-1	Changes in elevated expression levels of CTSL1	CTSL1	NCBI:1514	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
+AN6191-1	Changes in elevated expression levels of CTSL1	CTSL	NCBI:1514	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of ADM	ADM	NCBI:133	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of PGF	PGF	NCBI:5228	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
 AN6191-1	Changes in elevated expression levels of TNFRSF11A	TNFRSF11A	NCBI:8792	gene	rheumatoid arthritis	DOID:7148			prognostic;diagnostic				Pubmed:34869664		assessed_biomarker_entity;best_biomarker_role
@@ -806,14 +805,14 @@ AN6203-1	Increased expression HTRA1	HTRA1	NCBI:5654	gene	thyroid cancer	DOID:178
 AN6203-1	Increased expression TBX21	TBX21	NCBI:30009	gene	thyroid cancer	DOID:1781			prognostic				Pubmed:33345267		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker C7	C7	NCBI:730	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker ANPEP	ANPEP	NCBI:290	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGLV319	IGLV319	NCBI:28797	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGLV140	IGLV140	NCBI:28825	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGLV319	IGLV3-19	NCBI:28797	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGLV140	IGLV1-40	NCBI:28825	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker QSOX1	QSOX1	NCBI:5768	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGLV327	IGLV327	NCBI:28791	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGLV327	IGLV3-27	NCBI:28791	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker A2M	A2M	NCBI:2	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGHV551	IGHV551	NCBI:28388	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGHV434	IGHV434	NCBI:28395	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGKV41	IGKV41	NCBI:28908	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGHV551	IGHV5-51	NCBI:28388	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGHV434	IGHV4-34	NCBI:28395	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6204-1	Normal to Chronic Hepatitis B panel biomarker IGKV41	IGKV4-1	NCBI:28908	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker SERPINA3	SERPINA3	NCBI:12	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker HABP2	HABP2	NCBI:3026	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker LCAT	LCAT	NCBI:3931	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
@@ -826,26 +825,26 @@ AN6204-1	Normal to Chronic Hepatitis B panel biomarker CFHR2	CFHR2	NCBI:3080	gen
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker CPN1	CPN1	NCBI:1369	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6204-1	Normal to Chronic Hepatitis B panel biomarker F2	F2	NCBI:2147	gene	hepatitis B	DOID:2043			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker VWF	VWF	NCBI:7450	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV41	IGKV41	NCBI:28908	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV41	IGKV4-1	NCBI:28908	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker HSPG2	HSPG2	NCBI:3339	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker NRP1	NRP1	NCBI:8829	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker C7	C7	NCBI:730	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGHV39	IGHV39	NCBI:28451	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGLV147	IGLV147	NCBI:28822	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV15	IGKV15	NCBI:28299	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGHV39	IGHV3-9	NCBI:28451	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGLV147	IGLV1-47	NCBI:28822	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV15	IGKV1-5	NCBI:28299	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker JCHAIN	JCHAIN	NCBI:3512	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker LUM	LUM	NCBI:4060	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker PIGR	PIGR	NCBI:5284	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV127	IGKV127	NCBI:28935	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV116	IGKV116	NCBI:28938	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGHV37	IGHV37	NCBI:28452	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV127	IGKV1-27	NCBI:28935	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGKV116	IGKV1-16	NCBI:28938	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGHV37	IGHV3-7	NCBI:28452	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker ICAM2	ICAM2	NCBI:3384	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker CD5L	CD5L	NCBI:922	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker TGFBI	TGFBI	NCBI:7045	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGLV327	IGLV327	NCBI:28791	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGLV327	IGLV3-27	NCBI:28791	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker IGFBP2	IGFBP2	NCBI:3485	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker FBLN1	FBLN1	NCBI:2192	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6205-1	Normal to Liver Cirrhosis panel biomarker IGHV551	IGHV551	NCBI:28388	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6205-1	Normal to Liver Cirrhosis panel biomarker IGHV551	IGHV5-51	NCBI:28388	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker IGHA1	IGHA1	NCBI:3493	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker LGALS3BP	LGALS3BP	NCBI:3959	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker FGG	FGG	NCBI:2266	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
@@ -858,16 +857,16 @@ AN6205-1	Normal to Liver Cirrhosis panel biomarker CLU	CLU	NCBI:1191	gene	liver 
 AN6205-1	Normal to Liver Cirrhosis panel biomarker SERPIND1	SERPIND1	NCBI:3053	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6205-1	Normal to Liver Cirrhosis panel biomarker C1S	C1S	NCBI:716	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker ANPEP	ANPEP	NCBI:290	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGKV41	IGKV41	NCBI:28908	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGKV41	IGKV4-1	NCBI:28908	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker VWF	VWF	NCBI:7450	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker TGFBI	TGFBI	NCBI:7045	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker LYVE1	LYVE1	NCBI:10894	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker PIGR	PIGR	NCBI:5284	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGHV226	IGHV226	NCBI:28455	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGHV226	IGHV2-26	NCBI:28455	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker HSPG2	HSPG2	NCBI:3339	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker FUCA1	FUCA1	NCBI:2517	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGLV140	IGLV140	NCBI:28825	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGKV18	IGKV18	NCBI:28942	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGLV140	IGLV1-40	NCBI:28825	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGKV18	IGKV1-8	NCBI:28942	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker F12	F12	NCBI:2161	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker PROZ	PROZ	NCBI:8858	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker IGF1	IGF1	NCBI:3479	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
@@ -875,17 +874,17 @@ AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker F10	F10	NCBI:2159	ge
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker APOM	APOM	NCBI:55937	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker PLG	PLG	NCBI:5340	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6206-1	Normal to Hepatocellular Carcinoma panel biomarker APOC1	APOC1	NCBI:341	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGKV41	IGKV41	NCBI:28908	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGKV41	IGKV4-1	NCBI:28908	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker HSPG2	HSPG2	NCBI:3339	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGHA1	IGHA1	NCBI:3493	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker NRP1	NRP1	NCBI:8829	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker LUM	LUM	NCBI:4060	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker JCHAIN	JCHAIN	NCBI:3512	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGFBP2	IGFBP2	NCBI:3485	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGKV315	IGKV315	NCBI:28913	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGHV37	IGHV37	NCBI:28452	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGKV315	IGKV3-15	NCBI:28913	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGHV37	IGHV3-7	NCBI:28452	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker VWF	VWF	NCBI:7450	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGKV18	IGKV18	NCBI:28942	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker IGKV18	IGKV1-8	NCBI:28942	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker CD5L	CD5L	NCBI:922	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker CFI	CFI	NCBI:3426	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6207-1	Liver Cirrhosis vs Chronic Hepatitis B panel biomarker CAMP	CAMP	NCBI:820	gene	liver cirrhosis	DOID:5082			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
@@ -944,15 +943,15 @@ AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker APOM	APOM	
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker C1RL	C1RL	NCBI:51279	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker MCAM	MCAM	NCBI:4162	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker FBLN1	FBLN1	NCBI:2192	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGKV41	IGKV41	NCBI:28908	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGKV41	IGKV4-1	NCBI:28908	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker CDH5	CDH5	NCBI:1003	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGLV140	IGLV140	NCBI:28825	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGHV434	IGHV434	NCBI:28395	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGKV320	IGKV320	NCBI:28912	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGHV349	IGHV349	NCBI:28423	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGKV2D29	IGKV2D29	NCBI:28882	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGLV140	IGLV1-40	NCBI:28825	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGHV434	IGHV4-34	NCBI:28395	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGKV320	IGKV3-20	NCBI:28912	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGHV349	IGHV3-49	NCBI:28423	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGKV2D29	IGKV2D-29	NCBI:28882	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker HSPG2	HSPG2	NCBI:3339	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
-AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGHV551	IGHV551	NCBI:28388	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
+AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker IGHV551	IGHV5-51	NCBI:28388	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker CD5L	CD5L	NCBI:922	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker JCHAIN	JCHAIN	NCBI:3512	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
 AN6209-1	Hepatocellular Carcinoma  vs Liver Cirrhosis panel biomarker EFEMP1	EFEMP1	NCBI:2202	gene	hepatocellular carcinoma	DOID:684			prognostic				Pubmed:37209815		assessed_biomarker_entity;best_biomarker_role
@@ -1039,7 +1038,7 @@ AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of 
 AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of IL6	IL6	NCBI:3569	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
 AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of MMP12	MMP12	NCBI:4321	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
 AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of REN	REN	NCBI:5972	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
-AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of FIGF	FIGF	NCBI:2277	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
+AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of FIGF	VEGFD	NCBI:2277	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
 AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of TNFRSF10B	TNFRSF10B	NCBI:8795	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
 AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of ADM	ADM	NCBI:133	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
 AN6211-1	Changes in Independent Blood Biomarker in Proximity Extension Assay of GDF15	GDF15	NCBI:9518	gene	heart disease	DOID:114			diagnostic;prognostic				Pubmed:37963145		assessed_biomarker_entity;best_biomarker_role
@@ -1073,7 +1072,7 @@ AN6215-1	2-fold higher level expression of IL18	IL18	NCBI:3606	gene	chronic kidn
 AN6215-1	2-fold higher level expression of LCN2	LCN2	NCBI:3934	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
 AN6215-1	2-fold higher level expression of CLU	CLU	NCBI:1191	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
 AN6215-1	2-fold higher level expression of SPP1	SPP1	NCBI:6696	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
-AN6215-1	2-fold higher level expression of A1M	A1M	NCBI:259	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
+AN6215-1	2-fold higher level expression of A1M	AMBP	NCBI:259	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
 AN6215-1	2-fold higher level expression of B2M	B2M	NCBI:567	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
 AN6215-1	2-fold higher level expression of CST3	CST3	NCBI:1471	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
 AN6215-1	2-fold higher level expression of TFF3	TFF3	NCBI:7033	gene	chronic kidney disease	DOID:784			prognostic				Pubmed:34136786		assessed_biomarker_entity;best_biomarker_role
@@ -1102,7 +1101,7 @@ AN6218-1	Increased expression levels of MMP9	MMP9	NCBI:4318	gene	subacute deliri
 AN6218-1	Increased expression levels of SELP	SELP	NCBI:6403	gene	subacute delirium	DOID:8645			prognostic;monitoring				Pubmed:36224337		assessed_biomarker_entity;best_biomarker_role
 AN6218-1	Increased expression levels of PECAM1	PECAM1	NCBI:5175	gene	subacute delirium	DOID:8645			prognostic;monitoring				Pubmed:36224337		assessed_biomarker_entity;best_biomarker_role
 AN6218-1	Increased expression levels of IL6	IL6	NCBI:3569	gene	subacute delirium	DOID:8645			prognostic;monitoring				Pubmed:36224337		assessed_biomarker_entity;best_biomarker_role
-AN6218-1	Increased expression levels of PAI1	PAI1	NCBI:5054	gene	subacute delirium	DOID:8645			prognostic;monitoring				Pubmed:36224337		assessed_biomarker_entity;best_biomarker_role
+AN6218-1	Increased expression levels of PAI1	SERPINE1	NCBI:5054	gene	subacute delirium	DOID:8645			prognostic;monitoring				Pubmed:36224337		assessed_biomarker_entity;best_biomarker_role
 AN6219-1	Oncuria urine test expression levels of MMP9	MMP9	NCBI:4318	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
 AN6219-1	Oncuria urine test expression levels of VEGFA	VEGFA	NCBI:7422	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
 AN6219-1	Oncuria urine test expression levels of SDC1	SDC1	NCBI:6382	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
@@ -1110,8 +1109,8 @@ AN6219-1	Oncuria urine test expression levels of APOE	APOE	NCBI:348	gene	urinary
 AN6219-1	Oncuria urine test expression levels of CA9	CA9	NCBI:768	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
 AN6219-1	Oncuria urine test expression levels of ANG	ANG	NCBI:283	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
 AN6219-1	Oncuria urine test expression levels of MMP10	MMP10	NCBI:4319	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
-AN6219-1	Oncuria urine test expression levels of A1AT	A1AT	NCBI:5265	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
-AN6219-1	Oncuria urine test expression levels of PAI1	PAI1	NCBI:5054	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
+AN6219-1	Oncuria urine test expression levels of A1AT	SERPINA1	NCBI:5265	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
+AN6219-1	Oncuria urine test expression levels of PAI1	SERPINE1	NCBI:5054	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
 AN6219-1	Oncuria urine test expression levels of CXCL2	CXCL2	NCBI:2920	gene	urinary bladder cancer	DOID:11054			diagnostic				Pubmed:33823873		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of CCL11	CCL11	NCBI:6356	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of CCL2	CCL2	NCBI:6347	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
@@ -1119,13 +1118,13 @@ AN6220-1	Increased concentration of CCL4	CCL4	NCBI:6351	gene	postpartum depressi
 AN6220-1	Increased concentration of CCL5	CCL5	NCBI:6352	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of CRP	CRP	NCBI:1401	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of CXCL8	CXCL8	NCBI:3576	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
-AN6220-1	Increased concentration of IL17	IL17	NCBI:3605	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
+AN6220-1	Increased concentration of IL17	IL17A	NCBI:3605	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of IL18	IL18	NCBI:3606	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of IL1B	IL1B	NCBI:3553	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of IL2	IL2	NCBI:3558	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of IL3	IL3	NCBI:3562	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of IL6	IL6	NCBI:3569	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
-AN6220-1	Increased concentration of IL8	IL8	NCBI:3576	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
+AN6220-1	Increased concentration of IL8	CXCL8	NCBI:3576	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of TGFB2	TGFB2	NCBI:7042	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6220-1	Increased concentration of TNF	TNF	NCBI:7124	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
 AN6221-1	Decreased concentration of BDNF	BDNF	NCBI:627	gene	postpartum depression	DOID:9478			prognostic				Pubmed:37892657		assessed_biomarker_entity;best_biomarker_role
@@ -1327,11 +1326,11 @@ AN6234-1	Molecular marker panel BRCA1	BRCA1	NCBI:672	gene	ovarian clear cell car
 AN6234-1	Molecular marker panel BRCA2	BRCA2	NCBI:675	gene	ovarian clear cell carcinoma	DOID:0050934			prognostic				Pubmed:28187748		assessed_biomarker_entity;best_biomarker_role
 AN6234-1	Molecular marker panel CD274	CD274	NCBI:29126	gene	ovarian clear cell carcinoma	DOID:0050934			prognostic				Pubmed:28187748		assessed_biomarker_entity;best_biomarker_role
 AN6235-1	Promoter hypermethylation of tumor suppressor genes SLC5A8	SLC5A8	NCBI:160728	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
-AN6235-1	Promoter hypermethylation of tumor suppressor genes MINT1	MINT1	NCBI:320	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
+AN6235-1	Promoter hypermethylation of tumor suppressor genes MINT1	APBA1	NCBI:320	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
 AN6235-1	Promoter hypermethylation of tumor suppressor genes SFRP1	SFRP1	NCBI:6422	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
 AN6235-1	Promoter hypermethylation of tumor suppressor genes SFRP2	SFRP2	NCBI:6423	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
 AN6235-1	Promoter hypermethylation of tumor suppressor genes CDH13	CDH13	NCBI:1012	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
-AN6235-1	Promoter hypermethylation of tumor suppressor genes CRBP1	CRBP1	NCBI:5947	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
+AN6235-1	Promoter hypermethylation of tumor suppressor genes CRBP1	RBP1	NCBI:5947	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
 AN6235-1	Promoter hypermethylation of tumor suppressor genes RUNX3	RUNX3	NCBI:864	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
 AN6235-1	Promoter hypermethylation of tumor suppressor genes CDKN2A	CDKN2A	NCBI:1029	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
 AN6235-1	Promoter hypermethylation of tumor suppressor genes HLTF	HLTF	NCBI:6596	gene	colorectal cancer	DOID:9256			diagnostic				Pubmed:25622259		assessed_biomarker_entity;best_biomarker_role
@@ -1427,7 +1426,7 @@ AN6242-1	Pro-inflammatory biomarkers PLAUR	PLAUR	NCBI:5329	gene	cardiovascular s
 AN6242-1	Pro-inflammatory biomarkers TNF	TNF	NCBI:7124	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:31193994		assessed_biomarker_entity;best_biomarker_role
 AN6242-1	Pro-inflammatory biomarkers TNFRSF1A	TNFRSF1A	NCBI:7132	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:31193994		assessed_biomarker_entity;best_biomarker_role
 AN6242-1	Pro-inflammatory biomarkers PLAT	PLAT	NCBI:5327	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:31193994		assessed_biomarker_entity;best_biomarker_role
-AN6242-1	Pro-inflammatory biomarkers TRAIL	TRAIL	NCBI:8743	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:31193994		assessed_biomarker_entity;best_biomarker_role
+AN6242-1	Pro-inflammatory biomarkers TRAIL	TNFSF10	NCBI:8743	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:31193994		assessed_biomarker_entity;best_biomarker_role
 AN6243-1	COPD biomarker panel SCGB1A1	SCGB1A1	NCBI:7356	gene	chronic obstructive pulmonary disease	DOID:3083			diagnostic				Pubmed:19386108		assessed_biomarker_entity;best_biomarker_role
 AN6243-1	COPD biomarker panel CRP	CRP	NCBI:1401	gene	chronic obstructive pulmonary disease	DOID:3083			diagnostic				Pubmed:19386108		assessed_biomarker_entity;best_biomarker_role
 AN6243-1	COPD biomarker panel EDN1	EDN1	NCBI:1906	gene	chronic obstructive pulmonary disease	DOID:3083			diagnostic				Pubmed:19386108		assessed_biomarker_entity;best_biomarker_role
@@ -1472,7 +1471,7 @@ AN6247-1	Disease Activity Assessment Biomarkers IL6	IL6	NCBI:3569	gene	rheumatoi
 AN6247-1	Disease Activity Assessment Biomarkers TNFRSF1A	TNFRSF1A	NCBI:7132	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
 AN6247-1	Disease Activity Assessment Biomarkers VCAM1	VCAM1	NCBI:7412	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
 AN6247-1	Disease Activity Assessment Biomarkers EGF	EGF	NCBI:1950	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
-AN6247-1	Disease Activity Assessment Biomarkers VEGF	VEGF	NCBI:7422	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
+AN6247-1	Disease Activity Assessment Biomarkers VEGF	VEGFA	NCBI:7422	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
 AN6247-1	Disease Activity Assessment Biomarkers MMP1	MMP1	NCBI:4312	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
 AN6247-1	Disease Activity Assessment Biomarkers MMP3	MMP3	NCBI:4314	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
 AN6247-1	Disease Activity Assessment Biomarkers CHI3L1	CHI3L1	NCBI:1116	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
@@ -1482,13 +1481,13 @@ AN6247-1	Disease Activity Assessment Biomarkers SAA1	SAA1	NCBI:6288	gene	rheumat
 AN6247-1	Disease Activity Assessment Biomarkers CRP	CRP	NCBI:1401	gene	rheumatoid arthritis	DOID:7148			prognostic				Pubmed:23585841		assessed_biomarker_entity;best_biomarker_role
 AN6248-1	Predictive Value Added Biomarkers [gene}	IL2	NCBI:3558	gene	chronic obstructive pulmonary disease	DOID:3083			prognostic				Pubmed:29065892		assessed_biomarker_entity;best_biomarker_role
 AN6248-1	Predictive Value Added Biomarkers [gene}	IL6	NCBI:3569	gene	chronic obstructive pulmonary disease	DOID:3083			prognostic				Pubmed:29065892		assessed_biomarker_entity;best_biomarker_role
-AN6248-1	Predictive Value Added Biomarkers [gene}	IL8	NCBI:3576	gene	chronic obstructive pulmonary disease	DOID:3083			prognostic				Pubmed:29065892		assessed_biomarker_entity;best_biomarker_role
+AN6248-1	Predictive Value Added Biomarkers [gene}	CXCL8	NCBI:3576	gene	chronic obstructive pulmonary disease	DOID:3083			prognostic				Pubmed:29065892		assessed_biomarker_entity;best_biomarker_role
 AN6248-1	Predictive Value Added Biomarkers [gene}	CCL11	NCBI:6356	gene	chronic obstructive pulmonary disease	DOID:3083			prognostic				Pubmed:29065892		assessed_biomarker_entity;best_biomarker_role
-AN6249-1	Conensus biomarkers [gene}	A1AT	NCBI:5265	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
+AN6249-1	Conensus biomarkers [gene}	SERPINA1	NCBI:5265	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
 AN6249-1	Conensus biomarkers [gene}	FBLN5	NCBI:10516	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
 AN6249-1	Conensus biomarkers [gene}	YIPF3	NCBI:25844	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
 AN6249-1	Conensus biomarkers [gene}	GP2	NCBI:2813	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
-AN6249-1	Conensus biomarkers [gene}	CLM9	NCBI:146894	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
+AN6249-1	Conensus biomarkers [gene}	CD300LG	NCBI:146894	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
 AN6249-1	Conensus biomarkers [gene}	VASN	NCBI:114990	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
 AN6249-1	Conensus biomarkers [gene}	CD44	NCBI:960	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
 AN6249-1	Conensus biomarkers [gene}	EGF	NCBI:1950	gene	IgA glomerulonephritis	DOID:2986			diagnostic				Pubmed:29523019		assessed_biomarker_entity;best_biomarker_role
@@ -1498,7 +1497,7 @@ AN6250-1	Serum Biomarkers IL17B	IL17B	NCBI:27190	gene	dermatomyositis	DOID:10223
 AN6250-1	Serum Biomarkers IL17D	IL17D	NCBI:53342	gene	dermatomyositis	DOID:10223			prognostic				Pubmed:33015544		assessed_biomarker_entity;best_biomarker_role
 AN6250-1	Serum Biomarkers IL22	IL22	NCBI:50616	gene	dermatomyositis	DOID:10223			prognostic				Pubmed:33015544		assessed_biomarker_entity;best_biomarker_role
 AN6250-1	Serum Biomarkers CXCL10	CXCL10	NCBI:3627	gene	dermatomyositis	DOID:10223			prognostic				Pubmed:33015544		assessed_biomarker_entity;best_biomarker_role
-AN6250-1	Serum Biomarkers MCP1	MCP1	NCBI:6347	gene	dermatomyositis	DOID:10223			prognostic				Pubmed:33015544		assessed_biomarker_entity;best_biomarker_role
+AN6250-1	Serum Biomarkers MCP1	CCL2	NCBI:6347	gene	dermatomyositis	DOID:10223			prognostic				Pubmed:33015544		assessed_biomarker_entity;best_biomarker_role
 AN6250-1	Serum Biomarkers ANGPT2	ANGPT2	NCBI:285	gene	dermatomyositis	DOID:10223			prognostic				Pubmed:33015544		assessed_biomarker_entity;best_biomarker_role
 AN6250-1	Serum Biomarkers MIF	MIF	NCBI:4282	gene	dermatomyositis	DOID:10223			prognostic				Pubmed:33015544		assessed_biomarker_entity;best_biomarker_role
 AN6251-1	Common NSCLC biomarkers with targets [gene}	EGFR	NCBI:1956	gene	lung non-small cell carcinoma	DOID:3908			prognostic				Pubmed:32549358		assessed_biomarker_entity;best_biomarker_role
@@ -1534,7 +1533,7 @@ AN6253-1	Expression changes in serum and urine biomarkers ALCAM	ALCAM	NCBI:214	g
 AN6253-1	Expression changes in serum and urine biomarkers LCN2	LCN2	NCBI:3934	gene	systemic lupus erythematosus	DOID:9074			diagnostic				Pubmed:32911542		assessed_biomarker_entity;best_biomarker_role
 AN6254-1	Immune Profile Expression Biomarker CXCL12	CXCL12	NCBI:6387	gene	Parkinson's disease	DOID:14330			prognostic				Pubmed:35610646		assessed_biomarker_entity;best_biomarker_role
 AN6254-1	Immune Profile Expression Biomarker CX3CL1	CX3CL1	NCBI:6376	gene	Parkinson's disease	DOID:14330			prognostic				Pubmed:35610646		assessed_biomarker_entity;best_biomarker_role
-AN6254-1	Immune Profile Expression Biomarker IL8	IL8	NCBI:3576	gene	Parkinson's disease	DOID:14330			prognostic				Pubmed:35610646		assessed_biomarker_entity;best_biomarker_role
+AN6254-1	Immune Profile Expression Biomarker IL8	CXCL8	NCBI:3576	gene	Parkinson's disease	DOID:14330			prognostic				Pubmed:35610646		assessed_biomarker_entity;best_biomarker_role
 AN6254-1	Immune Profile Expression Biomarker CCL15	CCL15	NCBI:6359	gene	Parkinson's disease	DOID:14330			prognostic				Pubmed:35610646		assessed_biomarker_entity;best_biomarker_role
 AN6255-1	Tumor Suppressor Gene Biomarker Panel CDKN2A	CDKN2A	NCBI:1029	gene	nasopharynx carcinoma	DOID:9261			diagnostic;prognostic				Pubmed:32825179		assessed_biomarker_entity;best_biomarker_role
 AN6255-1	Tumor Suppressor Gene Biomarker Panel CDKN2B	CDKN2B	NCBI:1030	gene	nasopharynx carcinoma	DOID:9261			diagnostic;prognostic				Pubmed:32825179		assessed_biomarker_entity;best_biomarker_role
@@ -1557,7 +1556,7 @@ AN6256-1	Immune Markers for ALS IL2	IL2	NCBI:3558	gene	amyotrophic lateral scler
 AN6256-1	Immune Markers for ALS IL4	IL4	NCBI:3565	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
 AN6256-1	Immune Markers for ALS IL5	IL5	NCBI:3567	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
 AN6256-1	Immune Markers for ALS IL6	IL6	NCBI:3569	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
-AN6256-1	Immune Markers for ALS IL8	IL8	NCBI:3576	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
+AN6256-1	Immune Markers for ALS IL8	CXCL8	NCBI:3576	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
 AN6256-1	Immune Markers for ALS IL10	IL10	NCBI:3586	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
 AN6256-1	Immune Markers for ALS IL13	IL13	NCBI:3596	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
 AN6256-1	Immune Markers for ALS TNF	TNF	NCBI:7124	gene	amyotrophic lateral sclerosis	DOID:332			prognostic				Pubmed:33134918		assessed_biomarker_entity;best_biomarker_role
@@ -1639,7 +1638,7 @@ AN6262-1	Serum Biomarker Panel C5	C5	NCBI:727	gene	ankylosing spondylitis	DOID:7
 AN6262-1	Serum Biomarker Panel TFF1	TFF1	NCBI:7031	gene	ankylosing spondylitis	DOID:7147			diagnostic				Pubmed:37041650		assessed_biomarker_entity;best_biomarker_role
 AN6263-1	Increased Expression of APOA1	APOA1	NCBI:335	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
 AN6263-1	Increased Expression of IFNG	IFNG	NCBI:3458	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
-AN6263-1	Increased Expression of IL17	IL17	NCBI:3605	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
+AN6263-1	Increased Expression of IL17	IL17A	NCBI:3605	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
 AN6263-1	Increased Expression of RMRP	RMRP	NCBI:6023	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
 AN6263-1	Increased Expression of SPHK1	SPHK1	NCBI:8877	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
 AN6263-1	Increased Expression of SPHK2	SPHK2	NCBI:56848	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
@@ -1647,13 +1646,13 @@ AN6263-1	Increased Expression of S1PR1	S1PR1	NCBI:1901	gene	multiple sclerosis	D
 AN6263-1	Increased Expression of S1PR5	S1PR5	NCBI:53637	gene	multiple sclerosis	DOID:2377			diagnostic;prognostic				Pubmed:32071782		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of IL6	IL6	NCBI:3569	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of TNF	TNF	NCBI:7124	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
-AN6264-1	Increased Expression of IL17	IL17	NCBI:3605	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
-AN6264-1	Increased Expression of HLAC	HLAC	NCBI:3107	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
+AN6264-1	Increased Expression of IL17	IL17A	NCBI:3605	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
+AN6264-1	Increased Expression of HLAC	HLA-C	NCBI:3107	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of CCL20	CCL20	NCBI:6364	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of PON1	PON1	NCBI:5444	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of PTX3	PTX3	NCBI:5806	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of CXCL10	CXCL10	NCBI:3627	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
-AN6264-1	Increased Expression of IL4RA	IL4RA	NCBI:3566	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
+AN6264-1	Increased Expression of IL4RA	IL4R	NCBI:3566	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of IL13	IL13	NCBI:3596	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6264-1	Increased Expression of IL31	IL31	NCBI:386653	gene	psoriasis	DOID:8893			prognostic				Pubmed:36556392		assessed_biomarker_entity;best_biomarker_role
 AN6265-1	Molecular Profiling Panel NTRK3	NTRK3	NCBI:4916	gene	melanoma	DOID:1909			prognostic				Pubmed:38028569		assessed_biomarker_entity;best_biomarker_role
@@ -1672,7 +1671,7 @@ AN6267-1	Inflammatory Biomarker Panel CRP	CRP	NCBI:1401	gene	hypertension	DOID:1
 AN6267-1	Inflammatory Biomarker Panel IL2	IL2	NCBI:3558	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
 AN6267-1	Inflammatory Biomarker Panel IL4	IL4	NCBI:3565	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
 AN6267-1	Inflammatory Biomarker Panel IL6	IL6	NCBI:3569	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
-AN6267-1	Inflammatory Biomarker Panel IL8	IL8	NCBI:3576	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
+AN6267-1	Inflammatory Biomarker Panel IL8	CXCL8	NCBI:3576	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
 AN6267-1	Inflammatory Biomarker Panel TNF	TNF	NCBI:7124	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
 AN6267-1	Inflammatory Biomarker Panel CCL2	CCL2	NCBI:6347	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
 AN6267-1	Inflammatory Biomarker Panel LEP	LEP	NCBI:3952	gene	hypertension	DOID:10763			prognostic				Pubmed:33028995		assessed_biomarker_entity;best_biomarker_role
@@ -1714,7 +1713,7 @@ AN6271-1	Inflammatory and immune panel F3	F3	NCBI:2152	gene	cardiovascular syste
 AN6271-1	Inflammatory and immune panel CSF3	CSF3	NCBI:1440	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
 AN6271-1	Inflammatory and immune panel IL1RN	IL1RN	NCBI:3557	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
 AN6271-1	Inflammatory and immune panel IL6	IL6	NCBI:3569	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
-AN6271-1	Inflammatory and immune panel IL8	IL8	NCBI:3576	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
+AN6271-1	Inflammatory and immune panel IL8	CXCL8	NCBI:3576	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
 AN6271-1	Inflammatory and immune panel LEP	LEP	NCBI:3952	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
 AN6271-1	Inflammatory and immune panel CCL2	CCL2	NCBI:6347	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
 AN6271-1	Inflammatory and immune panel MMP3	MMP3	NCBI:4314	gene	cardiovascular system disease	DOID:1287			prognostic				Pubmed:23936524		assessed_biomarker_entity;best_biomarker_role
@@ -1738,7 +1737,7 @@ AN6273-1	Immune Cell Biomarker Panel CD19	CD19	NCBI:930	gene	breast cancer	DOID:
 AN6273-1	Immune Cell Biomarker Panel CD22	CD22	NCBI:933	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
 AN6273-1	Immune Cell Biomarker Panel CD79A	CD79A	NCBI:973	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
 AN6273-1	Immune Cell Biomarker Panel CD4	CD4	NCBI:920	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
-AN6273-1	Immune Cell Biomarker Panel CD8	CD8	NCBI:925	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
+AN6273-1	Immune Cell Biomarker Panel CD8	CD8A	NCBI:925	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
 AN6273-1	Immune Cell Biomarker Panel CD80	CD80	NCBI:941	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
 AN6273-1	Immune Cell Biomarker Panel CD86	CD86	NCBI:942	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
 AN6273-1	Immune Cell Biomarker Panel NOS2	NOS2	NCBI:4843	gene	breast cancer	DOID:1612			prognostic				Pubmed:37884650		assessed_biomarker_entity;best_biomarker_role
