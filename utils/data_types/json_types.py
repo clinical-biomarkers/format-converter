@@ -1,10 +1,12 @@
 from dataclasses import dataclass, field
+from pprint import pformat
 from pathlib import Path
 from typing import Any, Optional, Union, TYPE_CHECKING, TypeGuard
 from abc import ABC, abstractmethod
 from logging import Logger
 
 from utils import load_json_type_safe
+
 if TYPE_CHECKING:
     from . import TSVRow
 
@@ -628,63 +630,65 @@ class BiomarkerEntry(DataModelObject):
     exposure_agent: Optional[ExposureAgent] = None
     evidence_source: list[Evidence] = field(default_factory=list)
     citation: list[Citation] = field(default_factory=list)
+    # Retain other fields like canonical id
+    kwargs: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert entry to dictionary format for JSON serialization."""
-        if self.condition is not None:
-            return {
-                "biomarker_id": self.biomarker_id,
-                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
-                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
-                "condition": self.condition.to_dict(),
-                "evidence_source": [e.to_dict() for e in self.evidence_source],
-                "citation": [c.to_dict() for c in self.citation],
-            }
-        elif self.exposure_agent is not None:
-            return {
-                "biomarker_id": self.biomarker_id,
-                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
-                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
-                "exposure_agent": self.exposure_agent.to_dict(),
-                "evidence_source": [e.to_dict() for e in self.evidence_source],
-                "citation": [c.to_dict() for c in self.citation],
-            }
+        base: dict = {
+            "biomarker_id": self.biomarker_id,
+            "biomarker_component": [c.to_dict() for c in self.biomarker_component],
+            "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
+            "evidence_source": [e.to_dict() for e in self.evidence_source],
+            "citation": [c.to_dict() for c in self.citation],
+        }
+
+        if self.condition:
+            base["condition"] = self.condition.to_dict()
+        elif self.exposure_agent:
+            base["exposure_agent"] = self.exposure_agent.to_dict()
         else:
             raise ValueError(
-                f"Did not find condition or exposure agent in BiomarkerEntry: {self}"
+                f"Didn't find condition or exposure agent in biomarker entry {self.biomarker_id}"
             )
+
+        base.update(self.kwargs)
+        return base
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BiomarkerEntry":
-        condition_dict = data.get("condition")
-        if condition_dict is None:
-            return BiomarkerEntry(
-                biomarker_id=data["biomarker_id"],
-                biomarker_component=[
-                    BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
-                ],
-                best_biomarker_role=[
-                    BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
-                ],
-                exposure_agent=ExposureAgent.from_dict(data.get("exposure_agent", {})),
-                evidence_source=[
-                    Evidence.from_dict(e) for e in data["evidence_source"]
-                ],
-                citation=[Citation.from_dict(c) for c in data["citation"]],
-            )
-
-        return BiomarkerEntry(
-            biomarker_id=data["biomarker_id"],
-            biomarker_component=[
+        known_fields = {
+            "biomarker_id": data["biomarker_id"],
+            "biomarker_component": [
                 BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
             ],
-            best_biomarker_role=[
+            "best_biomarker_role": [
                 BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
             ],
-            condition=Condition.from_dict(data.get("condition", {})),
-            evidence_source=[Evidence.from_dict(e) for e in data["evidence_source"]],
-            citation=[Citation.from_dict(c) for c in data["citation"]],
-        )
+            "evidence_source": [Evidence.from_dict(c) for c in data["evidence_source"]],
+            "citation": [Citation.from_dict(c) for c in data["citation"]],
+        }
+
+        if "condition" in data:
+            known_fields["condition"] = Condition.from_dict(data["condition"])
+        elif "exposure_agent" in data:
+            known_fields["exposure_agent"] = ExposureAgent.from_dict(
+                data["exposure_agent"]
+            )
+        else:
+            raise ValueError(
+                f"Didn't find `condition` or `exposure_agent` in biomarker: {pformat(data)}"
+            )
+
+        # Preserve any extra fields in kwargs
+        extra_fields = {
+            k: v
+            for k, v in data.items()
+            if k not in known_fields and k not in ["condition", "exposure_agent"]
+        }
+        known_fields["kwargs"] = extra_fields
+
+        return cls(**known_fields)
 
     def collect_unique_evidence_sources(self) -> dict[str, set[str]]:
         """Returns the unique evidence sources by resource.
@@ -778,67 +782,65 @@ class BiomarkerEntryWCrossReference(DataModelObject):
     evidence_source: list[Evidence] = field(default_factory=list)
     citation: list[Citation] = field(default_factory=list)
     crossref: list[CrossReference] = field(default_factory=list)
+    kwargs: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert entry to dictionary format for JSON serialization."""
+        base: dict = {
+            "biomarker_id": self.biomarker_id,
+            "biomarker_component": [c.to_dict() for c in self.biomarker_component],
+            "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
+            "evidence_source": [e.to_dict() for e in self.evidence_source],
+            "citation": [c.to_dict() for c in self.citation],
+            "crossref": [c.to_dict() for c in self.crossref],
+        }
+
         if self.condition is not None:
-            return {
-                "biomarker_id": self.biomarker_id,
-                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
-                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
-                "condition": self.condition.to_dict(),
-                "evidence_source": [e.to_dict() for e in self.evidence_source],
-                "citation": [c.to_dict() for c in self.citation],
-                "crossref": [c.to_dict() for c in self.crossref],
-            }
+            base["condition"] = self.condition.to_dict()
         elif self.exposure_agent is not None:
-            return {
-                "biomarker_id": self.biomarker_id,
-                "biomarker_component": [c.to_dict() for c in self.biomarker_component],
-                "best_biomarker_role": [r.to_dict() for r in self.best_biomarker_role],
-                "exposure_agent": self.exposure_agent.to_dict(),
-                "evidence_source": [e.to_dict() for e in self.evidence_source],
-                "citation": [c.to_dict() for c in self.citation],
-                "crossref": [c.to_dict() for c in self.crossref],
-            }
+            base["exposure_agent"] = self.exposure_agent.to_dict()
         else:
             raise ValueError(
                 f"Did not find condition or exposure agent in BiomarkerEntryWCrossReference: {self}"
             )
 
+        base.update(self.kwargs)
+        return base
+
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BiomarkerEntryWCrossReference":
-        condition_dict = data.get("condition")
-        if condition_dict is None:
-            return BiomarkerEntryWCrossReference(
-                biomarker_id=data["biomarker_id"],
-                biomarker_component=[
-                    BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
-                ],
-                best_biomarker_role=[
-                    BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
-                ],
-                exposure_agent=ExposureAgent.from_dict(data.get("exposure_agent", {})),
-                evidence_source=[
-                    Evidence.from_dict(e) for e in data["evidence_source"]
-                ],
-                citation=[Citation.from_dict(c) for c in data["citation"]],
-                crossref=[CrossReference.from_dict(c) for c in data["crossref"]],
-            )
-
-        return BiomarkerEntryWCrossReference(
-            biomarker_id=data["biomarker_id"],
-            biomarker_component=[
+        known_fields = {
+            "biomarker_id": data["biomarker_id"],
+            "biomarker_component": [
                 BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
             ],
-            best_biomarker_role=[
+            "best_biomarker_role": [
                 BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
             ],
-            condition=Condition.from_dict(data.get("condition", {})),
-            evidence_source=[Evidence.from_dict(e) for e in data["evidence_source"]],
-            citation=[Citation.from_dict(c) for c in data["citation"]],
-            crossref=[CrossReference.from_dict(c) for c in data["crossref"]],
-        )
+            "evidence_source": [Evidence.from_dict(e) for e in data["evidence_source"]],
+            "citation": [Citation.from_dict(c) for c in data["citation"]],
+            "crossref": [CrossReference.from_dict(c) for c in data.get("crossref", [])],
+        }
+
+        if "condition" in data:
+            known_fields["condition"] = Condition.from_dict(data["condition"])
+        elif "exposure_agent" in data:
+            known_fields["exposure_agent"] = ExposureAgent.from_dict(
+                data["exposure_agent"]
+            )
+        else:
+            raise ValueError(
+                f"Didn't find `condition` or `exposure_agent` in biomarker: {pformat(data)}"
+            )
+
+        extra_fields = {
+            k: v
+            for k, v in data.items()
+            if k not in known_fields and k not in ["condition", "exposure_agent"]
+        }
+        known_fields["kwargs"] = extra_fields
+
+        return cls(**known_fields)
 
     @classmethod
     def from_biomarker_entry(
@@ -858,6 +860,7 @@ class BiomarkerEntryWCrossReference(DataModelObject):
             evidence_source=entry.evidence_source,
             citation=entry.citation,
             crossref=cross_references,
+            kwargs=entry.kwargs,
         )
 
 
