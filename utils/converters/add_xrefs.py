@@ -2,7 +2,7 @@ from collections.abc import Iterator
 from pathlib import Path
 import ijson
 import sys
-from typing import Literal
+from typing import Literal, Optional
 import json
 
 from . import JSON_LOG_CHECKPOINT, Converter
@@ -57,12 +57,12 @@ class XrefConverter(Converter, LoggedClass):
 
         if input_path_dir_flag:
             self.debug(f"Processing directory: {input_path}")
-            for file in input_path.iterdir():
+            for idx, file in enumerate(input_path.iterdir()):
                 if not file.is_file() or file.suffix.lower() != ".json":
                     self.debug(f"Skipping '{file}'")
                     continue
                 out_file = output_path / file.name
-                self._process_file(file, out_file)
+                self._process_file(file, out_file, idx + 1)
         else:
             self.debug(f"Processing single file: {input_path}")
             self._process_file(input_path, output_path)
@@ -118,7 +118,9 @@ class XrefConverter(Converter, LoggedClass):
             top_level_maps=self._hardcoded_xref_maps, level="hardcode"
         )
 
-    def _process_file(self, input_file: Path, output_file: Path) -> None:
+    def _process_file(
+        self, input_file: Path, output_file: Path, idx: Optional[int] = None
+    ) -> None:
         entries: list[BiomarkerEntryWCrossReference] = []
         total_xrefs = 0
         is_array = self._check_if_array(input_file)
@@ -143,7 +145,8 @@ class XrefConverter(Converter, LoggedClass):
             )
             entries.append(entry_with_xrefs)
 
-        self.info(f"Writing {len(entries)} entries to {output_file}")
+        idx_str = f"{idx}. " if idx else ""
+        self.info(f"{idx_str}Writing {len(entries)} entries to {output_file}")
         json_data: dict | list[dict] = [entry.to_dict() for entry in entries]
         if not is_array:
             if len(json_data) != 1:
