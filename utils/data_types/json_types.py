@@ -131,7 +131,7 @@ class AssessedBiomarkerEntity(
     ) -> bool:
         if logger:
             logger.debug(
-                f"Checking match (strict: {strict}) between condition name `{self.recommended_name}` and `{tsv_val}`"
+                f"Checking match (strict: {strict}) between assessed biomarker entity name `{self.recommended_name}` and `{tsv_val}`"
             )
         if not strict:
             return self.recommended_name.lower().strip() == tsv_val.lower().strip()
