@@ -28,7 +28,7 @@ Cross reference options:
 
 logging options:
   --debug              Run in debug mode
-  --log-dir LOG_DIR    Directory for log file (default: /Users/skimmer/projects/hive/format-converter/logs)
+  --log-dir LOG_DIR    Directory for log file (default: /data/shared/repos/format-converter/logs)
   --rotate-logs        Enable log rotation by date
   --no-console         Disable console logging output
 ```
