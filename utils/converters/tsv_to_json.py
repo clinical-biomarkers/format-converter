@@ -256,6 +256,10 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             )
             url = url if url else ""
             component.specimen.append(Specimen.from_row(row=row, url=url))
+        elif row.loinc_code:
+            specimen_id = SplittableID(id="")
+            url = ""
+            component.specimen.append(Specimen.from_row(row=row, url=url))
 
         return component
 
@@ -399,7 +403,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         """Update existing component with new data. Does not merge evidence data, that
         is handled separately.
         """
-        if not row.specimen:
+        if not row.specimen and not row.loinc_code:
             return
         # Check if this exact specimen already exists
         specimen_exists = any(

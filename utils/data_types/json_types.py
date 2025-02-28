@@ -60,7 +60,7 @@ class SplittableID(DataModelObject):
 
     def get_parts(self) -> tuple[str, str]:
         parts = self.id.split(":", maxsplit=1)
-        return parts[0], parts[1]
+        return parts[0], parts[-1]
 
     def to_dict(self) -> str:
         return self.id
