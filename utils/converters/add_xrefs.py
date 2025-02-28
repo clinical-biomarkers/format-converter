@@ -110,7 +110,7 @@ class XrefConverter(Converter, LoggedClass):
 
         # Load the hardcoded top level maps
         for resource, mapping_file_name in self._hardcoded_xref_file_names.items():
-            self._top_level_xrefs_mappings[resource] = CrossReferenceMap.from_file(
+            self._hardcoded_xref_maps[resource] = CrossReferenceMap.from_file(
                 filepath=self._xref_dir / mapping_file_name
             )
             self._second_level_hardcoded_xref_maps[resource] = {}
@@ -131,6 +131,9 @@ class XrefConverter(Converter, LoggedClass):
                     f"Hit log checkpoint on entry {idx + 1}\n"
                     f"\tFound {total_xrefs} total cross references"
                 )
+
+            if "crossref" in entry.kwargs:
+                del entry.kwargs["crossref"]
 
             crossrefs = self._get_crossrefs(entry)
             found_xrefs = len(crossrefs)
@@ -165,7 +168,7 @@ class XrefConverter(Converter, LoggedClass):
                     if not char.isspace():
                         return char == "["
         except Exception as e:
-            self.error(f"Failed to cehck JSON format of {path}\n{e}")
+            self.error(f"Failed to check JSON format of {path}\n{e}")
             raise
 
     def _stream_json(self, path: Path) -> Iterator[BiomarkerEntry]:
@@ -211,6 +214,7 @@ class XrefConverter(Converter, LoggedClass):
                 seen=seen_crossrefs,
             )
 
+            self.debug("Checking for loinc codes...")
             for specimen in component.specimen:
                 if specimen.loinc_code:
                     self.debug(
@@ -218,8 +222,9 @@ class XrefConverter(Converter, LoggedClass):
                         f"for specimen {specimen.name}"
                     )
 
-                    loinc_map = self._hardcoded_xref_maps.get("loinc")
-                    if loinc_map is not None:
+                    loinc_map_file = self._hardcoded_xref_file_names.get("loinc", "")
+                    if loinc_map_file is not None:
+                        loinc_map = self._hardcoded_xref_maps["loinc"]
                         xref = CrossReference(
                             id=specimen.loinc_code,
                             url=loinc_map.url.format(id=specimen.loinc_code),
