@@ -222,6 +222,8 @@ class Evidence(DataModelObject):
     tags: list[EvidenceTag]
 
     def to_dict(self) -> dict[str, Union[str, list]]:
+        if self.database.lower() == "pubmed":
+            self.database = "PubMed"
         return {
             "id": self.id,
             "database": self.database,
