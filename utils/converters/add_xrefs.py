@@ -209,6 +209,7 @@ class XrefConverter(Converter, LoggedClass):
             )
             self._add_namespace_xrefs(
                 namespace=entity_ns.lower(),
+                entity_type=component.assessed_entity_type,
                 id=entity_id,
                 crossrefs=crossrefs,
                 seen=seen_crossrefs,
@@ -227,7 +228,7 @@ class XrefConverter(Converter, LoggedClass):
                         loinc_map = self._hardcoded_xref_maps["loinc"]
                         xref = CrossReference(
                             id=specimen.loinc_code,
-                            url=loinc_map.url.format(id=specimen.loinc_code),
+                            url=loinc_map.url["all"].format(id=specimen.loinc_code),
                             database=loinc_map.database,
                             categories=loinc_map.categories,
                         )
@@ -242,6 +243,7 @@ class XrefConverter(Converter, LoggedClass):
                     # Check for secondary references
                     self._add_secondary_xrefs(
                         resource="loinc",
+                        entity_type=component.assessed_entity_type,
                         id=specimen.loinc_code,
                         crossrefs=crossrefs,
                         seen=seen_crossrefs,
@@ -257,6 +259,7 @@ class XrefConverter(Converter, LoggedClass):
     def _add_namespace_xrefs(
         self,
         namespace: str,
+        entity_type: str,
         id: str,
         crossrefs: list[CrossReference],
         seen: set[tuple[str, str, str]],
@@ -265,10 +268,20 @@ class XrefConverter(Converter, LoggedClass):
         if xref_map is None:
             return
 
+        if xref_map.id_map and id not in xref_map.id_map:
+            self.warning(f"ID `{id}` from `{namespace}` not found ID map")
+            return
+
+        entity_type_match_str = "all"
+        if xref_map.entity_type[0] != entity_type_match_str:
+            if entity_type not in xref_map.entity_type:
+                return
+            entity_type_match_str = entity_type
+
         # Add primary xref
         xref = CrossReference(
             id=id,
-            url=xref_map.url.format(id=id),
+            url=xref_map.url[entity_type_match_str].format(id=id),
             database=xref_map.database,
             categories=xref_map.categories,
         )
@@ -280,6 +293,7 @@ class XrefConverter(Converter, LoggedClass):
         # Add any secondary xrefs
         self._add_secondary_xrefs(
             resource=namespace,
+            entity_type=entity_type,
             id=id,
             crossrefs=crossrefs,
             seen=seen,
@@ -289,6 +303,7 @@ class XrefConverter(Converter, LoggedClass):
     def _add_secondary_xrefs(
         self,
         resource: str,
+        entity_type: str,
         id: str,
         crossrefs: list[CrossReference],
         seen: set[tuple[str, str, str]],
@@ -310,12 +325,18 @@ class XrefConverter(Converter, LoggedClass):
                 )
                 continue
 
+            entity_type_match_str = "all"
+            if xref_map.entity_type[0] != entity_type_match_str:
+                if entity_type not in xref_map.entity_type:
+                    return
+                entity_type_match_str = entity_type
+
             # Transform ID if mapping exists
             mapped_id = xref_map.id_map.get(id, id)
 
             xref = CrossReference(
                 id=mapped_id,
-                url=xref_map.url.format(id=mapped_id),
+                url=xref_map.url[entity_type_match_str].format(id=id),
                 database=xref_map.database,
                 categories=xref_map.categories,
             )
