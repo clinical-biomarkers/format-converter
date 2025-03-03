@@ -1,6 +1,11 @@
 {
   "database": "LOINC",
-  "url": "https://loinc.org/{id}",
+  "entity_type": [
+    "all"
+  ],
+  "url": {
+    "all": "https://loinc.org/{id}"
+  },
   "id_examples": [
     "26881-3"
   ],
