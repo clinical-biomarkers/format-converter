@@ -1,6 +1,11 @@
 {
   "database": "BioMuta",
-  "url": "https://hivelab.biochemistry.gwu.edu/biomuta/proteinview/{id}",
+  "entity_type": [
+    "protein"
+  ],
+  "url": {
+    "protein": "https://hivelab.biochemistry.gwu.edu/biomuta/proteinview/{id}"
+  },
   "id_examples": [
     "Q9P1W8-1",
     "P01116-1"

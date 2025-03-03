@@ -869,7 +869,8 @@ class BiomarkerEntryWCrossReference(DataModelObject):
 @dataclass
 class CrossReferenceMap:
     database: str
-    url: str
+    entity_type: list[str]
+    url: dict[str, str]
     id_examples: list[str]
     id_map: dict[str, str]
     categories: list[str]
@@ -877,14 +878,25 @@ class CrossReferenceMap:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "CrossReferenceMap":
-        return CrossReferenceMap(
+        cf_map = CrossReferenceMap(
             database=data["database"],
-            url=data["url"],
+            entity_type=data["entity_type"],
+            url={k: v for k, v in data["url"].items()},
             id_examples=data["id_examples"],
             id_map=data["id_map"],
             categories=data["categories"],
             secondary_cross_references=data["secondary_cross_references"],
         )
+
+        for url_entity_type in cf_map.url.keys():
+            if url_entity_type not in cf_map.entity_type:
+                error_msg = (
+                    f"Found URL entity type: {url_entity_type} that is not present "
+                    f"in the entity type list: {cf_map.entity_type}"
+                )
+                raise ValueError(error_msg)
+
+        return cf_map
 
     @classmethod
     def from_file(cls, filepath: Path) -> "CrossReferenceMap":

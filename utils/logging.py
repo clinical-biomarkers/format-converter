@@ -75,6 +75,7 @@ class LoggerFactory:
             instance.root_logger.addHandler(console_handler)
 
         instance._initialized = True
+        instance.root_logger.info("-" * 100)
         instance.root_logger.info(f"Logging initialized. Debug mode: {debug}")
 
     @classmethod

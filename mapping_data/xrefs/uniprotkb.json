@@ -1,6 +1,11 @@
 {
   "database": "UniProtKB",
-  "url": "https://www.uniprot.org/uniprotkb/{id}",
+  "entity_type": [
+    "protein"
+  ],
+  "url": {
+    "protein": "https://www.uniprot.org/uniprotkb/{id}"
+  },
   "id_examples": [
     "P40797",
     "Q95T37-1"

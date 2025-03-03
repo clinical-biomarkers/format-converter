@@ -1,6 +1,11 @@
 {
   "database": "dbSNP",
-  "url": "https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs={id}",
+  "entity_type": [
+    "gene"
+  ],
+  "url": {
+    "gene": "https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs={id}"
+  },
   "id_examples": [
     "rs1189230508"
   ],
