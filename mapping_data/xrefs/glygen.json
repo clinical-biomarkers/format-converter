@@ -1,0 +1,20 @@
+{
+  "database": "GlyGen",
+  "entity_type": [
+    "glycan",
+    "protein"
+  ],
+  "url": {
+    "glycan": "https://glygen.org/glycan/{id}",
+    "protein": "https://glygen.org/protein/{id}"
+  },
+  "id_examples": [
+    "G23863VK",
+    "P00533-1"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": [
+    "biomuta.json"
+  ]
+}

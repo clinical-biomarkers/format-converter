@@ -3,4 +3,5 @@ __pycache__/
 tmp/
 logs/
 mypy.ini
+nohup.out
 .env

@@ -1,19 +1,17 @@
 {
-  "database": "UniProtKB",
+  "database": "GlyTouCan",
   "entity_type": [
-    "protein"
+    "glycan"
   ],
   "url": {
-    "protein": "https://www.uniprot.org/uniprotkb/{id}"
+    "glycan": "https://glytoucan.org/Structures/Glycans/{id}"
   },
   "id_examples": [
-    "P40797",
-    "Q95T37-1"
+    "G78959US"
   ],
   "id_map": {},
   "categories": [],
   "secondary_cross_references": [
-    "biomuta.json",
     "glygen.json"
   ]
 }

@@ -134,5 +134,13 @@
     "url_template": "https://www.ncbi.nlm.nih.gov/gene/{id}",
     "cache": "ncbi_cache.json",
     "xref": null
+  },
+  "gtc": {
+    "full_name": "GlyTouCan",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://glytoucan.org/Structures/Glycans/{id}",
+    "cache": null,
+    "xref": "glytoucan.json"
   }
 }
