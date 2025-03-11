@@ -195,7 +195,7 @@ class Metadata(LoggedClass):
         # Check if entry is already in our cache file
         if id in cache:
             self.debug(f"Found cached data for {resource}:{id}")
-            found: Union[AssessedBiomarkerEntity, Citation, Condition]
+            found: Optional[Union[AssessedBiomarkerEntity, Citation, Condition]]
             cached_record = cache[id]
             match call_type:
                 case ApiCallType.ENTITY_TYPE:

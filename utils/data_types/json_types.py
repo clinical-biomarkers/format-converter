@@ -550,7 +550,9 @@ class Citation(DataModelObject, CacheableDataModelObject):
         return return_data
 
     @classmethod
-    def from_cache_dict(cls, data: Any) -> "Citation":
+    def from_cache_dict(cls, data: Any) -> Optional["Citation"]:
+        if not "title" in data:
+            return None
         return Citation(
             title=data["title"],
             journal=data["journal"],
