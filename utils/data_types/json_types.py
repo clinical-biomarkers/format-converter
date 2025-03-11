@@ -585,6 +585,9 @@ class BiomarkerRole(DataModelObject):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BiomarkerRole":
+        role = data["role"]
+        if role not in {"risk", "diagnostic", "prognostic", "monitoring", "predictive", "response", "safety"}:
+            raise ValueError(f"Invalid BEST biomarker role: {role}")
         return BiomarkerRole(role=data["role"])
 
 
