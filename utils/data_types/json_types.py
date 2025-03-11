@@ -422,13 +422,13 @@ class Condition(DataModelObject, CacheableDataModelObject):
 
 @dataclass
 class ExposureAgent(DataModelObject, CacheableDataModelObject):
-    id: str
+    id: SplittableID
     recommended_name: ConditionRecommendedName
     synonyms: list[ConditionSynonym] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Union[str, dict[str, str], list[dict[str, str]]]]:
         return {
-            "id": self.id,
+            "id": self.id.to_dict(),
             "recommended_name": self.recommended_name.to_dict(),
             "synonyms": [s.to_dict() for s in self.synonyms],
         }

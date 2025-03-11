@@ -139,7 +139,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             )
             condition_url = self._metadata.get_url_template(condition_resource)
             condition_url = (
-                condition_url.format(id=condition_id.get_parts()[1])
+                condition_url.format(id=condition_accession)
                 if condition_url
                 else ""
             )
@@ -178,14 +178,24 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         else:
             # TODO : not handling exposure agent metadata right now
             # TODO : this should be handled better with the condition, but fine for now
+            exposure_agent_id = SplittableID(id=row.exposure_agent_id)
+            expsore_agent_resource, exposure_agent_accession = (
+                exposure_agent_id.get_parts()
+            )
+            expsore_agent_url = self._metadata.get_url_template(expsore_agent_resource)
+            expsore_agent_url = (
+                expsore_agent_url.format(id=exposure_agent_accession)
+                if expsore_agent_url
+                else ""
+            )
             exposure_agent = ExposureAgent(
-                id=row.exposure_agent_id,
+                id=exposure_agent_id,
                 recommended_name=ConditionRecommendedName(
-                    id=SplittableID(id=row.exposure_agent_id),
+                    id=exposure_agent_id,
                     name=row.exposure_agent,
                     description="",
-                    resource="",
-                    url="",
+                    resource=expsore_agent_resource,
+                    url=expsore_agent_url,
                 ),
             )
 
