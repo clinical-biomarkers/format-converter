@@ -436,7 +436,7 @@ class ExposureAgent(DataModelObject, CacheableDataModelObject):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ExposureAgent":
         return ExposureAgent(
-            id=data["id"],
+            id=SplittableID(id=data["id"]),
             recommended_name=ConditionRecommendedName.from_dict(
                 data["recommended_name"]
             ),
