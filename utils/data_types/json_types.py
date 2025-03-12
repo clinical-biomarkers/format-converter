@@ -422,13 +422,13 @@ class Condition(DataModelObject, CacheableDataModelObject):
 
 @dataclass
 class ExposureAgent(DataModelObject, CacheableDataModelObject):
-    id: str
+    id: SplittableID
     recommended_name: ConditionRecommendedName
     synonyms: list[ConditionSynonym] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Union[str, dict[str, str], list[dict[str, str]]]]:
         return {
-            "id": self.id,
+            "id": self.id.to_dict(),
             "recommended_name": self.recommended_name.to_dict(),
             "synonyms": [s.to_dict() for s in self.synonyms],
         }
@@ -436,7 +436,7 @@ class ExposureAgent(DataModelObject, CacheableDataModelObject):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ExposureAgent":
         return ExposureAgent(
-            id=data["id"],
+            id=SplittableID(id=data["id"]),
             recommended_name=ConditionRecommendedName.from_dict(
                 data["recommended_name"]
             ),
@@ -550,7 +550,9 @@ class Citation(DataModelObject, CacheableDataModelObject):
         return return_data
 
     @classmethod
-    def from_cache_dict(cls, data: Any) -> "Citation":
+    def from_cache_dict(cls, data: Any) -> Optional["Citation"]:
+        if not "title" in data:
+            return None
         return Citation(
             title=data["title"],
             journal=data["journal"],
@@ -583,6 +585,9 @@ class BiomarkerRole(DataModelObject):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BiomarkerRole":
+        role = data["role"]
+        if role not in {"risk", "diagnostic", "prognostic", "monitoring", "predictive", "response", "safety"}:
+            raise ValueError(f"Invalid BEST biomarker role: {role}")
         return BiomarkerRole(role=data["role"])
 
 
