@@ -125,7 +125,7 @@
     "rate_limit": null,
     "url_template": "https://pubchem.ncbi.nlm.nih.gov/compound/{id}",
     "cache": null,
-    "xref": null
+    "xref": "pubmed_compound.json"
   },
   "ncbi": {
     "full_name": "national center for biotechnology information",
