@@ -2,7 +2,7 @@
   "subject_objects": {
     "biomarker_id": "https://biomarkerkb.org/biomarker/{}",
     "biomarker_canonical_id": "https://biomarkerkb.org/canonical/{}",
-    "uniprot": "http://purl.uniprot.org/uniprot/{}",
+    "upkb": "http://purl.uniprot.org/uniprot/{}",
     "best_biomarker_role": {
       "risk": "http://purl.obolibrary.org/obo/OBCI_0000008",
       "diagnostic": "http://purl.obolibrary.org/obo/OBCI_0000002",
@@ -14,9 +14,10 @@
     },
     "uberon": "http://purl.obolibrary.org/obo/UBERON_{}",
     "doid": "http://purl.obolibrary.org/obo/DOID_{}",
-    "cell_ontology": "http://purl.obolibrary.org/obo/{}",
+    "omim": "https://www.omim.org/entry/{}",
+    "co": "http://purl.obolibrary.org/obo/{}",
     "chebi": "http://purl.obolibrary.org/obo/CHEBI_{}",
-    "protein_ontology": "http://purl.obolibrary.org/obo/{}",
+    "pro": "http://purl.obolibrary.org/obo/{}",
     "ncit": "http://purl.obolibrary.org/obo/NCIT_{}",
     "ncbi": {
       "gene": "https://pubchem.ncbi.nlm.nih.gov/rest/rdf/gene/GID{}",
