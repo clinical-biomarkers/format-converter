@@ -28,7 +28,7 @@ from .json_types import (
     BiomarkerEntryWCrossReference,
     CrossReferenceMap,
 )
-from .triple_types import Triple, TripleCategory
+from .triple_types import Triple, TripleSubjectObjects, TriplePredicates
 from .api import (
     APIHandler,
     LibraryHandler,
