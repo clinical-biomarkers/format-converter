@@ -3,7 +3,7 @@ from typing import Iterator, Optional
 import ijson
 import logging
 
-from . import Converter
+from . import Converter, JSON_LOG_CHECKPOINT
 from utils import load_json_type_safe, ROOT_DIR
 from utils.logging import LoggedClass, log_once
 from utils.data_types import (
@@ -30,9 +30,14 @@ class JSONtoNTConverter(Converter, LoggedClass):
         self._final_triples: list[Triple] = []
 
     def convert(self, input_path: Path, output_path: Path) -> None:
-        for entry in self._stream_json(input_path):
+        count = 0
+        for idx, entry in enumerate(self._stream_json(input_path)):
+            if (idx + 1) % JSON_LOG_CHECKPOINT == 0:
+                self.debug(f"Hit log checkpoint on entry {idx + 1}")
             self._process_entry(entry)
+            count += 1
 
+        self.info(f"Successfully processed {count} biomarker entries")
         self._write_triples(output_path)
 
     def _stream_json(self, path: Path) -> Iterator[BiomarkerEntry]:
