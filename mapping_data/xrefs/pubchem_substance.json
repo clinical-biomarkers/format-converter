@@ -1,5 +1,5 @@
 {
-  "database": "PubChem Compound",
+  "database": "PubChem Substance",
   "entity_type": [
     "metabolite"
   ],
