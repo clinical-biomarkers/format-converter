@@ -1,13 +1,13 @@
 {
-  "database": "PubChem Compound",
+  "database": "PubChem Substance",
   "entity_type": [
     "metabolite"
   ],
   "url": {
-    "metabolite": "https://pubchem.ncbi.nlm.nih.gov/compound/{id}"
+    "metabolite": "https://pubchem.ncbi.nlm.nih.gov/substance/{id}"
   },
   "id_examples": [
-    "160471"
+    "485716527"
   ],
   "id_map": {},
   "categories": [],

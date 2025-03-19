@@ -1,15 +1,23 @@
 {
-  "database": "Metabolomics Workbench",
-  "entity_type": [
-    "metabolite"
-  ],
-  "url": {
-    "metabolite": "https://www.metabolomicsworkbench.org/databases/refmet/refmet_details.php?REFMET_ID={id}"
-  },
-  "id_examples": [
-    "RM0108606"
-  ],
-  "id_map": {},
-  "categories": [],
-  "secondary_cross_references": []
+    "database": "Metabolomics Workbench",
+    "entity_type": [
+        "metabolite"
+    ],
+    "url": {
+        "metabolite": "https://www.metabolomicsworkbench.org/databases/refmet/refmet_details.php?REFMET_ID={id}"
+    },
+    "id_examples": [
+        "RM0108606"
+    ],
+    "id_map": {
+        "PCCID:1551553": "RM0139460",
+        "PCCID:160471": "RM0153674",
+        "PCCID:6441567": "RM0136026",
+        "PCCID:743": "RM0155778",
+        "PCCID:487": "RM0152460",
+        "PCCID:9750": "RM0136022",
+        "PCCID:5312": "RM0028431"
+    },
+    "categories": [],
+    "secondary_cross_references": []
 }
