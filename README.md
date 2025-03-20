@@ -55,7 +55,13 @@ runtime but not always feasible depending on the resources available. If you wou
 `--metadata` flag can be used. Note that the converter will still attempt to search the local cache files for the data, but will skip passing off
 the data to the resource handler if not found.
 
-## Cross Reference Handling
+## Cross-reference Handling
 
-The `-x`/`--xref` argument will inject cross reference data to a JSON data model file(s). If a directory is passed for the `input` positional arg, 
+The `-x`/`--xref` argument will inject cross-reference data to a JSON data model file(s). If a directory is passed for the `input` positional arg, 
 a directory is expected for the `output` positional arg. Similarly, if a file is passed for the `input` arg, a file is expected for the `output` arg.
+
+### Adding a New Cross-reference
+Whenever a new cross-reference JSON file is added to `mapping_data/xrefs`, it needs to be added to the namespace map at `mapping_data/namespace_map.json`.
+The namespace map is the central config for this repository. The primary databases in the knowledgebase should all have an entry in the namespace map since
+the cross-reference and any secondary cross-references for a particular ID, e.g. PCCID and its secondary cross-reference RefMetID, will not be added without
+telling the code that PCCID has an xref file.
