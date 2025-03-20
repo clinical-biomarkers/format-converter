@@ -1,5 +1,5 @@
 {
-    "database": "Metabolomics Workbench",
+    "database": "RefMet: Metabolite Nomenclature",
     "entity_type": [
         "metabolite"
     ],
