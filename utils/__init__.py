@@ -2,13 +2,19 @@ from pathlib import Path
 from typing import Any, Literal, Union, overload, NoReturn
 import json
 import sys
+from decimal import Decimal
 
 ROOT_DIR = Path(__file__).parent.parent
 
 
 def write_json(filepath: Union[str, Path], data: Any, indent: int = 2) -> None:
     with open(filepath, "w") as f:
-        json.dump(data, f, indent=indent)
+        json.dump(
+            data,
+            f,
+            indent=indent,
+            default=lambda o: float(o) if isinstance(o, Decimal) else None,
+        )
 
 
 def _load_json(filepath: Union[str, Path]) -> Union[dict, list]:
