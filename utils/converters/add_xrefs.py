@@ -2,8 +2,10 @@ from collections.abc import Iterator
 from pathlib import Path
 import ijson
 import sys
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 import json
+
+from utils.data_types.json_types import SplittableID
 
 from . import JSON_LOG_CHECKPOINT, Converter
 from utils import load_json_type_safe, write_json, ROOT_DIR
@@ -209,8 +211,9 @@ class XrefConverter(Converter, LoggedClass):
             )
             self._add_namespace_xrefs(
                 namespace=entity_ns.lower(),
+                accession=entity_id,
+                id=component.assessed_biomarker_entity_id,
                 entity_type=component.assessed_entity_type,
-                id=entity_id,
                 crossrefs=crossrefs,
                 seen=seen_crossrefs,
             )
@@ -243,8 +246,9 @@ class XrefConverter(Converter, LoggedClass):
                     # Check for secondary references
                     self._add_secondary_xrefs(
                         resource="loinc",
-                        entity_type=component.assessed_entity_type,
+                        accession=specimen.loinc_code,
                         id=specimen.loinc_code,
+                        entity_type=component.assessed_entity_type,
                         crossrefs=crossrefs,
                         seen=seen_crossrefs,
                         xref_type="hardcode",
@@ -259,18 +263,68 @@ class XrefConverter(Converter, LoggedClass):
     def _add_namespace_xrefs(
         self,
         namespace: str,
+        accession: str,
+        id: Union[SplittableID, str],
         entity_type: str,
-        id: str,
         crossrefs: list[CrossReference],
         seen: set[tuple[str, str, str]],
     ) -> None:
+        """Adds the xrefs from the namespace map and any direct secondary xrefs.
+
+        Paramters
+        ---------
+        namespace: str
+            The namespace for the assessed entity type (value before the ":").
+        accesssion: str
+            The ID accession value (value after the ":").
+        id: SplittableID or str
+            The raw ID value (either a SplittableID if an assessed_biomarker_entity_id
+            or a str if a different field). This determines how to handle the ID mapping.
+        entity_type: str
+            The assessed entity type.
+        crossrefs: list[CrossReference]
+            The list to add cross references to.
+        seen: set[tuple[str, str, str]]
+            The list to filter out already seen xrefs (prevents duplicates).
+        """
+        # If the namespace isn't in the available xref mapping files, skip
         xref_map = self._top_level_xrefs_mappings.get(namespace)
         if xref_map is None:
             return
 
-        if xref_map.id_map and id not in xref_map.id_map:
-            self.warning(f"ID `{id}` from `{namespace}` not found ID map")
-            return
+        mapped_id = id
+        # Determine how to map the ID if available
+        # If we have a non-empty ID map, attempt to map the ID
+        if xref_map.id_map:
+            # If we have a SplittableID, attempt to grab the ID by a full match
+            if isinstance(mapped_id, SplittableID):
+                full_id = mapped_id.to_dict()
+                # ID isn't in the ID map, skip it
+                if full_id not in xref_map.id_map:
+                    self.warning(f"ID `{id}` from `{namespace}` not found in ID map")
+                    return
+                # ID is in the ID map, grab the mapped value
+                full_mapped_id = xref_map.id_map.get(full_id, full_id)
+                # If the source ID is a SplittableID, make sure the mapped value is also
+                # a SplittableID format
+                mapped_id_parts = SplittableID(id=full_mapped_id).get_parts()
+                if len(mapped_id_parts) != 2:
+                    self.error(f"Invalid mapped ID format: {full_mapped_id}")
+                    return
+                _, mapped_id = mapped_id_parts
+
+            # If we have a string, attempt to map the ID
+            else:
+                if mapped_id not in xref_map.id_map:
+                    self.warning(
+                        f"ID `{mapped_id}` from `{namespace}` not found in ID map"
+                    )
+                    return
+                mapped_id = xref_map.id_map.get(mapped_id, mapped_id)
+
+        # No ID map, just use the accession directly
+        else:
+            mapped_id = accession
 
         entity_type_match_str = "all"
         if xref_map.entity_type[0] != entity_type_match_str:
@@ -280,8 +334,8 @@ class XrefConverter(Converter, LoggedClass):
 
         # Add primary xref
         xref = CrossReference(
-            id=id,
-            url=xref_map.url[entity_type_match_str].format(id=id),
+            id=mapped_id,
+            url=xref_map.url[entity_type_match_str].format(id=mapped_id),
             database=xref_map.database,
             categories=xref_map.categories,
         )
@@ -293,8 +347,9 @@ class XrefConverter(Converter, LoggedClass):
         # Add any secondary xrefs
         self._add_secondary_xrefs(
             resource=namespace,
-            entity_type=entity_type,
+            accession=accession,
             id=id,
+            entity_type=entity_type,
             crossrefs=crossrefs,
             seen=seen,
             xref_type="namespace",
@@ -303,8 +358,9 @@ class XrefConverter(Converter, LoggedClass):
     def _add_secondary_xrefs(
         self,
         resource: str,
+        accession: str,
+        id: Union[SplittableID, str],
         entity_type: str,
-        id: str,
         crossrefs: list[CrossReference],
         seen: set[tuple[str, str, str]],
         xref_type: Literal["namespace", "hardcode"],
@@ -316,14 +372,34 @@ class XrefConverter(Converter, LoggedClass):
         )
 
         for mapping_name, xref_map in secondary_maps.items():
-            if xref_map.id_map and id not in xref_map.id_map:
-                source_type = (
-                    "hardcoded resource" if xref_type == "hardcode" else "resource"
-                )
-                self.warning(
-                    f"ID '{id}' from {source_type} '{resource}' not found in {mapping_name} ID map"
-                )
-                continue
+            mapped_id = id
+            if xref_map.id_map:
+                if isinstance(mapped_id, SplittableID):
+                    full_id = mapped_id.to_dict()
+                    if full_id not in xref_map.id_map:
+                        self.warning(
+                            f"ID `{mapped_id.to_dict()}` from `{resource}` not found in {mapping_name} ID map"
+                        )
+                        continue
+                    full_mapped_id = xref_map.id_map.get(full_id, full_id)
+                    mapped_id_parts = SplittableID(id=full_mapped_id).get_parts()
+                    if len(mapped_id_parts) != 2:
+                        self.error(
+                            f"Invalid mapped ID format during second level mapping from {mapping_name} ID map: {full_mapped_id}"
+                        )
+                        continue
+                    _, mapped_id = mapped_id_parts
+
+                else:
+                    if mapped_id not in xref_map.id_map:
+                        self.warning(
+                            f"ID `{mapped_id}` from `{resource}` not found in {mapping_name} ID map"
+                        )
+                        continue
+                    mapped_id = xref_map.id_map.get(mapped_id, mapped_id)
+
+            else:
+                mapped_id = accession
 
             entity_type_match_str = "all"
             if xref_map.entity_type[0] != entity_type_match_str:
@@ -331,12 +407,9 @@ class XrefConverter(Converter, LoggedClass):
                     return
                 entity_type_match_str = entity_type
 
-            # Transform ID if mapping exists
-            mapped_id = xref_map.id_map.get(id, id)
-
             xref = CrossReference(
                 id=mapped_id,
-                url=xref_map.url[entity_type_match_str].format(id=id),
+                url=xref_map.url[entity_type_match_str].format(id=mapped_id),
                 database=xref_map.database,
                 categories=xref_map.categories,
             )
