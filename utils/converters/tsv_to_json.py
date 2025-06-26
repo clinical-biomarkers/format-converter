@@ -97,6 +97,48 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             for row in reader:
                 yield TSVRow.from_dict(row)
 
+    def _check_header_spelling(self, headers: list[str]) -> None:
+        """Check TSV headers for spelling errors agains expected field names.
+        
+        Parameters
+        ----------
+        headers: list[str]
+            List of header names from the TSV file.
+        """
+        # Define expected headers based on TSVRow fields
+        expected_headers = {
+            'biomarker_id',
+            'biomarker',
+            'assessed_biomarker_entity',
+            'assessed_biomarker_entity_id',
+            'assessed_entity_type',
+            'best_biomarker_role',
+            'condition',
+            'condition_id',
+            'exposure_agent',
+            'exposure_agent_id',
+            'specimen',
+            'specimen_id',
+            'loinc_code'
+            'evidence_source',
+            'evidence',
+            'tag'
+        }
+        # Check for exact matches first
+        header_set = set(headers)
+        missing_headers = expected_headers - header_set
+        unexpected_headers = header_set - expected_headers
+
+        if missing_headers:
+            self.warning(f"Missing expected headers: {missing_headers}")
+        if unexpected_headers:
+            self.warning(f"Unexpected headers found: {unexpected_headers}")
+            # Suggest corrections using simple string similarity
+            for unexpected in unexpected_headers:
+                suggestions = self._suggest_header_corrections(unexpected, expected_headers)
+                if suggestions:
+                    self.warning(f"Did you mean '{suggestions[0]}' instead of '{unexpected}'?")
+
     def _process_row(self, row: TSVRow, idx: int) -> None:
         """Process a single row, updating entries and evidence."""
         log_once(
