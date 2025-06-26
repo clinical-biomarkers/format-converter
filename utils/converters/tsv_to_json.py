@@ -73,7 +73,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         self.info(f"Writing {len(self._entries)} entries to {output_path}")
         self.info(f"Made {self._api_calls} API calls")
 
-        # Wrie the convertted JSON output
+        # Write the converted JSON output
         entries = list(self._entries.values())
         self._write_json(entries, output_path)
         if self._preload_caches:
