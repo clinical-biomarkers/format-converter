@@ -139,6 +139,41 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                 if suggestions:
                     self.warning(f"Did you mean '{suggestions[0]}' instead of '{unexpected}'?")
 
+    def _suggest_header_corrections(self, header: str, expected_headers: set[str]) -> list[str]:
+        """Suggest corrections for misspelled headers using simple edit distance.
+
+        Parameters
+        ----------
+        header: str
+            The potentially misspelled header.
+        expected_headers: set[str]
+            Set of expected header names.
+
+        Returns
+        -------
+        list[str]
+            List of suggested corrections, sorted by similarity.            
+        """
+        from difflib import get_close_matches
+        
+        # Use difflib for fuzzy matching
+        suggestions = get_close_matches(
+            header.lower(),
+            [h.lower() for h in expected_headers],
+            n=3,
+            cutoff=0.6
+        )
+        
+        # Map back to original case
+        result = []
+        for suggestion in suggestions:
+            for expected in expected_headers:
+                if expected.lower() == suggestion:
+                    result.append(expected)
+                    break
+
+        return result
+
     def _process_row(self, row: TSVRow, idx: int) -> None:
         """Process a single row, updating entries and evidence."""
         log_once(
