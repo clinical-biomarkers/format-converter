@@ -94,6 +94,9 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         """
         with path.open() as f:
             reader = csv.DictReader(f, delimiter="\t")
+            # Check header spelling
+            if reader.fieldnames:
+                self._check_header_spelling(reader.fieldnames)
             for row in reader:
                 yield TSVRow.from_dict(row)
 
@@ -124,6 +127,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             'evidence',
             'tag'
         }
+
         # Check for exact matches first
         header_set = set(headers)
         missing_headers = expected_headers - header_set
