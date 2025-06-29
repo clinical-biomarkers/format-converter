@@ -96,17 +96,27 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             reader = csv.DictReader(f, delimiter="\t")
             # Check header spelling
             if reader.fieldnames:
-                self._check_header_spelling(reader.fieldnames)
+                corrected_headers = self._check_header_spelling(list(reader.fieldnames))
+                # If headers were corrected, create a new reader with corrected fieldnames
+                f.seek(0) # Reset file pointer to beginning
+                reader = csv.DictReader(f, delimiter="\t", fieldnames=corrected_headers)
+                next(reader) # Skip the original header row
+
             for row in reader:
                 yield TSVRow.from_dict(row)
 
-    def _check_header_spelling(self, headers: list[str]) -> None:
+    def _check_header_spelling(self, headers: list[str]) -> list[str]:
         """Check TSV headers for spelling errors agains expected field names.
         
         Parameters
         ----------
         headers: list[str]
             List of header names from the TSV file.
+
+        Returns
+        -------
+        list[str]
+            Corrected list of header names.
         """
         # Define expected headers based on TSVRow fields
         expected_headers = {
@@ -135,13 +145,44 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
         if missing_headers:
             self.warning(f"Missing expected headers: {missing_headers}")
+        corrected_headers = list(headers) # Create a copy to modify
         if unexpected_headers:
             self.warning(f"Unexpected headers found: {unexpected_headers}")
-            # Suggest corrections using simple string similarity
-            for unexpected in unexpected_headers:
-                suggestions = self._suggest_header_corrections(unexpected, expected_headers)
-                if suggestions:
-                    self.warning(f"Did you mean '{suggestions[0]}' instead of '{unexpected}'?")
+            # For unexpected headers, suggest corrections and ask user
+            for i, header in enumerate(corrected_headers):
+                if header in unexpected_headers:
+                    suggestions = self._suggest_header_corrections(header, expected_headers)
+                    if suggestions:
+                        response = self._ask_user_correction(header, suggestions[0])
+                        if response:
+                            corrected_headers[i] = suggestions[0]
+                            self.info(f"Corrected '{header}' to '{suggestions[0]}'")
+
+        return corrected_headers
+
+    def _ask_user_correction(self, wrong_header: str, suggested_header: str) -> bool:
+        """Ask user if they want to correct a misspelled header.
+
+        Parameters
+        ----------
+        wrong_header: str
+            The potentially misspelled header.
+        suggested_header: str
+            The suggested correction.
+
+        Returns
+        -------
+        bool
+            True if user wants to make the correction, False otherwise.
+        """
+        while True:
+            response = input(f"WARNING - Did you mean '{suggested_header}' instead of '{wrong_header}'? (y/n): ").strip().lower()
+            if response in ['y', 'yes']:
+                return True
+            elif response in ['n', 'no']:
+                return False
+            else:
+                print("Please enter 'y' for yes or 'n' for no.")
 
     def _suggest_header_corrections(self, header: str, expected_headers: set[str]) -> list[str]:
         """Suggest corrections for misspelled headers using simple edit distance.
