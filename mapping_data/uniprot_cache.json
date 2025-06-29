@@ -4638,5 +4638,357 @@
       "NELL2-interacting cofactor for lumicrine signaling",
       "NICOL"
     ]
+  },
+  "P01258": {
+    "recommended_name": "Calcitonin",
+    "synonyms": []
+  },
+  "P02794": {
+    "recommended_name": "Ferritin heavy chain",
+    "synonyms": [
+      "Ferritin H subunit",
+      "Cell proliferation-inducing gene 15 protein"
+    ]
+  },
+  "P05109": {
+    "recommended_name": "Protein S100-A8",
+    "synonyms": [
+      "Calgranulin-A",
+      "Calprotectin L1L subunit",
+      "Cystic fibrosis antigen",
+      "CFAG",
+      "Leukocyte L1 complex light chain",
+      "Migration inhibitory factor-related protein 8",
+      "MRP-8",
+      "p8",
+      "S100 calcium-binding protein A8",
+      "Urinary stone protein band A"
+    ]
+  },
+  "P07195": {
+    "recommended_name": "L-lactate dehydrogenase B chain",
+    "synonyms": [
+      "LDH-B",
+      "LDH heart subunit",
+      "LDH-H",
+      "Renal carcinoma antigen NY-REN-46"
+    ]
+  },
+  "P01160": {
+    "recommended_name": "Natriuretic peptides A",
+    "synonyms": [
+      "Atrial natriuretic factor prohormone",
+      "proANF",
+      "Atrial natriuretic peptide prohormone",
+      "preproANP",
+      "proANP",
+      "Atriopeptigen",
+      "Cardiodilatin",
+      "CDD",
+      "preproCDD-ANF"
+    ]
+  },
+  "P60568": {
+    "recommended_name": "Interleukin-2",
+    "synonyms": [
+      "IL-2",
+      "T-cell growth factor",
+      "TCGF"
+    ]
+  },
+  "P15018": {
+    "recommended_name": "Leukemia inhibitory factor",
+    "synonyms": [
+      "LIF",
+      "Differentiation-stimulating factor",
+      "D factor",
+      "Melanoma-derived LPL inhibitor",
+      "MLPLI"
+    ]
+  },
+  "P21731": {
+    "recommended_name": "Thromboxane A2 receptor",
+    "synonyms": [
+      "TXA2-R",
+      "Prostanoid TP receptor"
+    ]
+  },
+  "Q04206": {
+    "recommended_name": "Transcription factor p65",
+    "synonyms": [
+      "Nuclear factor NF-kappa-B p65 subunit",
+      "Nuclear factor of kappa light polypeptide gene enhancer in B-cells 3"
+    ]
+  },
+  "Q07817": {
+    "recommended_name": "Bcl-2-like protein 1",
+    "synonyms": [
+      "Bcl2-L-1",
+      "Apoptosis regulator Bcl-X"
+    ]
+  },
+  "Q96RR1": {
+    "recommended_name": "Twinkle mtDNA helicase",
+    "synonyms": [
+      "Progressive external ophthalmoplegia 1 protein",
+      "T7 gp4-like protein with intramitochondrial nucleoid localization",
+      "T7-like mitochondrial DNA helicase",
+      "Twinkle protein, mitochondrial"
+    ]
+  },
+  "P02647": {
+    "recommended_name": "Apolipoprotein A-I",
+    "synonyms": [
+      "Apo-AI",
+      "ApoA-I",
+      "Apolipoprotein A1"
+    ]
+  },
+  "P08887": {
+    "recommended_name": "Interleukin-6 receptor subunit alpha",
+    "synonyms": [
+      "IL-6 receptor subunit alpha",
+      "IL-6R subunit alpha",
+      "IL-6R-alpha",
+      "IL-6RA",
+      "IL-6R 1",
+      "Membrane glycoprotein 80",
+      "gp80"
+    ]
+  },
+  "P43355": {
+    "recommended_name": "Melanoma-associated antigen 1",
+    "synonyms": [
+      "Antigen MZ2-E",
+      "Cancer/testis antigen 1.1",
+      "CT1.1",
+      "MAGE-1 antigen"
+    ]
+  },
+  "P43364": {
+    "recommended_name": "Melanoma-associated antigen 11",
+    "synonyms": [
+      "Cancer/testis antigen 1.11",
+      "CT1.11",
+      "MAGE-11 antigen"
+    ]
+  },
+  "P36268": {
+    "recommended_name": "Inactive glutathione hydrolase 2",
+    "synonyms": [
+      "Gamma-glutamyltransferase 2 pseudogene",
+      "Inactive gamma-glutamyltranspeptidase 2",
+      "GGT 2"
+    ]
+  },
+  "P46531": {
+    "recommended_name": "Neurogenic locus notch homolog protein 1",
+    "synonyms": [
+      "Notch 1",
+      "hN1",
+      "Translocation-associated notch protein TAN-1"
+    ]
+  },
+  "Q9NYV4": {
+    "recommended_name": "Cyclin-dependent kinase 12",
+    "synonyms": [
+      "Cdc2-related kinase, arginine/serine-rich",
+      "CrkRS",
+      "Cell division cycle 2-related protein kinase 7",
+      "CDC2-related protein kinase 7",
+      "Cell division protein kinase 12",
+      "hCDK12"
+    ]
+  },
+  "P06400": {
+    "recommended_name": "Retinoblastoma-associated protein",
+    "synonyms": [
+      "p105-Rb",
+      "p110-RB1",
+      "pRb",
+      "Rb",
+      "pp110"
+    ]
+  },
+  "P21359": {
+    "recommended_name": "Neurofibromin",
+    "synonyms": [
+      "Neurofibromatosis-related protein NF-1"
+    ]
+  },
+  "P13726": {
+    "recommended_name": "Tissue factor",
+    "synonyms": [
+      "TF",
+      "Coagulation factor III",
+      "Thromboplastin"
+    ]
+  },
+  "Q9NWT6": {
+    "recommended_name": "Hypoxia-inducible factor 1-alpha inhibitor",
+    "synonyms": [
+      "Factor inhibiting HIF-1",
+      "FIH-1",
+      "Hypoxia-inducible factor asparagine hydroxylase"
+    ]
+  },
+  "Q15847": {
+    "recommended_name": "Adipogenesis regulatory factor",
+    "synonyms": [
+      "Adipogenesis factor rich in obesity",
+      "Adipose most abundant gene transcript 2 protein",
+      "Adipose-specific protein 2",
+      "apM-2"
+    ]
+  },
+  "P27449": {
+    "recommended_name": "V-type proton ATPase 16 kDa proteolipid subunit c",
+    "synonyms": [
+      "V-ATPase 16 kDa proteolipid subunit c",
+      "Vacuolar proton pump 16 kDa proteolipid subunit c"
+    ]
+  },
+  "Q6IAA8": {
+    "recommended_name": "Ragulator complex protein LAMTOR1",
+    "synonyms": [
+      "Late endosomal/lysosomal adaptor and MAPK and MTOR activator 1",
+      "Lipid raft adaptor protein p18",
+      "Protein associated with DRMs and endosomes",
+      "p27Kip1-releasing factor from RhoA",
+      "p27RF-Rho"
+    ]
+  },
+  "O14493": {
+    "recommended_name": "Claudin-4",
+    "synonyms": [
+      "Clostridium perfringens enterotoxin receptor",
+      "CPE-R",
+      "CPE-receptor",
+      "Williams-Beuren syndrome chromosomal region 8 protein"
+    ]
+  },
+  "P02788": {
+    "recommended_name": "Lactotransferrin",
+    "synonyms": [
+      "Lactoferrin",
+      "Growth-inhibiting protein 12",
+      "Talalactoferrin"
+    ]
+  },
+  "P07339": {
+    "recommended_name": "Cathepsin D",
+    "synonyms": []
+  },
+  "P20290": {
+    "recommended_name": "Transcription factor BTF3",
+    "synonyms": [
+      "Nascent polypeptide-associated complex subunit beta",
+      "NAC-beta",
+      "RNA polymerase B transcription factor 3"
+    ]
+  },
+  "P11926": {
+    "recommended_name": "Ornithine decarboxylase",
+    "synonyms": [
+      "ODC"
+    ]
+  },
+  "P05413": {
+    "recommended_name": "Fatty acid-binding protein, heart",
+    "synonyms": [
+      "Fatty acid-binding protein 3",
+      "Heart-type fatty acid-binding protein",
+      "H-FABP",
+      "Mammary-derived growth inhibitor",
+      "MDGI",
+      "Muscle fatty acid-binding protein",
+      "M-FABP"
+    ]
+  },
+  "Q9H3R2": {
+    "recommended_name": "Mucin-13",
+    "synonyms": [
+      "MUC-13",
+      "Down-regulated in colon cancer 1"
+    ]
+  },
+  "P25815": {
+    "recommended_name": "Protein S100-P",
+    "synonyms": [
+      "Migration-inducing gene 9 protein",
+      "MIG9",
+      "Protein S100-E",
+      "S100 calcium-binding protein P"
+    ]
+  },
+  "P21673": {
+    "recommended_name": "Diamine acetyltransferase 1",
+    "synonyms": [
+      "Polyamine N-acetyltransferase 1",
+      "Putrescine acetyltransferase",
+      "Spermidine/spermine N(1)-acetyltransferase 1",
+      "SSAT",
+      "SSAT-1"
+    ]
+  },
+  "P16581": {
+    "recommended_name": "E-selectin",
+    "synonyms": [
+      "CD62 antigen-like family member E",
+      "Endothelial leukocyte adhesion molecule 1",
+      "ELAM-1",
+      "Leukocyte-endothelial cell adhesion molecule 2",
+      "LECAM2"
+    ]
+  },
+  "P03973": {
+    "recommended_name": "Antileukoproteinase",
+    "synonyms": [
+      "ALP",
+      "BLPI",
+      "HUSI-1",
+      "Mucus proteinase inhibitor",
+      "MPI",
+      "Protease inhibitor WAP4",
+      "Secretory leukocyte protease inhibitor",
+      "Seminal proteinase inhibitor",
+      "WAP four-disulfide core domain protein 4"
+    ]
+  },
+  "Q12805": {
+    "recommended_name": "EGF-containing fibulin-like extracellular matrix protein 1",
+    "synonyms": [
+      "Extracellular protein S1-5",
+      "Fibrillin-like protein",
+      "Fibulin-3",
+      "FIBL-3"
+    ]
+  },
+  "P15692": {
+    "recommended_name": "Vascular endothelial growth factor A, long form",
+    "synonyms": [
+      "L-VEGF",
+      "Vascular permeability factor",
+      "VPF"
+    ]
+  },
+  "P43121": {
+    "recommended_name": "Cell surface glycoprotein MUC18",
+    "synonyms": [
+      "Cell surface glycoprotein P1H12",
+      "Melanoma cell adhesion molecule",
+      "Melanoma-associated antigen A32",
+      "Melanoma-associated antigen MUC18",
+      "S-endo 1 endothelial-associated antigen"
+    ]
+  },
+  "P05121": {
+    "recommended_name": "Plasminogen activator inhibitor 1",
+    "synonyms": [
+      "PAI",
+      "PAI-1",
+      "Endothelial plasminogen activator inhibitor",
+      "Serpin E1"
+    ]
   }
 }

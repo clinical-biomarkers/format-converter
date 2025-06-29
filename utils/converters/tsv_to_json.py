@@ -73,7 +73,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         self.info(f"Writing {len(self._entries)} entries to {output_path}")
         self.info(f"Made {self._api_calls} API calls")
 
-        # Wrie the convertted JSON output
+        # Write the converted JSON output
         entries = list(self._entries.values())
         self._write_json(entries, output_path)
         if self._preload_caches:
@@ -94,8 +94,89 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         """
         with path.open() as f:
             reader = csv.DictReader(f, delimiter="\t")
+            # Check header spelling
+            if reader.fieldnames:
+                self._check_header_spelling(reader.fieldnames)
             for row in reader:
                 yield TSVRow.from_dict(row)
+
+    def _check_header_spelling(self, headers: list[str]) -> None:
+        """Check TSV headers for spelling errors agains expected field names.
+        
+        Parameters
+        ----------
+        headers: list[str]
+            List of header names from the TSV file.
+        """
+        # Define expected headers based on TSVRow fields
+        expected_headers = {
+            'biomarker_id',
+            'biomarker',
+            'assessed_biomarker_entity',
+            'assessed_biomarker_entity_id',
+            'assessed_entity_type',
+            'best_biomarker_role',
+            'condition',
+            'condition_id',
+            'exposure_agent',
+            'exposure_agent_id',
+            'specimen',
+            'specimen_id',
+            'loinc_code',
+            'evidence_source',
+            'evidence',
+            'tag'
+        }
+
+        # Check for exact matches first
+        header_set = set(headers)
+        missing_headers = expected_headers - header_set
+        unexpected_headers = header_set - expected_headers
+
+        if missing_headers:
+            self.warning(f"Missing expected headers: {missing_headers}")
+        if unexpected_headers:
+            self.warning(f"Unexpected headers found: {unexpected_headers}")
+            # Suggest corrections using simple string similarity
+            for unexpected in unexpected_headers:
+                suggestions = self._suggest_header_corrections(unexpected, expected_headers)
+                if suggestions:
+                    self.warning(f"Did you mean '{suggestions[0]}' instead of '{unexpected}'?")
+
+    def _suggest_header_corrections(self, header: str, expected_headers: set[str]) -> list[str]:
+        """Suggest corrections for misspelled headers using simple edit distance.
+
+        Parameters
+        ----------
+        header: str
+            The potentially misspelled header.
+        expected_headers: set[str]
+            Set of expected header names.
+
+        Returns
+        -------
+        list[str]
+            List of suggested corrections, sorted by similarity.            
+        """
+        from difflib import get_close_matches
+        
+        # Use difflib for fuzzy matching
+        suggestions = get_close_matches(
+            header.lower(),
+            [h.lower() for h in expected_headers],
+            n=3,
+            cutoff=0.6
+        )
+        
+        # Map back to original case
+        result = []
+        for suggestion in suggestions:
+            for expected in expected_headers:
+                if expected.lower() == suggestion:
+                    result.append(expected)
+                    break
+
+        return result
 
     def _process_row(self, row: TSVRow, idx: int) -> None:
         """Process a single row, updating entries and evidence."""
