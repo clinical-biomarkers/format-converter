@@ -122,7 +122,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             'exposure_agent_id',
             'specimen',
             'specimen_id',
-            'loinc_code'
+            'loinc_code',
             'evidence_source',
             'evidence',
             'tag'
