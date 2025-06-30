@@ -1,6 +1,6 @@
 ijson==3.3.0
 pytest==8.3.4
-requests==2.32.3
+requests==2.32.4
 pymed==0.8.9
 python-dotenv==1.0.1
 deepdiff==8.2.0
