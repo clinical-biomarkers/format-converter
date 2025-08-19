@@ -4990,5 +4990,38 @@
       "Endothelial plasminogen activator inhibitor",
       "Serpin E1"
     ]
+  },
+  "O00468": {
+    "recommended_name": "Agrin",
+    "synonyms": []
+  },
+  "P16870": {
+    "recommended_name": "Carboxypeptidase E",
+    "synonyms": [
+      "CPE",
+      "Carboxypeptidase H",
+      "CPH",
+      "Enkephalin convertase",
+      "Prohormone-processing carboxypeptidase"
+    ]
+  },
+  "P16871": {
+    "recommended_name": "Interleukin-7 receptor subunit alpha",
+    "synonyms": [
+      "IL-7 receptor subunit alpha",
+      "IL-7R subunit alpha",
+      "IL-7R-alpha",
+      "IL-7RA",
+      "CDw127"
+    ]
+  },
+  "P16872": {
+    "recommended_name": "Interleukin-7 receptor subunit alpha",
+    "synonyms": [
+      "IL-7 receptor subunit alpha",
+      "IL-7R subunit alpha",
+      "IL-7R-alpha",
+      "IL-7RA"
+    ]
   }
 }

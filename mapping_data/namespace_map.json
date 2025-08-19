@@ -7,6 +7,14 @@
     "cache": "doid_cache.json",
     "xref": null
   },
+  "edrn": {
+    "full_name": "early detection research network",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": null,
+    "cache": "edrn_cache.json",
+    "xref": null
+  },
   "upkb": {
     "full_name": "uniprot",
     "api_endpoint": "https://www.ebi.ac.uk/proteins/api/proteins/{id}",
@@ -115,9 +123,9 @@
     "full_name": "hugo gene nomenclature committee",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": null,
+    "url_template": "https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:{id}",
     "cache": null,
-    "xref": null
+    "xref": "hgnc.json"
   },
   "pccid": {
     "full_name": "pubchem compound",
