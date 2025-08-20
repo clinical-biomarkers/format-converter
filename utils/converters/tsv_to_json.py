@@ -410,7 +410,8 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         # Parse base evidence details
         evidence_base = {
             "id": id,
-            "database": database.title(),
+            ## Preserves original casing of the database name. Might want to hard-code unusual casings such as UniProt, CIViC etc to ensure consistency.
+            "database": database, # formerly database.title() which converts the first letter of each word to uppercase and the rest to lowercase
             "url": url,
             "evidence_list": [
                 EvidenceItem(evidence=e.strip())
