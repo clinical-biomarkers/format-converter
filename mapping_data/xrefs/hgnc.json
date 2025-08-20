@@ -1,0 +1,15 @@
+{
+  "database": "HUGO Gene Nomenclature Committee",
+  "entity_type": [
+    "gene"
+  ],
+  "url": {
+    "gene": "https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:{id}"
+  },
+  "id_examples": [
+    "1787"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

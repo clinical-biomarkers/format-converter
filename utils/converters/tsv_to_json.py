@@ -444,6 +444,10 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             else:
                 top_level_tags.append(EvidenceTag(tag=tag))
 
+        self.debug(f"Evidence source: {row.evidence_source}")
+        self.debug(f"Component tags: {component_tags}")
+        self.debug(f"Top level tags: {top_level_tags}")
+
         # Add evidence to component level if it has component tags
         if component_tags:
             component_evidence = Evidence(**evidence_base, tags=component_tags)  # type: ignore
@@ -455,6 +459,14 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         if top_level_tags:
             top_level_evidence = Evidence(**evidence_base, tags=top_level_tags)  # type: ignore
             self._add_evidence(entry.evidence_source, top_level_evidence)
+
+        # Default untagged evidence to component level
+        if not component_tags and not top_level_tags:
+            self.debug(f"No tags found for evidence source {row.evidence_source}, defaulting to component level")
+            component_evidence = Evidence(**evidence_base, tags=[])
+            self._add_evidence(
+                entry.biomarker_component[-1].evidence_source, component_evidence
+            )
 
     def _add_citations(self, entry: BiomarkerEntry) -> None:
         """Adds the base citation data to the entry."""
