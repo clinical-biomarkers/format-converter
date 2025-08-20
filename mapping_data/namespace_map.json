@@ -11,7 +11,7 @@
     "full_name": "early detection research network",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": null,
+    "url_template": "https://edrn.nci.nih.gov/@@dataDispatch?subjectURI=http://edrn.jpl.nasa.gov/bmdb/biomarkers/view/{id}",
     "cache": "edrn_cache.json",
     "xref": null
   },
