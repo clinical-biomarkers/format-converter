@@ -49,11 +49,11 @@
   },
   "chebi": {
     "full_name": "chemical entities of biological interest",
-    "api_endpoint": "https://www.ebi.ac.uk/webservices/chebi/2.0/test/getCompleteEntity?chebiId={id}",
+    "api_endpoint": "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{id}",
     "rate_limit": null,
-    "url_template": "http://purl.obolibrary.org/obo/{id}",
+    "url_template": "https://www.ebi.ac.uk/chebi/beta/CHEBI:{id}",
     "cache": "chebi_cache.json",
-    "xref": null
+    "xref": "chebi.json"
   },
   "gwas": {
     "full_name": "gwas",
@@ -149,7 +149,7 @@
     "rate_limit": 10,
     "url_template": "https://www.ncbi.nlm.nih.gov/gene/{id}",
     "cache": "ncbi_cache.json",
-    "xref": null
+    "xref": "ncbi.json"
   },
   "gtc": {
     "full_name": "GlyTouCan",
