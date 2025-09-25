@@ -1,5 +1,5 @@
 {
-  "database": "Chemical Entities of Biological Interest",
+  "database": "ChEBI",
   "entity_type": [
     "glycan",
     "lipoprotein",
