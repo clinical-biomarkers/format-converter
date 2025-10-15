@@ -7,6 +7,14 @@
     "cache": "doid_cache.json",
     "xref": null
   },
+  "mondo": {
+    "full_name": "mondo disease ontology",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "http://purl.obolibrary.org/obo/MONDO_{id}",
+    "cache": "mondo_cache.json",
+    "xref": null
+  },
   "edrn": {
     "full_name": "early detection research network",
     "api_endpoint": null,
@@ -14,6 +22,14 @@
     "url_template": "https://edrn.nci.nih.gov/@@dataDispatch?subjectURI=http://edrn.jpl.nasa.gov/bmdb/biomarkers/view/{id}",
     "cache": "edrn_cache.json",
     "xref": null
+  },
+  "mrb": {
+    "full_name": "the microrna database",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": null,
+    "cache": "mrb_cache.json",
+    "xref": "mrb.json"
   },
   "upkb": {
     "full_name": "uniprot",
@@ -45,7 +61,7 @@
     "rate_limit": null,
     "url_template": "http://purl.obolibrary.org/obo/{id}",
     "cache": "cell_ontology_cache.json",
-    "xref": null
+    "xref": "co.json"
   },
   "chebi": {
     "full_name": "chemical entities of biological interest",
@@ -107,9 +123,9 @@
     "full_name": "protein ontology",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": null,
+    "url_template": "https://proconsortium.org/cgi-bin/entry_pro?id=PR:{id}",
     "cache": null,
-    "xref": null
+    "xref": "pro.json"
   },
   "dbsnp": {
     "full_name": "dbsnp",
