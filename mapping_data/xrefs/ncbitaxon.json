@@ -1,0 +1,15 @@
+{
+  "database": "NCBI Taxonomy Browser",
+  "entity_type": [
+    "all"
+  ],
+  "url": {
+    "all": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={id}"
+  },
+  "id_examples": [
+    "48867"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

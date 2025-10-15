@@ -23,13 +23,21 @@
     "cache": "edrn_cache.json",
     "xref": null
   },
+  "loinc": {
+    "full_name": "logical observation identifiers names and codes",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://loinc.org/{id}",
+    "cache": "loinc_cache.json",
+    "xref": "loinc.json"
+  },
   "mrb": {
     "full_name": "the microrna database",
     "api_endpoint": null,
     "rate_limit": null,
     "url_template": null,
     "cache": "mrb_cache.json",
-    "xref": "mrb.json"
+    "xref": null
   },
   "upkb": {
     "full_name": "uniprot",
@@ -166,6 +174,14 @@
     "url_template": "https://www.ncbi.nlm.nih.gov/gene/{id}",
     "cache": "ncbi_cache.json",
     "xref": "ncbi.json"
+  },
+  "ncbitaxon": {
+    "full_name": "ncbi taxonomy browser",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={id}",
+    "cache": "ncbitaxon_cache.json",
+    "xref": "ncbitaxon.json"
   },
   "gtc": {
     "full_name": "GlyTouCan",
