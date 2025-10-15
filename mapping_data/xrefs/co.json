@@ -1,0 +1,15 @@
+{
+  "database": "Cell Ontology",
+  "entity_type": [
+    "cell"
+  ],
+  "url": {
+    "cell": "http://purl.obolibrary.org/obo/{id}"
+  },
+  "id_examples": [
+    "CL_0000233"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}
