@@ -1,0 +1,15 @@
+{
+  "database": "Protein Ontology",
+  "entity_type": [
+    "protein"
+  ],
+  "url": {
+    "gene": "https://proconsortium.org/cgi-bin/entry_pro?id=PR:{id}"
+  },
+  "id_examples": [
+    "000025934"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

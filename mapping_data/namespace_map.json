@@ -7,12 +7,36 @@
     "cache": "doid_cache.json",
     "xref": null
   },
+  "mondo": {
+    "full_name": "mondo disease ontology",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "http://purl.obolibrary.org/obo/MONDO_{id}",
+    "cache": "mondo_cache.json",
+    "xref": null
+  },
   "edrn": {
     "full_name": "early detection research network",
     "api_endpoint": null,
     "rate_limit": null,
     "url_template": "https://edrn.nci.nih.gov/@@dataDispatch?subjectURI=http://edrn.jpl.nasa.gov/bmdb/biomarkers/view/{id}",
     "cache": "edrn_cache.json",
+    "xref": null
+  },
+  "loinc": {
+    "full_name": "logical observation identifiers names and codes",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://loinc.org/{id}",
+    "cache": "loinc_cache.json",
+    "xref": "loinc.json"
+  },
+  "mrb": {
+    "full_name": "the microrna database",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": null,
+    "cache": "mrb_cache.json",
     "xref": null
   },
   "upkb": {
@@ -45,15 +69,15 @@
     "rate_limit": null,
     "url_template": "http://purl.obolibrary.org/obo/{id}",
     "cache": "cell_ontology_cache.json",
-    "xref": null
+    "xref": "co.json"
   },
   "chebi": {
     "full_name": "chemical entities of biological interest",
-    "api_endpoint": "https://www.ebi.ac.uk/webservices/chebi/2.0/test/getCompleteEntity?chebiId={id}",
+    "api_endpoint": "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{id}",
     "rate_limit": null,
-    "url_template": "http://purl.obolibrary.org/obo/{id}",
+    "url_template": "https://www.ebi.ac.uk/chebi/beta/CHEBI:{id}",
     "cache": "chebi_cache.json",
-    "xref": null
+    "xref": "chebi.json"
   },
   "gwas": {
     "full_name": "gwas",
@@ -107,9 +131,9 @@
     "full_name": "protein ontology",
     "api_endpoint": null,
     "rate_limit": null,
-    "url_template": null,
+    "url_template": "https://proconsortium.org/cgi-bin/entry_pro?id=PR:{id}",
     "cache": null,
-    "xref": null
+    "xref": "pro.json"
   },
   "dbsnp": {
     "full_name": "dbsnp",
@@ -149,7 +173,15 @@
     "rate_limit": 10,
     "url_template": "https://www.ncbi.nlm.nih.gov/gene/{id}",
     "cache": "ncbi_cache.json",
-    "xref": null
+    "xref": "ncbi.json"
+  },
+  "ncbitaxon": {
+    "full_name": "ncbi taxonomy browser",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={id}",
+    "cache": "ncbitaxon_cache.json",
+    "xref": "ncbitaxon.json"
   },
   "gtc": {
     "full_name": "GlyTouCan",

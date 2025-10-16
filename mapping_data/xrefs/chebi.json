@@ -1,0 +1,19 @@
+{
+  "database": "ChEBI",
+  "entity_type": [
+    "glycan",
+    "lipoprotein",
+    "metabolite"
+  ],
+  "url": {
+    "glycan": "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{id}",
+    "lipoprotein": "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{id}",
+    "metabolite": "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{id}"
+  },
+  "id_examples": [
+    "58044"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}
