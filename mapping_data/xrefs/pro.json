@@ -4,7 +4,7 @@
     "protein"
   ],
   "url": {
-    "gene": "https://proconsortium.org/cgi-bin/entry_pro?id=PR:{id}"
+    "protein": "https://proconsortium.org/cgi-bin/entry_pro?id=PR:{id}"
   },
   "id_examples": [
     "000025934"
