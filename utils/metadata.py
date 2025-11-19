@@ -55,6 +55,28 @@ class Metadata(LoggedClass):
         self.debug(f"Getting resource data for {resource_clean}")
         return self.namespace_map[resource_clean]
 
+    def get_display_name(self, resource: Optional[str]) -> Optional[str]:
+        """Get the display name for a resource (used for frontend display).
+
+        Falls back to full_name if display_name not present.
+        """
+        exists, resource_clean = self._check_resource_existence(resource)
+        if not exists:
+            return None
+
+        # Try display_name first
+        display_name = self.namespace_map[resource_clean].get("display_name")
+        if display_name:
+            return display_name
+
+        # Fall back to full_name
+        full_name = self.namespace_map[resource_clean].get("full_name")
+        if not full_name:
+            self.debug(f"No display name or full name found for {resource_clean}")
+            return None
+
+        return full_name
+
     def get_full_name(self, resource: Optional[str]) -> Optional[str]:
         exists, resource_clean = self._check_resource_existence(resource)
         if not exists:
@@ -367,9 +389,14 @@ class Metadata(LoggedClass):
             return False, ""
         resource_clean = self._clean_string(resource)
         if resource_clean not in self.namespace_map:
+            import traceback
+            self.warning(
+                f"Resource {resource} (cleaned: {resource_clean}) does not exist in namespace map\n"
+                f"Call stack:\n{''.join(traceback.format_stack())}"
+            )
             log_once(
                 self.logger,
-                f"Resource {resource} does not exist in namespace map",
+                f"Resource {resource} (cleaned: {resource_clean}) does not exist in namespace map",
                 logging.WARNING,
             )
             return False, resource_clean

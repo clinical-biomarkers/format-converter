@@ -1,0 +1,15 @@
+{
+  "database": "NCIT",
+  "entity_type": [
+    "DNA"
+  ],
+  "url": {
+    "DNA": "https://evsexplore.semantics.cancer.gov/evsexplore/concept/ncit/{id}"
+  },
+  "id_examples": [
+    "C17961"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}
