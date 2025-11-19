@@ -1,0 +1,15 @@
+{
+  "database": "SigCom LINCS",
+  "entity_type": [
+    "gene"
+  ],
+  "url": {
+    "gene": "https://maayanlab.cloud/sigcom-lincs/#/MetadataSearch/Genes?query={%22skip%22:0,%22limit%22:10,%22search%22:[%22{id}%22]}"
+  },
+  "id_examples": [
+    ""
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

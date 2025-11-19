@@ -1,0 +1,15 @@
+{
+  "database": "Pharos",
+  "entity_type": [
+    "gene"
+  ],
+  "url": {
+    "gene": "https://pharos.nih.gov/targets/{id}"
+  },
+  "id_examples": [
+    ""
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

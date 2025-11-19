@@ -1,0 +1,15 @@
+{
+  "database": "Reactome",
+  "entity_type": [
+    "gene"
+  ],
+  "url": {
+    "gene": "https://reactome.org/content/query?q={id}&species=Homo+sapiens&species=Entries+without+species&cluster=true"
+  },
+  "id_examples": [
+    ""
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

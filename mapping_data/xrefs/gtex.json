@@ -1,0 +1,15 @@
+{
+  "database": "GTEx",
+  "entity_type": [
+    "gene"
+  ],
+  "url": {
+    "gene": "https://www.gtexportal.org/home/gene/{id}"
+  },
+  "id_examples": [
+    ""
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

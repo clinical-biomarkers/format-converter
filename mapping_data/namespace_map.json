@@ -242,6 +242,24 @@
     "cache": "ncit_cache.json",
     "xref": "ncit.json"
   },
+  "exrna": {
+    "full_name": "exrna atlas",
+    "display_name": "exRNA Atlas",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://exrna-atlas.org/exat/censusResults?identifiers={id}&library={exrna_library}",
+    "cache": null,
+    "xref": "exrna.json"
+  },
+  "geneva": {
+    "full_name": "geneva",
+    "display_name": "GENEVA",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://genevatool.org/gene_table?gene_name={id}",
+    "cache": null,
+    "xref": "geneva.json"
+  },
   "gtc": {
     "full_name": "glytoucan",
     "display_name": "GlyTouCan",
@@ -250,5 +268,77 @@
     "url_template": "https://glytoucan.org/Structures/Glycans/{id}",
     "cache": null,
     "xref": "glytoucan.json"
+  },
+  "gtex": {
+    "full_name": "gtex",
+    "display_name": "GTEx",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.gtexportal.org/home/gene/{id}",
+    "cache": null,
+    "xref": "gtex.json"
+  },
+  "idg": {
+    "full_name": "idg reactome portal",
+    "display_name": "IDG Reactome Portal",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://idg.reactome.org/search/{id}",
+    "cache": null,
+    "xref": "idg.json"
+  },
+  "mw": {
+    "full_name": "metabolomics workbench",
+    "display_name": "Metabolomics Workbench",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.metabolomicsworkbench.org/databases/proteome/MGP_detail.php?MGP_ID={id}",
+    "cache": null,
+    "xref": "mw.json"
+  },
+  "pcrp": {
+    "full_name": "protein capture reagents program",
+    "display_name": "Protein Capture Reagents Program",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://proteincapture.org/reagent_portal/?hgnc_name_value={id}#proteins",
+    "cache": null,
+    "xref": "pcrp.json"
+  },
+  "pharos": {
+    "full_name": "pharos",
+    "display_name": "Pharos",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://pharos.nih.gov/targets/{id}",
+    "cache": null,
+    "xref": "pharos.json"
+  },
+  "reactome": {
+    "full_name": "reactome",
+    "display_name": "Reactome",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://reactome.org/content/query?q={id}&species=Homo+sapiens&species=Entries+without+species&cluster=true",
+    "cache": null,
+    "xref": "reactome.json"
+  },
+  "sigcom": {
+    "full_name": "sigcom lincs",
+    "display_name": "SigCom LINCS",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://maayanlab.cloud/sigcom-lincs/#/MetadataSearch/Genes?query={%22skip%22:0,%22limit%22:10,%22search%22:[%22{id}%22]}",
+    "cache": null,
+    "xref": "sigcom.json"
+  },
+  "udn": {
+    "full_name": "undiagnosed diseases network",
+    "display_name": "Undiagnosed Diseases Network",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://undiagnosed.hms.harvard.edu/genes/{id}",
+    "cache": null,
+    "xref": "udn.json"
   }
 }
