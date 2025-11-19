@@ -255,6 +255,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         if row.condition_id:
             condition_id = SplittableID(id=row.condition_id)
             condition_resource, condition_accession = condition_id.get_parts()
+            self.debug(f"Condition ID: {row.condition_id}, condition_resource: '{condition_resource}', condition_accession: '{condition_accession}'")
             condition_resource_name = self._metadata.get_full_name(condition_resource)
             condition_resource_name = (
                 condition_resource_name if condition_resource_name else ""
@@ -395,13 +396,39 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
         return component
 
+    def _normalize_database_name(self, database: str) -> str:
+        """Normalize database name to match the official casing from namespace map.
+        
+        Uses display_name for user-facing source names.
+        Parameters
+        ----------
+        database: str
+            The database name from the TSV (may have incorrect casing)
+
+        Returns
+        -------
+        str
+            The properly cased database name, or original if not found in map
+        """
+        database_lower = database.strip().lower()
+        display_name = self._metadata.get_display_name(database_lower)
+
+        # If display_name is found in namespace_map, use it
+        if display_name:
+            return display_name
+
+        # Otherwise, preserve original casing
+        return database.strip()
+
     def _handle_evidence(self, entry: BiomarkerEntry, row: TSVRow) -> None:
         """Handle evidence allocation based on tags."""
         split_ev = row.evidence_source.split(":")
         database = split_ev[0]
         id = split_ev[-1]
 
-        url = self._metadata.get_url_template(resource=database)
+        # Normalize the database name using namespace map
+        database = self._normalize_database_name(database)
+        url = self._metadata.get_url_template(resource=database.lower())
         if url is not None:
             url = url.format(id=id)
         else:
@@ -410,8 +437,8 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         # Parse base evidence details
         evidence_base = {
             "id": id,
-            ## Preserves original casing of the database name. Might want to hard-code unusual casings such as UniProt, CIViC etc to ensure consistency.
-            "database": database, # formerly database.title() which converts the first letter of each word to uppercase and the rest to lowercase
+            ## Preserves original casing of the database name
+            "database": database, # foremerly database.title() which converts the first letter of each word to uppercase and the rest to lowercase
             "url": url,
             "evidence_list": [
                 EvidenceItem(evidence=e.strip())
@@ -419,6 +446,8 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                 if e.strip()
             ],
         }
+
+        self.debug(f"evidence_base: {evidence_base}")
 
         # Separate tags by level
         component_tags = []
@@ -473,6 +502,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         """Adds the base citation data to the entry."""
 
         evidence_sources = entry.collect_unique_evidence_sources()
+        self.debug(f"Evidence sources collected: {evidence_sources}")
         for resource, ids in evidence_sources.items():
             for id in ids:
                 api_calls, citation = self._metadata.fetch_metadata(

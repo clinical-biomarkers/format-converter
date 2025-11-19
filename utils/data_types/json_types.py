@@ -220,6 +220,7 @@ class Evidence(DataModelObject):
     url: str
     evidence_list: list[EvidenceItem]
     tags: list[EvidenceTag]
+    database_key: str = ""
 
     def to_dict(self) -> dict[str, Union[str, list]]:
         if self.database.lower() == "pubmed":

@@ -32,9 +32,9 @@ class DoidHandler(APIHandler, LoggedClass):
             if description is not None:
                 description = description.group(1)
 
-            synonyms = doid_data.get("synonyms", [])
+            synonyms = doid_data.get("synonyms") or []
             synonyms = [
-                s.replace("EXACT", "").strip() for s in synonyms if "EXACT" in synonyms
+                s.replace("EXACT", "").strip() for s in synonyms if "EXACT" in s
             ]
             splittable_id = SplittableID(id=f"{resource}:{id}")
             condition = Condition(

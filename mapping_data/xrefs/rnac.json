@@ -1,0 +1,15 @@
+{
+  "database": "RNAcentral",
+  "entity_type": [
+    "RNA"
+  ],
+  "url": {
+    "RNA": "https://rnacentral.org/rna/{id}"
+  },
+  "id_examples": [
+    "URS000075B42D"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}
