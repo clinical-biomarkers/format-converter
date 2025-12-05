@@ -1,0 +1,17 @@
+{
+  "database": "Gene Ontology",
+  "entity_type": [
+    "gene",
+    "protein"
+  ],
+  "url": {
+    "gene": "http://amigo.geneontology.org/amigo/gene_product/UniProtKB:{id}",
+    "protein": "http://amigo.geneontology.org/amigo/gene_product/UniProtKB:{id}"
+  },
+  "id_examples": [
+    "P00533"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

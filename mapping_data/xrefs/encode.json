@@ -1,15 +1,15 @@
 {
-  "database": "NCBI",
+  "database": "ENCODE",
   "entity_type": [
     "gene",
     "protein"
   ],
   "url": {
-    "gene": "https://www.ncbi.nlm.nih.gov/gene/{id}",
-    "protein": "https://www.ncbi.nlm.nih.gov/gene/{id}"
+    "gene": "https://www.encodeproject.org/genes/{id}",
+    "protein": "https://www.encodeproject.org/genes/{id}"
   },
   "id_examples": [
-    "1956"
+    "675"
   ],
   "id_map": {},
   "categories": [],

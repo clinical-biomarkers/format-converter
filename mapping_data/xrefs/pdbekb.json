@@ -1,0 +1,17 @@
+{
+  "database": "PDBe Knowledge Base",
+  "entity_type": [
+    "gene",
+    "protein"
+  ],
+  "url": {
+    "gene": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/{id}",
+    "protein": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/{id}"
+  },
+  "id_examples": [
+    "P05067"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

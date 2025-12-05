@@ -1,0 +1,17 @@
+{
+  "database": "AlphaFold",
+  "entity_type": [
+    "gene",
+    "protein"
+  ],
+  "url": {
+    "gene": "https://alphafold.ebi.ac.uk/search/text/{id}",
+    "protein": "https://alphafold.ebi.ac.uk/search/text/{id}"
+  },
+  "id_examples": [
+    "AF-P00533-2-F1-v6"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

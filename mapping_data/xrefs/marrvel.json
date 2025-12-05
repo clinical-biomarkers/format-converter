@@ -1,12 +1,12 @@
 {
-  "database": "NCBI",
+  "database": "MARRVEL",
   "entity_type": [
     "gene",
     "protein"
   ],
   "url": {
-    "gene": "https://www.ncbi.nlm.nih.gov/gene/{id}",
-    "protein": "https://www.ncbi.nlm.nih.gov/gene/{id}"
+    "gene": "http://marrvel.org/human/gene/{id}",
+    "protein": "http://marrvel.org/human/gene/{id}"
   },
   "id_examples": [
     "1956"

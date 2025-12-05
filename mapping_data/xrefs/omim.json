@@ -1,0 +1,17 @@
+{
+  "database": "OMIM",
+  "entity_type": [
+    "gene",
+    "protein"
+  ],
+  "url": {
+    "gene": "https://www.omim.org/search?index=entry&start=1&limit=10&sort=score+desc%2C+prefix_sort+desc&search=approved_gene_symbol%3A{id}",
+    "protein": "https://www.omim.org/search?index=entry&start=1&limit=10&sort=score+desc%2C+prefix_sort+desc&search=approved_gene_symbol%3A{id}"
+  },
+  "id_examples": [
+    "BRCA2"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

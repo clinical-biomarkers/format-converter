@@ -1,10 +1,12 @@
 {
   "database": "HUGO Gene Nomenclature Committee",
   "entity_type": [
-    "gene"
+    "gene",
+    "protein"
   ],
   "url": {
-    "gene": "https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:{id}"
+    "gene": "https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:{id}",
+    "protein": "https://www.genenames.org/data/gene-symbol-report/#!/symbol/{id}"
   },
   "id_examples": [
     "1787"
