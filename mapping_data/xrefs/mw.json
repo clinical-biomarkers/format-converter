@@ -7,7 +7,7 @@
     "gene": "https://www.metabolomicsworkbench.org/databases/proteome/MGP_detail.php?MGP_ID={id}"
   },
   "id_examples": [
-    ""
+    "ACACA"
   ],
   "id_map": {},
   "categories": [],

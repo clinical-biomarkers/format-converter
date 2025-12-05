@@ -1,12 +1,12 @@
 {
-  "database": "NCBI",
+  "database": "BioGPS",
   "entity_type": [
     "gene",
     "protein"
   ],
   "url": {
-    "gene": "https://www.ncbi.nlm.nih.gov/gene/{id}",
-    "protein": "https://www.ncbi.nlm.nih.gov/gene/{id}"
+    "gene": "http://biogps.org/#goto=genereport&id={id}",
+    "protein": "http://biogps.org/#goto=genereport&id={id}"
   },
   "id_examples": [
     "1956"

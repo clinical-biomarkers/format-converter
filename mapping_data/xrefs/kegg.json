@@ -1,12 +1,12 @@
 {
-  "database": "NCBI",
+  "database": "KEGG",
   "entity_type": [
     "gene",
     "protein"
   ],
   "url": {
-    "gene": "https://www.ncbi.nlm.nih.gov/gene/{id}",
-    "protein": "https://www.ncbi.nlm.nih.gov/gene/{id}"
+    "gene": "https://www.genome.jp/entry/hsa:{id}",
+    "protein": "https://www.genome.jp/entry/hsa:{id}"
   },
   "id_examples": [
     "1956"

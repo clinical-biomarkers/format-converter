@@ -1,9 +1,11 @@
 {
   "database": "UniProtKB",
   "entity_type": [
+    "gene",
     "protein"
   ],
   "url": {
+    "gene": "https://www.uniprot.org/uniprotkb/{id}",
     "protein": "https://www.uniprot.org/uniprotkb/{id}"
   },
   "id_examples": [

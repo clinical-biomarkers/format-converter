@@ -1,15 +1,15 @@
 {
-  "database": "NCBI",
+  "database": "GeneMANIA",
   "entity_type": [
     "gene",
     "protein"
   ],
   "url": {
-    "gene": "https://www.ncbi.nlm.nih.gov/gene/{id}",
-    "protein": "https://www.ncbi.nlm.nih.gov/gene/{id}"
+    "gene": "https://genemania.org/search/homo-sapiens/{id}",
+    "protein": "https://genemania.org/search/homo-sapiens/{id}"
   },
   "id_examples": [
-    "1956"
+    "BRCA2"
   ],
   "id_map": {},
   "categories": [],

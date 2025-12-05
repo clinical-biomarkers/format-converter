@@ -1,15 +1,15 @@
 {
-  "database": "NCBI",
+  "database": "Human Protein Atlas",
   "entity_type": [
     "gene",
     "protein"
   ],
   "url": {
-    "gene": "https://www.ncbi.nlm.nih.gov/gene/{id}",
-    "protein": "https://www.ncbi.nlm.nih.gov/gene/{id}"
+    "gene": "https://www.proteinatlas.org/search/{id}",
+    "protein": "https://www.proteinatlas.org/search/{id}"
   },
   "id_examples": [
-    "1956"
+    "BRCA2"
   ],
   "id_map": {},
   "categories": [],

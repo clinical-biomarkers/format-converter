@@ -1,15 +1,15 @@
 {
-  "database": "NCBI",
+  "database": "Bgee",
   "entity_type": [
     "gene",
     "protein"
   ],
   "url": {
-    "gene": "https://www.ncbi.nlm.nih.gov/gene/{id}",
-    "protein": "https://www.ncbi.nlm.nih.gov/gene/{id}"
+    "gene": "https://www.bgee.org/gene/{id}",
+    "protein": "https://www.bgee.org/gene/{id}"
   },
   "id_examples": [
-    "1956"
+    "ENSG00000146648"
   ],
   "id_map": {},
   "categories": [],
