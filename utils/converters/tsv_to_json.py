@@ -389,10 +389,11 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             )
             url = url if url else ""
             component.specimen.append(Specimen.from_row(row=row, url=url))
-        elif row.loinc_code:
-            specimen_id = SplittableID(id="")
-            url = ""
-            component.specimen.append(Specimen.from_row(row=row, url=url))
+        # Commenting out the elif block to see if it solves the issue with LOINC codes being tied to specimens (which they shouldn't be)
+        # elif row.loinc_code:
+            # specimen_id = SplittableID(id="")
+            # url = ""
+            # component.specimen.append(Specimen.from_row(row=row, url=url))
 
         return component
 
