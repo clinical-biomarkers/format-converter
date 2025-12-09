@@ -215,6 +215,123 @@
     "cache": "pdb_cache.json",
     "xref": "pdb.json"
   },
+  "alphafold": {
+    "full_name": "AlphaFold DB",
+    "display_name": "AlphaFold",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://alphafold.ebi.ac.uk/search/text/{id}",
+    "cache": null,
+    "xref": "alphafold.json"
+  },
+  "bgee": {
+    "full_name": "Bgee",
+    "display_name": "Bgee",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.bgee.org/gene/{id}",
+    "cache": null,
+    "xref": "bgee.json"
+  },
+  "biogps": {
+    "full_name": "BioGPS",
+    "display_name": "BioGPS",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "http://biogps.org/#goto=genereport&id={id}",
+    "cache": null,
+    "xref": "biogps.json"
+  },
+  "clingen": {
+    "full_name": "ClinGen",
+    "display_name": "ClinGen",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://search.clinicalgenome.org/kb/genes/HGNC:{id}",
+    "cache": null,
+    "xref": "clingen.json"
+  },
+  "encode": {
+    "full_name": "ENCODE",
+    "display_name": "ENCODE",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.encodeproject.org/genes/{id}",
+    "cache": null,
+    "xref": "encode.json"
+  },
+  "genecards": {
+    "full_name": "GeneCards",
+    "display_name": "GeneCards",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.genecards.org/cgi-bin/carddisp.pl?gene={id}",
+    "cache": null,
+    "xref": "genecards.json"
+  },
+  "genemania": {
+    "full_name": "GeneMANIA",
+    "display_name": "GeneMANIA",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://genemania.org/search/homo-sapiens/{id}",
+    "cache": null,
+    "xref": "genemania.json"
+  },
+  "go": {
+    "full_name": "Gene Ontology",
+    "display_name": "Gene Ontology",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "http://amigo.geneontology.org/amigo/gene_product/UniProtKB:{id}",
+    "cache": null,
+    "xref": "go.json"
+  },
+  "gwas_catalog": {
+    "full_name": "GWAS Catalog",
+    "display_name": "GWAS Catalog",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.ebi.ac.uk/gwas/genes/{id}",
+    "cache": null,
+    "xref": "gwas_catalog.json"
+  },
+  "hgbrowser": {
+    "full_name": "Human Genome Browser",
+    "display_name": "Human Genome Browser",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://genome.ucsc.edu/cgi-bin/hgGene?hgg_gene={id}&hgg_type=knownGene",
+    "cache": null,
+    "xref": "hgbrowser.json"
+  },
+  "hpatlas": {
+    "full_name": "Human Protein Atlas",
+    "display_name": "Human Protein Atlas",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.proteinatlas.org/search/{id}",
+    "cache": null,
+    "xref": "hpatlas.json"
+  },
+  "kegg": {
+    "full_name": "KEGG",
+    "display_name": "KEGG",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.genome.jp/entry/hsa:{id}",
+    "cache": null,
+    "xref": "kegg.json"
+  },
+  "marrvel": {
+    "full_name": "MARRVEL",
+    "display_name": "MARRVEL",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "http://marrvel.org/human/gene/{id}",
+    "cache": null,
+    "xref": "marrvel.json"
+  },
   "ncbi": {
     "full_name": "national center for biotechnology information",
     "display_name": "NCBI",
@@ -296,6 +413,15 @@
     "cache": null,
     "xref": "mw.json"
   },
+  "opentargets": {
+    "full_name": "Open Targets",
+    "display_name": "Open Targets",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://platform.opentargets.org/target/{id}",
+    "cache": null,
+    "xref": "opentargets.json"
+  },
   "pcrp": {
     "full_name": "protein capture reagents program",
     "display_name": "Protein Capture Reagents Program",
@@ -304,6 +430,15 @@
     "url_template": "https://proteincapture.org/reagent_portal/?hgnc_name_value={id}#proteins",
     "cache": null,
     "xref": "pcrp.json"
+  },
+  "pdbekb": {
+    "full_name": "PDBe Knowledge Base",
+    "display_name": "PDBe Knowledge Base",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/{id}",
+    "cache": null,
+    "xref": "pdbekb.json"
   },
   "pharos": {
     "full_name": "pharos",
