@@ -35,6 +35,8 @@ logging options:
 
 ## TSV to JSON Notes
 
+Make sure to insert placeholder biomarker IDs into the TSV file before converting!
+
 The TSV to JSON conversion can handle the filling in of some metadata automatically. Pubmed paper citation data and some `assessed_biomarker_entity`
 / `citation` metdata data can be automatically retrieved from API calls. In order for the TSV to JSON conversion to utilize the NCBI and PubMed
 APIs a `.env` file is expected containing your email and and an API key (instructions for obtaining an API key can be found
