@@ -5023,5 +5023,67 @@
       "IL-7R-alpha",
       "IL-7RA"
     ]
+  },
+  "P01591": {
+    "recommended_name": "Immunoglobulin J chain",
+    "synonyms": [
+      "Joining chain of multimeric IgA and IgM"
+    ]
+  },
+  "P01592": {
+    "recommended_name": "Immunoglobulin J chain",
+    "synonyms": []
+  },
+  "P01825": {
+    "recommended_name": "Immunoglobulin heavy variable 4-59",
+    "synonyms": [
+      "Ig heavy chain V-II region NEWM"
+    ]
+  },
+  "Q02496": {
+    "recommended_name": "Mucin-1",
+    "synonyms": [
+      "MUC-1",
+      "Episialin"
+    ]
+  },
+  "P40259": {
+    "recommended_name": "B-cell antigen receptor complex-associated protein beta chain",
+    "synonyms": [
+      "B-cell-specific glycoprotein B29",
+      "Ig-beta",
+      "Immunoglobulin-associated B29 protein"
+    ]
+  },
+  "P46940": {
+    "recommended_name": "Ras GTPase-activating-like protein IQGAP1",
+    "synonyms": [
+      "p195"
+    ]
+  },
+  "P40199": {
+    "recommended_name": "Cell adhesion molecule CEACAM6",
+    "synonyms": [
+      "Carcinoembryonic antigen-related cell adhesion molecule 6",
+      "CEA cell adhesion molecule 6",
+      "Non-specific crossreacting antigen",
+      "Normal cross-reacting antigen"
+    ]
+  },
+  "P01108": {
+    "recommended_name": "Myc proto-oncogene protein",
+    "synonyms": [
+      "Proto-oncogene c-Myc",
+      "Transcription factor p64"
+    ]
+  },
+  "P20023": {
+    "recommended_name": "Complement receptor type 2",
+    "synonyms": [
+      "Cr2",
+      "Complement C3d receptor",
+      "Epstein-Barr virus receptor",
+      "EBV receptor"
+    ]
   }
 }
