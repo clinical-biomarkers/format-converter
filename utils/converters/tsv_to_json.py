@@ -2,8 +2,10 @@ from pathlib import Path
 from typing import Iterator, Optional
 import csv
 import logging
+import time
 
 from utils.data_types.json_types import Citation, Reference
+from utils.general import confirmation_message_complete
 from utils.logging import LoggedClass
 from utils.metadata import Metadata, ApiCallType
 from utils import write_json
@@ -27,6 +29,13 @@ from utils.data_types import (
     ObjectFieldTags,
 )
 
+# Force IPv4 to avoid IPv6 timeout issues with NCBI
+import socket
+_original_getaddrinfo = socket.getaddrinfo
+def _getaddrinfo_ipv4(*args, **kwargs):
+    responses = _original_getaddrinfo(*args, **kwargs)
+    return [response for response in responses if response[0] == socket.AF_INET]
+socket.getaddrinfo = _getaddrinfo_ipv4
 
 class TSVtoJSONConverter(Converter, LoggedClass):
     """Converts biomarker TSV data to the full JSON data model format.
@@ -53,6 +62,9 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         self._preload_caches = preload_caches
         self._metadata = Metadata(preload_caches=self._preload_caches)
         self._api_calls = 0  # Tracks total API calls made
+        self._header_mapping: dict[str, str] = {}  # Maps original headers to corrected headers
+        self._assign_ids = False  # Flag to indicate if we need to assign biomarker IDs internally
+        self._current_row_number = 0  # Track current row number for ID assignment
 
     def convert(self, input_path: Path, output_path: Path) -> None:
         """Main conversion workflow entry point.
@@ -64,6 +76,11 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         output_path: Path
             Path to write the JSON output.
         """
+        # Run preflight validation before starting conversion
+        needs_delay = self._preflight_validation(input_path)
+        if needs_delay:
+            time.sleep(5)
+
         # Process each row, building entries incrementally
         for idx, row in enumerate(self._stream_tsv(input_path)):
             if (idx + 1) % TSV_LOG_CHECKPOINT == 0:
@@ -78,6 +95,63 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         self._write_json(entries, output_path)
         if self._preload_caches:
             self._metadata.save_cache_files()
+
+    def _preflight_validation(self, path: Path) -> bool:
+        """Perform pre-flight validation checks before converting.
+
+        Currently includes:
+        - Header validation
+        - Non-empty biomarker_id field
+
+        Parameters
+        ----------
+        path: Path
+            Path to the TSV file to validate.
+
+        Returns
+        -------
+        bool
+            True if user interaction occurred (needs delay), False if validation passed without interaction
+        """
+        self.info("=" * 60)
+        self.info("PRE-FLIGHT VALIDATION")
+        self.info("=" * 60)
+
+        user_interaction = False
+
+        # Header validation and biomarker_id check
+        with path.open() as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            original_headers = list(reader.fieldnames) if reader.fieldnames else []
+            corrected_headers = self._validate_headers(original_headers)
+            for orig, corrected in zip(original_headers, corrected_headers):
+                self._header_mapping[orig] = corrected
+            # Check if headers were corrected
+            if corrected_headers != original_headers:
+                user_interaction = True
+
+            # biomarker_id check
+            rows = list(reader)
+            row_count = len(rows)
+            biomarker_id_key = 'biomarker_id'
+            original_biomarker_key = None
+            for orig, corr in self._header_mapping.items():
+                if corr == 'biomarker_id':
+                    original_biomarker_key = orig
+                    break
+            check_key = original_biomarker_key if original_biomarker_key else biomarker_id_key
+            if rows and all(not row.get(check_key, '').strip() for row in rows):
+                print(f"\nWARNING: biomarker_id field is empty for all rows.")
+                print(f"Assigning sequential IDs from 1 to {row_count}...")
+                self._assign_ids = True
+                user_interaction = True
+
+        if user_interaction:
+            confirmation_message_complete()
+            return True
+        else:
+            print("\nValidation passed. Headers and biomarker_id are correct.")
+            return False
 
     def _stream_tsv(self, path: Path) -> Iterator[TSVRow]:
         """Stream and parse TSV file rows.
@@ -94,19 +168,26 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         """
         with path.open() as f:
             reader = csv.DictReader(f, delimiter="\t")
-            # Check header spelling
-            if reader.fieldnames:
-                corrected_headers = self._check_header_spelling(list(reader.fieldnames))
-                # If headers were corrected, create a new reader with corrected fieldnames
-                f.seek(0) # Reset file pointer to beginning
-                reader = csv.DictReader(f, delimiter="\t", fieldnames=corrected_headers)
-                next(reader) # Skip the original header row
+
+            # Correct headers if needed
+            if self._header_mapping:
+                original_fieldnames = reader.fieldnames
+                reader.fieldnames = [
+                    self._header_mapping.get(field, field)
+                    for field in original_fieldnames
+                ]
 
             for row in reader:
+                self._current_row_number += 1
+                
+                # Assign biomarker_id if needed
+                if self._assign_ids:
+                    row['biomarker_id'] = str(self._current_row_number)
+
                 yield TSVRow.from_dict(row)
 
-    def _check_header_spelling(self, headers: list[str]) -> list[str]:
-        """Check TSV headers for spelling errors agains expected field names.
+    def _validate_headers(self, headers: list[str]) -> list[str]:
+        """Validate TSV headers against expected field names.
         
         Parameters
         ----------
@@ -116,7 +197,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         Returns
         -------
         list[str]
-            Corrected list of header names.
+            Corrected headers (may be same as input if no corrections needed)
         """
         # Define expected headers based on TSVRow fields
         expected_headers = {
@@ -157,7 +238,6 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                         if response:
                             corrected_headers[i] = suggestions[0]
                             self.info(f"Corrected '{header}' to '{suggestions[0]}'")
-
         return corrected_headers
 
     def _ask_user_correction(self, wrong_header: str, suggested_header: str) -> bool:
@@ -176,7 +256,9 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             True if user wants to make the correction, False otherwise.
         """
         while True:
-            response = input(f"WARNING - Did you mean '{suggested_header}' instead of '{wrong_header}'? (y/n): ").strip().lower()
+            response = input(
+                f"WARNING - Did you mean '{suggested_header}' instead of '{wrong_header}'? (y/n): "
+            ).strip().lower()
             if response in ['y', 'yes']:
                 return True
             elif response in ['n', 'no']:
@@ -231,6 +313,9 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         # If we don't find the existing entry, create it and add
         if not entry:
             entry = self._create_entry(row)
+            # Skip row if entry creation failed (due to empty entity_id)
+            if entry is None:
+                return
             self._entries[row.biomarker_id] = entry
         # If we do find an existing entry for that, handle the component
         else:
@@ -294,7 +379,8 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                         self.logger,
                         (
                             f"TSV condition name ({row.condition}) does NOT match "
-                            f"resource recommended name ({condition.recommended_name.name})"
+                            f"resource recommended name ({condition.recommended_name.name}) "
+                            f"and will be replaced by the recommended name"
                         ),
                         logging.WARNING,
                     )
@@ -324,6 +410,10 @@ class TSVtoJSONConverter(Converter, LoggedClass):
 
         component = self._create_component(row)
 
+        # Return None is component creation failed (due to empty entity_id)
+        if component is None:
+            return None
+
         # TODO : missing xrefs right now
         return BiomarkerEntry(
             biomarker_id=row.biomarker_id,
@@ -333,20 +423,27 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             exposure_agent=exposure_agent,
         )
 
-    def _create_component(self, row: TSVRow) -> BiomarkerComponent:
+    def _create_component(self, row: TSVRow) -> Optional[BiomarkerComponent]:
         """Creates the base biomarker component from the TSV row. Does not
         create the component level evidence.
         """
+        # Check if assessed_biomarker_entity_id is empty
+        if not row.assessed_biomarker_entity_id or row.assessed_biomarker_entity_id.strip() == "":
+            return None
+
         assessed_biomarker_entity_id = SplittableID(id=row.assessed_biomarker_entity_id)
         assessed_biomarker_entity_resource, assessed_biomarker_entity_accession = (
             assessed_biomarker_entity_id.get_parts()
         )
+        assessed_entity_type = row.assessed_entity_type
+        if assessed_entity_type and "NA" not in assessed_entity_type: # any entity type except DNA, RNA, mRNA, miRNA...
+            assessed_entity_type = assessed_entity_type.lower()
         api_calls, assessed_biomarker_entity = self._metadata.fetch_metadata(
             fetch_flag=self._fetch_metadata,
             call_type=ApiCallType.ENTITY_TYPE,
             resource=assessed_biomarker_entity_resource,
             id=assessed_biomarker_entity_accession,
-            assessed_entity_type=row.assessed_entity_type,
+            assessed_entity_type=assessed_entity_type,
         )
         self._api_calls += api_calls
         if assessed_biomarker_entity is None or not AssessedBiomarkerEntity.type_guard(
@@ -378,7 +475,7 @@ class TSVtoJSONConverter(Converter, LoggedClass):
                 )
             ),
             assessed_biomarker_entity_id=assessed_biomarker_entity_id,
-            assessed_entity_type=row.assessed_entity_type,
+            assessed_entity_type=assessed_entity_type,
         )
 
         if row.specimen:
@@ -389,10 +486,11 @@ class TSVtoJSONConverter(Converter, LoggedClass):
             )
             url = url if url else ""
             component.specimen.append(Specimen.from_row(row=row, url=url))
-        elif row.loinc_code:
-            specimen_id = SplittableID(id="")
-            url = ""
-            component.specimen.append(Specimen.from_row(row=row, url=url))
+        # Commenting out the elif block to see if it solves the issue with LOINC codes being tied to specimens (which they shouldn't be)
+        # elif row.loinc_code:
+            # specimen_id = SplittableID(id="")
+            # url = ""
+            # component.specimen.append(Specimen.from_row(row=row, url=url))
 
         return component
 
@@ -572,7 +670,8 @@ class TSVtoJSONConverter(Converter, LoggedClass):
         else:
             # No match found - create and add new component
             new_component = self._create_component(row)
-            entry.biomarker_component.append(new_component)
+            if new_component is not None:
+                entry.biomarker_component.append(new_component)
 
     def _update_component(self, component: BiomarkerComponent, row: TSVRow) -> None:
         """Update existing component with new data. Does not merge evidence data, that

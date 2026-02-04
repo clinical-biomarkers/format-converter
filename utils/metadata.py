@@ -14,6 +14,7 @@ from utils.data_types import (
     AssessedBiomarkerEntity,
     Citation,
     Condition,
+    ConditionSynonym,
     RateLimiter,
 )
 from .api import LIBRARY_CALL, METADATA_HANDLERS
@@ -235,6 +236,8 @@ class Metadata(LoggedClass):
                         resource=full_name,
                         url=url,
                     )
+                    # Parse disease_syn.json
+                    self._add_mondo_synonyms(found, id)
             return 0, found
 
         if not fetch_flag:
@@ -275,6 +278,9 @@ class Metadata(LoggedClass):
 
         # Save fetched data to cache if possible
         if processed_data is not None:
+            # Add MONDO synonyms to newly fetched Condition objects before caching
+            if call_type == ApiCallType.CONDITION and isinstance(processed_data, Condition):
+                self._add_mondo_synonyms(processed_data, id)
             try:
                 save_data = processed_data.to_cache_dict()
                 self._update_cache(
@@ -284,6 +290,45 @@ class Metadata(LoggedClass):
                 self.error(f"Failed updating cache for {resource}, {id}: {e}")
 
         return api_call_count, processed_data
+
+    def _add_mondo_synonyms(self, condition: Condition, doid: str) -> None:
+        """Add MONDO synonyms to a Condition object from disease_syn.json.
+        
+        Parameters
+        ----------
+        condition: Condition
+            The condition object to add synonyms to.
+        doid: str
+            The DOID identifier to lookup in disease_syn.json.
+        """
+        self.debug(f"_add_mondo_synonyms called for DOID: {doid}")
+        disease_syn_path = ROOT_DIR / "mapping_data" / "disease_syn.json"
+        try:
+            disease_syn_data = load_json_type_safe(disease_syn_path, return_type="dict")
+            self.debug(f"Loaded disease_syn.json, checking for {doid}")
+            
+            # Check if the DOID exists in the disease_syn.json file
+            if doid in disease_syn_data:
+                self.debug(f"Found MONDO synonyms for {doid}: {disease_syn_data[doid]}")
+                # Loop through the synonyms and add them to the condition object
+                for synonym_entry in disease_syn_data[doid]:
+                    condition.synonyms.append(
+                        ConditionSynonym(
+                            id=synonym_entry["id"],
+                            name=synonym_entry["name"],
+                            resource=synonym_entry["resource"],
+                            url=synonym_entry["url"]
+                        )
+                    )
+                self.debug(f"Added {len(disease_syn_data[doid])} synonyms to condition")
+            else:
+                self.debug(f"No MONDO synonyms found for {doid}")
+        except FileNotFoundError:
+            self.warning(f"disease_syn.json file not found at {disease_syn_path}")
+        except ValueError as e:
+            self.error(f"Failed to parse disease_syn.json: {e}")
+        except Exception as e:
+            self.error(f"Error loading MONDO synonyms: {e}")
 
     def _api_call_handling(
         self, resource: str, endpoint: str
