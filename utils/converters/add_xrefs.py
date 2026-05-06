@@ -194,6 +194,10 @@ class XrefConverter(Converter, LoggedClass):
 
         if input_path_dir_flag:
             self.debug(f"Processing directory: {input_path}")
+            files = list(input_path.iterdir())
+            self.info(f"Found {len(files)} total items in directory")
+            json_files = [f for f in files if f.is_file() and f.suffix.lower() == ".json"]
+            self.info(f"Found {len(json_files)} JSON files to process")
             for idx, file in enumerate(input_path.iterdir()):
                 if not file.is_file() or file.suffix.lower() != ".json":
                     self.debug(f"Skipping '{file}'")
@@ -422,6 +426,8 @@ class XrefConverter(Converter, LoggedClass):
                         yield BiomarkerEntry.from_dict(record)
         except Exception as e:
             self.error(f"Failed to stream JSON from {path}\n{e}")
+            import traceback
+            self.error(traceback.format_exc())
             raise
 
     def _get_crossrefs(self, entry: BiomarkerEntry) -> list[CrossReference]:
