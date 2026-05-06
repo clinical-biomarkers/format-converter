@@ -1,0 +1,15 @@
+{
+  "database": "MeSH",
+  "entity_type": [
+    "protein"
+  ],
+  "url": {
+    "protein": "https://meshb.nlm.nih.gov/record/ui?ui={id}"
+  },
+  "id_examples": [
+    "D000080545"
+  ],
+  "id_map": {},
+  "categories": [],
+  "secondary_cross_references": []
+}

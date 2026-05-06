@@ -5085,5 +5085,15 @@
       "Epstein-Barr virus receptor",
       "EBV receptor"
     ]
+  },
+  "P05783": {
+    "recommended_name": "Keratin, type I cytoskeletal 18",
+    "synonyms": [
+      "Cell proliferation-inducing gene 46 protein",
+      "Cytokeratin-18",
+      "CK-18",
+      "Keratin-18",
+      "K18"
+    ]
   }
 }

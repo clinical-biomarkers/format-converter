@@ -1,8 +1,6 @@
 from typing import Optional
 from requests import Response
 import logging
-import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import ParseError
 
 from utils.logging import LoggedClass, log_once
 from utils.data_types import (
@@ -19,34 +17,21 @@ class ChebiHandler(APIHandler, LoggedClass):
         self, response: Response, id: str, **kwargs
     ) -> Optional[CacheableDataModelObject]:
         try:
-            root = ET.fromstring(response.content)
-            ns = {"chebi": "https://www.ebi.ac.uk/webservices/chebi"}
-
-            chebi_name_element = root.find(".//chebi:chebiAsciiName", ns)
-            chebi_name = chebi_name_element.text if chebi_name_element else None
+            data = response.json()
+            chebi_name = data.get("ascii_name")
             if chebi_name is None:
-                raise ValueError(f"")
-
+                raise ValueError("")
             synonyms: list[str] = []
-            synonym_elements = root.findall(".//chebi:Synonyms", ns)
-            for syn_el in synonym_elements:
-                syn = syn_el.find("chebi:data", ns)
-                if syn is not None:
-                    syn_text = syn.text
-                    if syn_text is not None:
+            for name_list in data.get("names", {}).values():
+                for entry in name_list:
+                    syn_text = entry.get("ascii_name")
+                    if syn_text and syn_text != chebi_name:
                         synonyms.append(syn_text)
 
             return AssessedBiomarkerEntity(
                 recommended_name=chebi_name,
                 synonyms=[Synonym(synonym=s) for s in synonyms],
             )
-        except ParseError as e:
-            log_once(
-                self.logger,
-                f"Error parsing return data for Chebi ID: {id}\n{e}",
-                logging.ERROR,
-            )
-            return None
         except ValueError as e:
             log_once(
                 self.logger,

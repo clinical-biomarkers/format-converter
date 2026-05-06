@@ -1,1 +1,377 @@
-{}
+{
+  "17855": {
+    "recommended_name": "triglyceride",
+    "synonyms": [
+      "a triacylglycerol",
+      "Triacylglycerol",
+      "triacylglycerols",
+      "Triglycerid",
+      "Triglyceride",
+      "triglycerides",
+      "Triglyzerid",
+      "triglycerides"
+    ]
+  },
+  "61793": {
+    "recommended_name": "alpha-Neu5Ac-(2->3)-beta-D-Gal-(1->3)-[alpha-L-Fuc-(1->4)]-D-GlcNAc",
+    "synonyms": [
+      "5-acetamido-3,5-dideoxy-D-glycero-alpha-D-galacto-non-2-ulopyranonosyl-(2->3)-beta-D-galactopyranosyl-(1->3)-[6-deoxy-alpha-L-galactopyranosyl-(1->4)]-2-acetamido-2-deoxy-D-glucopyranose",
+      "CA19-9",
+      "CA19-9 antigen",
+      "carbohydrate antigen 19-9",
+      "(Gal)1 (GlcNAc)1 (LFuc)1 (Neu5Ac)1",
+      "NeuAcalpha2,3Galbeta1-3[Fucalpha1-4]GlcNAc",
+      "R-alpha-D-Gal-beta1,3-alpha-D-GlcNAc-(alpha1,4-Fuc)-beta1,3-D-Gal-alpha2,3-Neu5Ac",
+      "sialyl Lewis A",
+      "sialyl Lewis a antigen",
+      "sialyl-Lewis(A)",
+      "sLeA"
+    ]
+  },
+  "16737": {
+    "recommended_name": "creatinine",
+    "synonyms": [
+      "1-methylglycocyamidine",
+      "1-Methylglycocyamidine",
+      "1-Methylhydantoin-2-imide",
+      "2-amino-1,5-dihydro-1-methyl-4H-Imidazol-4-one",
+      "2-Amino-1-methylimidazolin-4-one",
+      "Creatine anhydride",
+      "creatinina",
+      "Creatinine",
+      "Kreatinin",
+      "2-imino-1-methylimidazolidin-4-one"
+    ]
+  },
+  "16199": {
+    "recommended_name": "urea",
+    "synonyms": [
+      "1728",
+      "Carbamide",
+      "carbonyldiamide",
+      "E927b",
+      "Harnstoff",
+      "H2NC(O)NH2",
+      "Karbamid",
+      "ur",
+      "Urea",
+      "UREA",
+      "uree",
+      "carbamide"
+    ]
+  },
+  "16990": {
+    "recommended_name": "bilirubin IXalpha",
+    "synonyms": [
+      "1,10,19,22,23,24-hexahydro-2,7,13,17-tetramethyl-1,19-dioxo-3,18-divinylbiline-8,12-dipropionic acid",
+      "2,17-diethenyl-1,10,19,22,23,24-hexahydro-3,7,13,18-tetramethyl-1,19-dioxo-21H-biline-8,12-dipropanoic acid",
+      "2,7,13,17-tetramethyl-1,19-dioxo-3,18-divinyl-1,10,19,22,23,24-hexahydro-21H-biline-8,12-dipropanoic acid",
+      "8,12-bis(2-carboxyethyl)-2,7,13,17-tetramethyl-3,18-divinylbiladiene-ac-1,19(21H,24H)-dione",
+      "Bilirubin",
+      "bilirubin-IXalpha",
+      "bilirubin(Z,Z)",
+      "3,18-diethenyl-2,7,13,17-tetramethyl-1,19-dioxo-1,10,19,22,23,24-hexahydro-21H-biline-8,12-dipropanoic acid",
+      "bilirubin"
+    ]
+  },
+  "29101": {
+    "recommended_name": "sodium(1+)",
+    "synonyms": [
+      "Na+",
+      "Na(+)",
+      "SODIUM ION",
+      "Na(+)",
+      "sodium(1+) ion",
+      "sodium cation",
+      "sodium(I) cation"
+    ]
+  },
+  "18211": {
+    "recommended_name": "citrulline",
+    "synonyms": [
+      "2-amino-5-(carbamoylamino)pentanoic acid",
+      "N(5)-carbamoylornithine",
+      "2-Amino-5-uredovaleric acid",
+      "Cit",
+      "citrulina",
+      "Citrullin",
+      "Citrulline",
+      "dl-citrulline",
+      "N(5)-(aminocarbonyl)ornithine",
+      "N(5)-(aminocarbonyl)-DL-ornithine",
+      "N(5)-carbamoyl-DL-ornithine",
+      "DL-2-amino-5-ureidovaleric acid"
+    ]
+  },
+  "88764": {
+    "recommended_name": "ethyl butyrate",
+    "synonyms": [
+      "Butanoic acid ethyl ester",
+      "Butyric acid ethyl ester",
+      "Ethyl 1-butyrate",
+      "Ethyl ester of butanoic acid",
+      "Ethyl n-butanoate",
+      "Ethyl n-butyrate",
+      "n-Butyric acid ethyl ester",
+      "ethyl butanoate",
+      "ethyl butanoate"
+    ]
+  },
+  "17824": {
+    "recommended_name": "propan-2-ol",
+    "synonyms": [
+      "1-methylethanol",
+      "1-methylethyl alcohol",
+      "2-hydroxypropane",
+      "2-Propanol",
+      "i-propanol",
+      "i-Propylalkohol",
+      "sec-propanol",
+      "IPA",
+      "Isopropanol",
+      "isopropyl alcohol",
+      "Isopropyl alcohol",
+      "ISOPROPYL ALCOHOL",
+      "Isopropylalkohol",
+      "Propan-2-ol"
+    ]
+  },
+  "39026": {
+    "recommended_name": "low-density lipoprotein",
+    "synonyms": [
+      "LDL",
+      "low-density lipoproteins",
+      "beta-lipoproteins"
+    ]
+  },
+  "28728": {
+    "recommended_name": "thromboxane B2",
+    "synonyms": [
+      "(5Z,13E,15S)-9alpha,11,15-trihydroxythromboxa-5,13-dien-1-oic acid",
+      "Thromboxane B2",
+      "TXB2",
+      "TXB2",
+      "TXB2"
+    ]
+  },
+  "17927": {
+    "recommended_name": "N(1)-acetylspermidine",
+    "synonyms": [
+      "1-N-acetylspermidine",
+      "N1-Acetylspermidine",
+      "N-{3-[(4-aminobutyl)amino]propyl}acetamide"
+    ]
+  },
+  "15725": {
+    "recommended_name": "trimethylenediamine",
+    "synonyms": [
+      "1,3-diamino-n-propane",
+      "1,3-diaminopropane",
+      "1,3-propanediamine",
+      "1,3-propylenediamine",
+      "1,3-trimethylenediamine",
+      "3-aminopropylamine",
+      "Propane-1,3-diamine",
+      "tn",
+      "alpha,omega-propanediamine",
+      "propane-1,3-diamine"
+    ]
+  },
+  "17148": {
+    "recommended_name": "putrescine",
+    "synonyms": [
+      "1,4-Butanediamine",
+      "1,4-butylenediamine",
+      "1,4-DIAMINOBUTANE",
+      "1,4-tetramethylenediamine",
+      "Butane-1,4-diamine",
+      "butylenediamine",
+      "H2N(CH2)4NH2",
+      "Putrescin",
+      "putrescina",
+      "Putrescine",
+      "Putreszin",
+      "Tetramethylendiamin",
+      "Tetramethylenediamine",
+      "butane-1,4-diamine"
+    ]
+  },
+  "15746": {
+    "recommended_name": "spermine",
+    "synonyms": [
+      "4,9-diaza-1,12-dodecanediamine",
+      "4,9-diazadodecane-1,12-diamine",
+      "N,N'-Bis(3-aminopropyl)-1,4-butanediamine",
+      "Spermine",
+      "SPERMINE",
+      "N,N'-bis(3-aminopropyl)butane-1,4-diamine"
+    ]
+  },
+  "76792": {
+    "recommended_name": "5-(hydroxymethyl)cytosine",
+    "synonyms": [
+      "4-Amino-5-(hydroxymethyl)-2(1H)-pyrimidinone",
+      "5-hydroxymethylcytosine",
+      "4-amino-5-(hydroxymethyl)pyrimidin-2(1H)-one"
+    ]
+  },
+  "89446": {
+    "recommended_name": "Lactosylceramide (d18:1/12:0)",
+    "synonyms": [
+      "1-O-(4-O-b-D-Galactopyranosyl-b-D-glucopyranosyl)-Ceramide",
+      "1-O-(4-O-beta-delta-Galactopyranosyl-beta-delta-glucopyranosyl)-Ceramide",
+      "1-O-(4-O-beta-delta-Galactopyranosyl-beta-glucopyranosyl)ceramide",
+      "1-O-(4-O-beta-D-Galactopyranosyl-beta-glucopyranosyl)ceramide",
+      "1ylce-O-(4-O-beta-delta-Galactopyranosyl-beta-glucopyranosyl)ceramide",
+      "beta-delta-Galactosyl-1,4-beta-delta-glucosramide",
+      "beta-delta-Galactosyl-1,4-beta-delta-Glucosylceramide",
+      "beta-D-Galactosyl-1,4-beta-D-Glucosylceramide",
+      "CDH",
+      "CDw17 antigen",
+      "Cytolipin H",
+      "delta-Galactosyl-1,4-beta-delta-glucosylceramide",
+      "D-Galactosyl-1,4-beta-D-glucosylceramide",
+      "Gal-beta1->4Glc-beta1->1'Cer",
+      "LacCer",
+      "LacCer(d18:1/12:0)",
+      "Lactosylceramide",
+      "Lactosyl ceramide (d18:1/12:0)",
+      "Lactosyl-N-acylsphingosine",
+      "N-(Dodecanoyl)-1-beta-lactosyl-sphing-4-enine",
+      "N-(Dodecanoyl)-1-b-lactosyl-sphing-4-enine",
+      "N-Lignoceryl sphingosyl lactoside",
+      "N-[(2S,3R,4E)-1-{[(2R,4R,5S,6R)-3,4-dihydroxy-6-(hydroxymethyl)-5-{[(2S,3R,4S,5R,6R)-3,4,5-trihydroxy-6-(hydroxymethyl)oxan-2-yl]oxy}oxan-2-yl]oxy}-3-hydroxyoctadec-4-en-2-yl]dodecanamide"
+    ]
+  },
+  "77462": {
+    "recommended_name": "HexCer(d18:1/16:0)",
+    "synonyms": [
+      "N-hexadecanoyl-(1<->1)-hexosyl-sphing-4-enine",
+      "N-hexadecanoyl hexosylceramide",
+      "HexCer d18:1/16:0"
+    ]
+  },
+  "90437": {
+    "recommended_name": "phosphatidylserine(18:1/18:1)",
+    "synonyms": [
+      "PS(18:1/18:1)"
+    ]
+  },
+  "40304": {
+    "recommended_name": "8-hydroxy-2'-deoxyguanosine",
+    "synonyms": [
+      "2'-deoxy-8-hydroxyguanosine",
+      "2'-deoxy-8-oxoguanosine",
+      "7,8-Dihydro-2'-deoxy-8-oxoguanosine",
+      "8-HYDROXY-2'-DEOXYGUANOSINE",
+      "8-Hydroxydeoxyguanosine",
+      "8-OHdG",
+      "8-Oxo-2'-deoxyguanine",
+      "8-oxo-2'-dG",
+      "8-Oxo-7,8-dihydro-2'-deoxyguanosine",
+      "8-Oxo-7-hydrodeoxyguanosine",
+      "8-Oxo-dG",
+      "8-Oxoguanosine"
+    ]
+  },
+  "132942": {
+    "recommended_name": "quinolinate",
+    "synonyms": [
+      "quinolinate anion",
+      "quinolinic acid anion"
+    ]
+  },
+  "17879": {
+    "recommended_name": "4-hydroxybenzoate",
+    "synonyms": [
+      "4-hydroxybenzoic acid, ion(1-)",
+      "p-hydroxybenzoate"
+    ]
+  },
+  "58044": {
+    "recommended_name": "2,5-dihydroxybenzoate",
+    "synonyms": [
+      "2,5-dihydroxybenzoate anion",
+      "5-hydroxysalicylate",
+      "gentisate",
+      "hydroquinonecarboxylate"
+    ]
+  },
+  "53276": {
+    "recommended_name": "poly(styrene)",
+    "synonyms": [
+      "Ethenylbenzene homopolymer",
+      "poly(1-phenylethane-1,2-diyl)",
+      "polystyrene",
+      "Polystyrene",
+      "PS",
+      "Styrene, homopolymer",
+      "Styrene polymer",
+      "Styrofoam",
+      "Vinylbenzene polymer",
+      "poly(1-phenylethylene)"
+    ]
+  },
+  "53227": {
+    "recommended_name": "poly(ethylene)",
+    "synonyms": [
+      "poly(ethene)",
+      "polyethene",
+      "polyethylene",
+      "Polyethylene",
+      "polythene"
+    ]
+  },
+  "53550": {
+    "recommended_name": "poly(propylene)",
+    "synonyms": [
+      "1-Propene homopolymer",
+      "Polipropene 25",
+      "poly(propene)",
+      "polypropene",
+      "polypropylene",
+      "Polypropylene",
+      "PP",
+      "poly(1-methylethylene)",
+      "poly(prop-1-ene)"
+    ]
+  },
+  "53259": {
+    "recommended_name": "poly(ethylene terephthalate) macromolecule",
+    "synonyms": [
+      "Ethylene terephthalate oligomer",
+      "Ethylene terephthalate polymer",
+      "Lavsan",
+      "PETE",
+      "poly(ethylene terephthalate)",
+      "polyethylene terephthalate",
+      "polyethyleneterephthalate",
+      "Poly(ethylene terephthalate)",
+      "Polyethylene terephthalate",
+      "Polyethylene terephthalate film",
+      "Poly(ethylene terephthalate) glycol",
+      "Poly(oxy-1,2-ethanediyloxycarbonyl-1,4-phenylenecarbonyl)",
+      "Poly(oxyethyleneoxyterephthaloyl)",
+      "Terephtahlic acid-ethylene glycol polyester",
+      "Pegoterato",
+      "Pegoteratum",
+      "poly(ethylene terephthalate)",
+      "poly(oxyethyleneoxyterephthaloyl)"
+    ]
+  },
+  "53243": {
+    "recommended_name": "poly(vinyl chloride)",
+    "synonyms": [
+      "Chlorethene homopolymer",
+      "Chloroethene homopolymer",
+      "Chloroethylene homopolymerise",
+      "Chloroethylene polymer",
+      "poly(vinylchloride)",
+      "polyvinyl chloride",
+      "Poly(vinyl chloride)",
+      "Polyvinyl chloride",
+      "PVC",
+      "poly(1-chloroethylene)"
+    ]
+  }
+}

@@ -44,6 +44,15 @@
     "cache": "markerdb_cache.json",
     "xref": "markerdb.json"
   },
+  "meshid": {
+    "full_name": "medical subject headings",
+    "display_name": "MeSH",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://meshb.nlm.nih.gov/record/ui?ui={id}",
+    "cache": null,
+    "xref": "mesh.json"
+  },
   "mrb": {
     "full_name": "the microrna database",
     "display_name": "miRBase",
@@ -51,6 +60,15 @@
     "rate_limit": null,
     "url_template": null,
     "cache": "mrb_cache.json",
+    "xref": null
+  },
+  "omx": {
+    "full_name": "oncomx",
+    "display_name": "OncoMX",
+    "api_endpoint": null,
+    "rate_limit": null,
+    "url_template": "https://data.oncomx.org/allbiomarkers/biomarker/{id}",
+    "cache": null,
     "xref": null
   },
   "rnac": {
