@@ -4,6 +4,7 @@ from utils.converters import Converter
 from utils.converters.json_to_tsv import JSONtoTSVConverter
 from utils.converters.tsv_to_json import TSVtoJSONConverter
 from utils.converters.json_to_nt import JSONtoNTConverter
+from utils.converters.batch_json_to_nt import BatchJSONtoNTConverter
 from utils.converters.add_xrefs import XrefConverter
 from utils.logging import LoggerFactory
 from argparse import ArgumentParser, Namespace
@@ -126,6 +127,11 @@ def main() -> None:
             logger.info(msg)
             converter = JSONtoNTConverter()
         # Unsupported conversion
+        # Batch JSON to NT conversion
+        elif input.is_dir() and output.suffix.lower() == ".nt":
+            msg = f"Converting batch JSON to NT: {input} -> {output}"
+            logger.info(msg)
+            converter = BatchJSONtoNTConverter()
         else:
             msg = f"Invalid conversion: {input.suffix} -> {output.suffix}"
             logger.error(msg)
