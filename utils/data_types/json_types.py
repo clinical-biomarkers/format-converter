@@ -677,7 +677,7 @@ class BiomarkerEntry(DataModelObject):
             "citation": [Citation.from_dict(c) for c in data["citation"]],
         }
 
-        if "condition" in data:
+        if "condition" in data and data["condition"]:
             known_fields["condition"] = Condition.from_dict(data["condition"])
         elif "exposure_agent" in data:
             known_fields["exposure_agent"] = ExposureAgent.from_dict(
@@ -830,7 +830,7 @@ class BiomarkerEntryWCrossReference(DataModelObject):
             "crossref": [CrossReference.from_dict(c) for c in data.get("crossref", [])],
         }
 
-        if "condition" in data:
+        if "condition" in data and data["condition"]:
             known_fields["condition"] = Condition.from_dict(data["condition"])
         elif "exposure_agent" in data:
             known_fields["exposure_agent"] = ExposureAgent.from_dict(
