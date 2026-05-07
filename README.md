@@ -67,3 +67,8 @@ Whenever a new cross-reference JSON file is added to `mapping_data/xrefs`, it ne
 The namespace map is the central config for this repository. The primary databases in the knowledgebase should all have an entry in the namespace map since
 the cross-reference and any secondary cross-references for a particular ID, e.g. PCCID and its secondary cross-reference RefMetID, will not be added without
 telling the code that PCCID has an xref file.
+
+## JSON to NT
+```
+python main.py /data/shared/biomarkerdb/releases/data/current/jsondb/biomarkerdb /data/shared/biomarkerdb/downloads/nt/current/all-biomarkers.nt
+```
