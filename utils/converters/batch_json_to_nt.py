@@ -59,7 +59,7 @@ class BatchJSONtoNTConverter(Converter, LoggedClass):
             total_count += count
 
         self.info(f"Total biomarker entries processed: {total_count}")
-        self._write_triples(output_dir / "all-biomarkers.nt", all_triples)
+        self._write_triples(output_dir, all_triples)
 
     def _stream_json(self, path: Path) -> Iterator[BiomarkerEntry]:
         try:
