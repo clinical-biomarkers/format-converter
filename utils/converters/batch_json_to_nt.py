@@ -124,7 +124,7 @@ class BatchJSONtoNTConverter(Converter, LoggedClass):
         )
         if change_triple:
             component_triples.append(change_triple)
-
+        """
         # Triples for any NCBI gene references embedded in the biomarker string
         for ncbi_triple in self._build_ncbi_biomarker_triples(
             subject_uri=subject_uri,
@@ -132,7 +132,7 @@ class BatchJSONtoNTConverter(Converter, LoggedClass):
             predicate_uri=predicate_uri,
         ):
             component_triples.append(ncbi_triple)
-
+        """
         # Specimen triples
         for specimen in component.specimen:
             specimen_triple = self._build_specimen_triple(
