@@ -4,13 +4,13 @@
     "biomarker_canonical_id": "https://biomarkerkb.org/canonical/{}",
     "upkb": "http://purl.uniprot.org/uniprot/{}",
     "best_biomarker_role": {
-      "risk": "http://purl.obolibrary.org/obo/OBCI_0000008",
-      "diagnostic": "http://purl.obolibrary.org/obo/OBCI_0000002",
-      "prognostic": "http://purl.obolibrary.org/obo/OBCI_0000006",
-      "monitoring": "http://purl.obolibrary.org/obo/OBCI_0000003",
-      "predictive": "http://purl.obolibrary.org/obo/OBCI_0000005",
-      "response": "http://purl.obolibrary.org/obo/OBCI_0000004",
-      "safety": "http://purl.obolibrary.org/obo/OBCI_0000007"
+      "risk": "http://purl.obolibrary.org/obo/OBCI_000000008",
+      "diagnostic": "http://purl.obolibrary.org/obo/OBCI_000000002",
+      "prognostic": "http://purl.obolibrary.org/obo/OBCI_000000006",
+      "monitoring": "http://purl.obolibrary.org/obo/OBCI_000000003",
+      "predictive": "http://purl.obolibrary.org/obo/OBCI_000000005",
+      "response": "http://purl.obolibrary.org/obo/OBCI_000000004",
+      "safety": "http://purl.obolibrary.org/obo/OBCI_000000007"
     },
     "uberon": "http://purl.obolibrary.org/obo/UBERON_{}",
     "doid": "http://purl.obolibrary.org/obo/DOID_{}",
@@ -32,18 +32,32 @@
   },
   "predicates": {
     "biomarker_change": {
-      "absence": "http://purl.obolibrary.org/obo/OBCI_1000017",
-      "decrease": "http://purl.obolibrary.org/obo/OBCI_1000015",
-      "increase": "http://purl.obolibrary.org/obo/OBCI_1000009",
-      "presence": "http://purl.obolibrary.org/obo/OBCI_1000016"
+      "absence": "http://purl.obolibrary.org/obo/OBCI_100000017",
+      "aspect": "http://purl.obolibrary.org/obo/OBCI_100000021",
+      "decrease": "http://purl.obolibrary.org/obo/OBCI_100000015",
+      "difference": "http://purl.obolibrary.org/obo/OBCI_100000014",
+      "increase": "http://purl.obolibrary.org/obo/OBCI_100000009",
+      "morphology": "http://purl.obolibrary.org/obo/OBCI_100000022",
+      "presence": "http://purl.obolibrary.org/obo/OBCI_100000016",
+      "presence_difference": "http://purl.obolibrary.org/obo/OBCI_100000019",
+      "quality": "http://purl.obolibrary.org/obo/OBCI_100000020"
     },
-    "best_biomarker_role": "http://purl.obolibrary.org/obo/OBCI_1000011",
-    "specimen_sampled_from": "http://purl.obolibrary.org/obo/OBCI_1000018",
+    "best_biomarker_role": "http://purl.obolibrary.org/obo/OBCI_100000011",
+    "civic_biomarker_role": "http://purl.obolibrary.org/obo/OBCI_100000012",
+    "from_image": "http://purl.obolibrary.org/obo/OBCI_100000024",
+    "specimen_sampled_from": "http://purl.obolibrary.org/obo/OBCI_100000018",
     "condition_role_indicator": {
-      "diagnostic": "http://purl.obolibrary.org/obo/OBCI_1000002",
-      "risk": "http://purl.obolibrary.org/obo/OBCI_1000008",
-      "monitoring": "http://purl.obolibrary.org/obo/OBCI_1000003",
-      "prognostic": "http://purl.obolibrary.org/obo/OBCI_1000006"
+      "clinical_effect": "http://purl.obolibrary.org/obo/RO_0020334",
+      "clinical_information": "http://purl.obolibrary.org/obo/RO_0020326",
+      "diagnostic": "http://purl.obolibrary.org/obo/RO_0020327",
+      "marker": "http://purl.obolibrary.org/obo/RO_0002607",
+      "monitoring": "http://purl.obolibrary.org/obo/RO_0020328",
+      "monitoring_effect": "http://purl.obolibrary.org/obo/RO_0020335",
+      "predictive": "http://purl.obolibrary.org/obo/RO_0020330",
+      "prognostic": "http://purl.obolibrary.org/obo/RO_0020331",
+      "response": "http://purl.obolibrary.org/obo/RO_0020329",
+      "risk": "http://purl.obolibrary.org/obo/RO_0020333",
+      "toxicity": "http://purl.obolibrary.org/obo/RO_0020332"
     }
   }
 }
