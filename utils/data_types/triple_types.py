@@ -69,3 +69,7 @@ class TriplePredicates:
     @classmethod
     def condition_role_check(cls, role: str) -> bool:
         return role in ["diagnostic", "risk", "monitoring", "prognostic"]
+
+    @staticmethod
+    def evidence_key() -> str:
+        return "has_evidence_source"

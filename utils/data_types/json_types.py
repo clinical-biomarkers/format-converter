@@ -594,19 +594,17 @@ class BiomarkerRole(DataModelObject):
 
 @dataclass
 class BiomarkerComponent(DataModelObject):
+    component_index: str
     biomarker: str
-    assessed_biomarker_entity: AssessedBiomarkerEntity
-    assessed_biomarker_entity_id: SplittableID
-    assessed_entity_type: str
+    entities: list[dict[str, Any]]
     specimen: list[Specimen] = field(default_factory=list)
     evidence_source: list[Evidence] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "component_index": self.component_index,
             "biomarker": self.biomarker,
-            "assessed_biomarker_entity": self.assessed_biomarker_entity.to_dict(),
-            "assessed_biomarker_entity_id": self.assessed_biomarker_entity_id.to_dict(),
-            "assessed_entity_type": self.assessed_entity_type,
+            "entities": self.entities,
             "specimen": [s.to_dict() for s in self.specimen],
             "evidence_source": [e.to_dict() for e in self.evidence_source],
         }
@@ -614,14 +612,9 @@ class BiomarkerComponent(DataModelObject):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BiomarkerComponent":
         return BiomarkerComponent(
+            component_index=data["component_index"],
             biomarker=data["biomarker"],
-            assessed_biomarker_entity=AssessedBiomarkerEntity.from_dict(
-                data["assessed_biomarker_entity"]
-            ),
-            assessed_biomarker_entity_id=SplittableID(
-                id=data["assessed_biomarker_entity_id"]
-            ),
-            assessed_entity_type=data["assessed_entity_type"],
+            entities=data["entities"],
             specimen=[Specimen.from_dict(s) for s in data["specimen"]],
             evidence_source=[Evidence.from_dict(e) for e in data["evidence_source"]],
         )
@@ -668,7 +661,7 @@ class BiomarkerEntry(DataModelObject):
         known_fields = {
             "biomarker_id": data["biomarker_id"],
             "biomarker_component": [
-                BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
+                BiomarkerComponent.from_dict(c) for c in data["biomarker_component_new"]
             ],
             "best_biomarker_role": [
                 BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]
@@ -820,7 +813,7 @@ class BiomarkerEntryWCrossReference(DataModelObject):
         known_fields = {
             "biomarker_id": data["biomarker_id"],
             "biomarker_component": [
-                BiomarkerComponent.from_dict(c) for c in data["biomarker_component"]
+                BiomarkerComponent.from_dict(c) for c in data["biomarker_component_new"]
             ],
             "best_biomarker_role": [
                 BiomarkerRole.from_dict(r) for r in data["best_biomarker_role"]

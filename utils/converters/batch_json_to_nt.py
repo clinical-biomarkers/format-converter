@@ -88,6 +88,17 @@ class BatchJSONtoNTConverter(Converter, LoggedClass):
                 self._process_component(subject_uri=biomarker_uri, component=component)
             )
 
+        evidence_predicate = self._triples_map[TriplePredicates.name()][
+            TriplePredicates.evidence_key()
+        ]
+        existing_evidence_objects = {
+            t.object for t in entry_triples if t.predicate == evidence_predicate
+        }
+        for ev_triple in self._build_evidence_triples(biomarker_uri, entry.evidence_source):
+            if ev_triple.object not in existing_evidence_objects:
+                entry_triples.append(ev_triple)
+                existing_evidence_objects.add(ev_triple.object)
+
         condition_triple = self._build_condition_triple(
             subject_uri=biomarker_uri,
             condition=entry.condition,
@@ -106,24 +117,24 @@ class BatchJSONtoNTConverter(Converter, LoggedClass):
         self.info(f"Generated {len(entry_triples)} triples for entry {biomarker_id}")
         return entry_triples
 
-    def _process_component(
-        self, subject_uri: str, component: BiomarkerComponent
-    ) -> list[Triple]:
+    def _process_component(self, subject_uri: str, component: BiomarkerComponent) -> list[Triple]:
         component_triples: list[Triple] = []
 
         predicate_uri = self._get_change_predicate_uri(component.biomarker)
         if predicate_uri is None:
             return component_triples
 
-        # Triple for assessed_biomarker_entity_id
-        change_triple = self._build_change_triple(
-            subject_uri=subject_uri,
-            biomarker=component.biomarker,
-            entity_id=component.assessed_biomarker_entity_id,
-            entity_type=component.assessed_entity_type,
-        )
-        if change_triple:
-            component_triples.append(change_triple)
+        # Assessed entity triples
+        for entity in component.entities:
+            change_triple = self._build_change_triple(
+                subject_uri=subject_uri,
+                biomarker=component.biomarker,
+                entity_id=SplittableID(id=entity["assessed_biomarker_entity_id"]),
+                entity_type=entity["assessed_entity_type"],
+            )
+            if change_triple:
+                component_triples.append(change_triple)
+
         """
         # Triples for any NCBI gene references embedded in the biomarker string
         for ncbi_triple in self._build_ncbi_biomarker_triples(
@@ -140,6 +151,10 @@ class BatchJSONtoNTConverter(Converter, LoggedClass):
             )
             if specimen_triple:
                 component_triples.append(specimen_triple)
+
+        # Evidence triples
+        for ev_triple in self._build_evidence_triples(subject_uri, component.evidence_source):
+            component_triples.append(ev_triple)
 
         return component_triples
 
@@ -255,6 +270,32 @@ class BatchJSONtoNTConverter(Converter, LoggedClass):
                 Triple(subject=subject_uri, predicate=predicate_uri, object=object_uri)
             )
         return triples
+
+    def _build_evidence_triples(self, subject_uri, sources):
+        self.debug("Attempting to build evidence triples...")
+        triples = []
+        predicate_uri = self._triples_map[TriplePredicates.name()][
+            TriplePredicates.evidence_key()
+        ]
+        for source in sources:
+            object_uri = self._get_evidence_uri(source)
+            if object_uri:
+                triples.append(
+                    Triple(subject=subject_uri, predicate=predicate_uri, object=object_uri)
+                )
+        return triples
+
+    def _get_evidence_uri(self, source):
+        db_key = source.database.lower().strip()
+        template = self._triples_map[TripleSubjectObjects.name()].get("evidence", {}).get(db_key)
+        if template is None:
+            log_once(
+                logger=self.logger,
+                message=f"No URI template for evidence database: '{source.database}'",
+                level=logging.WARNING,
+            )
+            return None
+        return template.format(source.id)
 
     def _get_object_uri(
         self, id: SplittableID, entity_type: Optional[str]
